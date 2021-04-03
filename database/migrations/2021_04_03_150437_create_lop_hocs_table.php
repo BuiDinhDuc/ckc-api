@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateLopHocsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,15 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->string('matk',10);
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+        Schema::create('lop_hocs', function (Blueprint $table) {
+            $table->string('malh',10);
+            $table->string('tenlop')->nullable();
+            $table->date('ngaytao')->nullable();
             $table->boolean('trangthai')->default(1);
-            $table->string('password');
-            $table->rememberToken();
+            $table->string('mabm',10)->nullable();
             $table->timestamps();
-
-            $table->primary('matk');
+            $table->primary('malh');
+            $table->foreign('mabm')->references('mabm')->on('bo_mons');
         });
     }
 
@@ -33,6 +32,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('lop_hocs');
     }
 }

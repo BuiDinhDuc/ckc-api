@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateKhoasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,14 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->string('matk',10);
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+        Schema::create('khoas', function (Blueprint $table) {
+            $table->string('makhoa',10);
+            $table->string('tenkhoa')->nullable();
+            $table->date('ngaylap')->nullable();
             $table->boolean('trangthai')->default(1);
-            $table->string('password');
-            $table->rememberToken();
             $table->timestamps();
 
-            $table->primary('matk');
+            $table->primary('makhoa');
         });
     }
 
@@ -33,6 +31,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('khoas');
     }
 }
