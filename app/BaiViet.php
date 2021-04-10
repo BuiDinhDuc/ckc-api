@@ -13,9 +13,20 @@ class BaiViet extends Model
     {
         return $this->belongsTo('App\ChuDe', 'macd', 'macd');
     }
-
     public function binhluans()
     {
-        return $this->hasMany('App\BinhLuan');
+        return $this->hasMany('App\BinhLuan', 'mabv', 'mabv');
+    }
+    public function lophocphan()
+    {
+        return $this->belongsTo('App\LopHocPhan', 'malhp', 'malhp');
+    }
+    public function taikhoan()
+    {
+        return $this->belongsTo('App\User', 'maytk', 'maytk');
+    }
+    public function filebaiviets()
+    {
+        return $this->hasMany('App\FileBaiViet', 'mabv', 'mabv');
     }
 }

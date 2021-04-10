@@ -18,6 +18,7 @@ class CreateFilesTable extends Migration
             $table->text('tenfile')->nullable();
             $table->datetime('ngaytao')->nullable();
             $table->string('duoifile');
+            $table->string('matk', 10)->nullable();
             $table->integer('dungluong')->nullable();
             $table->boolean('trangthai')->default(1);
 
