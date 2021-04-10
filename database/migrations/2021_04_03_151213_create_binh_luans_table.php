@@ -14,12 +14,12 @@ class CreateBinhLuansTable extends Migration
     public function up()
     {
         Schema::create('binh_luans', function (Blueprint $table) {
-            $table->string('mabl',10);
+            $table->string('mabl', 10);
             $table->text('noidung')->nullable();
             $table->datetime('ngaytao')->nullable();
-            
-            $table->string('mabv',10);
-            $table->string('matk',10);
+
+            $table->string('mabv', 10);
+            $table->string('matk', 10);
 
             $table->primary('mabl');
             $table->foreign('mabv')->references('mabv')->on('bai_viets');

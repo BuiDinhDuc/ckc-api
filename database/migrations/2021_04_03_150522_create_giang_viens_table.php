@@ -14,14 +14,14 @@ class CreateGiangViensTable extends Migration
     public function up()
     {
         Schema::create('giang_viens', function (Blueprint $table) {
-            $table->string('magv',10);
+            $table->string('magv', 10);
             $table->string('tengv')->nullable();
             $table->date('ngaysinh')->nullable();
             $table->string('diachi')->nullable();
-            $table->string('sdt',10)->nullable();
+            $table->string('sdt', 10)->nullable();
             $table->string('cccd')->nullable();
-            $table->string('matk',10)->nullable();
-            $table->string('mabm',10)->nullable();
+            $table->string('matk', 10)->nullable();
+            $table->string('mabm', 10)->nullable();
             $table->boolean('trangthai')->default(1);
             $table->timestamps();
 

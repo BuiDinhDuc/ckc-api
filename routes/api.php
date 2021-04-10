@@ -15,21 +15,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Route::group(['middleware' => 'auth:api'], function () {
-    Route::prefix('khoa')->group(function (){
-        Route::get('getAll','KhoaController@getAll');
-        Route::get('detail','KhoaController@detail');
-        Route::post('create','KhoaController@createNew');
-        Route::post('update','KhoaController@update');
-        Route::post('delete','KhoaController@delete');
-    });
-
-    Route::prefix('bomon')->group(function (){
-        Route::get('getAll','BoMonController@getAll');
-        Route::get('detail','BoMonController@detail');
-        Route::post('create','BoMonController@createNew');
-        Route::post('update','BoMonController@update');
-        Route::post('delete','BoMonController@delete');
-    });
+Route::prefix('khoa')->group(function () {
+    Route::get('getAll', 'KhoaController@getAllKhoa');
+    Route::get('detail', 'KhoaController@detailKhoa');
+    Route::post('create', 'KhoaController@createNewKhoa');
+    Route::post('update', 'KhoaController@updateKhoa');
+    Route::post('delete', 'KhoaController@deleteKhoa');
+});
+Route::prefix('bomon')->group(function () {
+    Route::get('getAll', 'BoMonController@getAllBoMon');
+    Route::get('detail', 'BoMonController@detailBoMon');
+    Route::post('create', 'BoMonController@createNewBoMon');
+    Route::post('update', 'BoMonController@updateBoMon');
+    Route::post('delete', 'BoMonController@deleteBoMon');
+});
 
     
 

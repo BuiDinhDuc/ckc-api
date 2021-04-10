@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class LopHocPhan extends Model
 {
-    //
+    protected $primaryKey = 'malhp';
 }

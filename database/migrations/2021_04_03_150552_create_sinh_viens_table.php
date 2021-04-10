@@ -14,14 +14,14 @@ class CreateSinhViensTable extends Migration
     public function up()
     {
         Schema::create('sinh_viens', function (Blueprint $table) {
-            $table->string('masv',10);
+            $table->string('masv', 10);
             $table->string('tensv')->nullable();
             $table->date('ngaysinh')->nullable();
             $table->string('diachi')->nullable();
-            $table->string('sdt',10)->nullable();
+            $table->string('sdt', 10)->nullable();
             $table->string('cccd')->nullable();
-            $table->string('matk',10)->nullable();
-            $table->string('malh',10)->nullable();
+            $table->string('matk', 10)->nullable();
+            $table->string('malh', 10)->nullable();
             $table->boolean('trangthai')->default(1);
             $table->timestamps();
             $table->primary('masv');

@@ -14,11 +14,11 @@ class CreateMonHocsTable extends Migration
     public function up()
     {
         Schema::create('mon_hocs', function (Blueprint $table) {
-            $table->string('mamh',10);
+            $table->string('mamh', 10);
             $table->string('tenmh')->nullable();
             $table->date('tinchi')->nullable();
             $table->boolean('trangthai')->default(1);
-            $table->timestamps(); 
+            $table->timestamps();
             $table->primary('mamh');
         });
     }

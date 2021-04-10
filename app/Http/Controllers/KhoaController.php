@@ -7,21 +7,21 @@ use Illuminate\Http\Request;
 use App\BoMon;
 class KhoaController extends Controller
 {
-    public function getAll(Request $request){
+    public function getAllKhoa(Request $request){
         $lst_khoa = Khoa::where('trangthai',1)->get();
         if(!empty($lst_khoa))
             return response()->json(['status'=>'success','data'=>$lst_khoa],200);
         else
             return response()->json(['status'=>'failed','message'=>'Không có khoa nào'],404);
     }
-    public function detail(Request $request){
+    public function detailKhoa(Request $request){
         $khoa = Khoa::where('makhoa',$request->makhoa)->get();
         if(!empty($khoa))
             return response()->json(['status'=>'success','data'=>$khoa],200);
         else
         return response()->json(['status'=>'failed','message'=>'Không tìm thấy khoa'],200);
     }
-    public function createNew(Request $request){
+    public function createNewKhoa(Request $request){
         $khoa = new Khoa();
         $makhoa =  $this->taoma();
         $khoa->makhoa  = $makhoa;
@@ -32,7 +32,7 @@ class KhoaController extends Controller
         $lst_khoa = Khoa::where('trangthai',1)->get();
         return response()->json(['status'=>'success','data'=>$lst_khoa],200);
     }
-    public function update(Request $request){
+    public function updateKhoa(Request $request){
         $khoa = Khoa::find($request->makhoa);
         if(!empty($khoa))
         {
@@ -48,7 +48,7 @@ class KhoaController extends Controller
             return response()->json(['status'=>'failed','message'=>'Không tìm thấy khoa'],404);
         }
     }
-    public function delete(Request $request){
+    public function deleteKhoa(Request $request){
         $khoa = Khoa::where('makhoa','=',$request->makhoa)->first();
         $bomon = BoMon::where('makhoa','=',$request->makhoa);
         if(empty($bomon))

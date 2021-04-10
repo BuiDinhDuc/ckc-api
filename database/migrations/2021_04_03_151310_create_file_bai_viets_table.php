@@ -14,15 +14,15 @@ class CreateFileBaiVietsTable extends Migration
     public function up()
     {
         Schema::create('file_bai_viets', function (Blueprint $table) {
-            $table->string('mafile_bv',10);
-           $table->string('mafile',10)->nullable();
-           $table->string('mabv',10)->nullable();
-           $table->boolean('trangthai')->default(1);
-           $table->timestamps();
+            $table->string('mafile_bv', 10);
+            $table->string('mafile', 10)->nullable();
+            $table->string('mabv', 10)->nullable();
+            $table->boolean('trangthai')->default(1);
+            $table->timestamps();
 
-           $table->primary('mafile_bv');
-           $table->foreign('mafile')->references('mafile')->on('files');
-           $table->foreign('mabv')->references('mabv')->on('bai_viets');
+            $table->primary('mafile_bv');
+            $table->foreign('mafile')->references('mafile')->on('files');
+            $table->foreign('mabv')->references('mabv')->on('bai_viets');
         });
     }
 

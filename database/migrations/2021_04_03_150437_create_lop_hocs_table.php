@@ -14,11 +14,11 @@ class CreateLopHocsTable extends Migration
     public function up()
     {
         Schema::create('lop_hocs', function (Blueprint $table) {
-            $table->string('malh',10);
+            $table->string('malh', 10);
             $table->string('tenlop')->nullable();
             $table->date('ngaytao')->nullable();
             $table->boolean('trangthai')->default(1);
-            $table->string('mabm',10)->nullable();
+            $table->string('mabm', 10)->nullable();
             $table->timestamps();
             $table->primary('malh');
             $table->foreign('mabm')->references('mabm')->on('bo_mons');

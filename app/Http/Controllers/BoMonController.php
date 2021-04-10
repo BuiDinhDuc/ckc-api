@@ -7,15 +7,16 @@ use Illuminate\Http\Request;
 
 class BoMonController extends Controller
 {
-    public function getAll(Request $request){
-        $lst_bomon = BoMon::where('trangthai',1)->with('bm')->get();
-        return response()->json(['status'=>'success','data'=>$lst_bomon],200);
+    public function getAllBoMon(Request $request){
+        $lst_bomon = BoMon::where('trangthai',1)->withCount('lophocs')->get();
+        $data['list'] = $lst_bomon;
+        return response()->json(['status'=>'success','data'=>$data],200);
     }
-    public function detail(Request $request){
-        $bomon = BoMon::where('mabm',$request->mabm)->with('bm')->get();
+    public function detailBomon(Request $request){
+        $bomon = BoMon::where('mabm',$request->mabm)->with('lophocs')->get();
         return response()->json(['status'=>'success','data'=>$bomon],200);
     }
-    public function createNew(Request $request){
+    public function createNewBoMon(Request $request){
         $bomon = new BoMon();
         $mabm =  $this->taoma();
         $bomon->mabm  = $mabm;
@@ -27,7 +28,7 @@ class BoMonController extends Controller
         $lst_bomon = BoMon::where('trangthai',1)->get();
         return response()->json(['status'=>'success','data'=>$lst_bomon],200);
     }
-    public function update(Request $request){
+    public function updateBoMon(Request $request){
         $bomon = BoMon::find($request->mabm);
         $bomon->tenbm = $request->tenbm;
         $bomon->ngaylap  = $request->ngaylap;
@@ -37,7 +38,7 @@ class BoMonController extends Controller
         $lst_bomon = BoMon::where('trangthai',1)->get();
         return response()->json(['status'=>'success','data'=>$lst_bomon],200);
     }
-    public function delete(Request $request){
+    public function deleteBoMon(Request $request){
         $bomon = BoMon::find($request->mabm);
         $bomon->trangthai = 0;
         $bomon->save();

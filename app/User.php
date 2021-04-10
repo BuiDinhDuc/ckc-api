@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    protected $primaryKey = 'matk';
     use Notifiable;
 
     /**
