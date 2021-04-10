@@ -23,11 +23,17 @@ class CreateGiangViensTable extends Migration
             $table->string('matk', 10)->nullable();
             $table->string('mabm', 10)->nullable();
             $table->boolean('trangthai')->default(1);
+            $table->unsignedBigInteger('province_id')->nullable();
+            $table->unsignedBigInteger('district_id')->nullable();
+            $table->unsignedBigInteger('ward_id')->nullable();
             $table->timestamps();
 
             $table->primary('magv');
             $table->foreign('mabm')->references('mabm')->on('bo_mons');
             $table->foreign('matk')->references('matk')->on('users');
+            $table->foreign('province_id')->references('id')->on('provinces');
+            $table->foreign('district_id')->references('id')->on('districts');
+            $table->foreign('ward_id')->references('id')->on('wards');
         });
     }
 
