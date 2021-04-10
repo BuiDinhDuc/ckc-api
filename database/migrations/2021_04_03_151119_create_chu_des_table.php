@@ -21,7 +21,7 @@ class CreateChuDesTable extends Migration
             $table->string('malhp', 10)->nullable();
 
             $table->primary('macd');
-            $table->foreign('malhp')->references('malhp')->on('lop_hoc_phans');
+            // $table->foreign('malhp')->references('malhp')->on('lop_hoc_phans');
         });
     }
 

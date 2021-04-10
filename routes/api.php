@@ -15,6 +15,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Route::group(['middleware' => 'auth:api'], function () {
+Route::prefix('baiviet')->group(function () {
+    Route::get('getDiscussionPostList', 'BaiVietController@getDiscussionPostList');
+    Route::get('detail', 'BoMonController@detailBoMon');
+    Route::post('create', 'BoMonController@createNewBoMon');
+    Route::post('update', 'BoMonController@updateBoMon');
+    Route::post('delete', 'BoMonController@deleteBoMon');
+});
+
 Route::prefix('khoa')->group(function () {
     Route::get('getAll', 'KhoaController@getAllKhoa');
     Route::get('detail', 'KhoaController@detailKhoa');
@@ -29,6 +37,9 @@ Route::prefix('bomon')->group(function () {
     Route::post('update', 'BoMonController@updateBoMon');
     Route::post('delete', 'BoMonController@deleteBoMon');
 });
+
+Route::get('/home', 'HomeController@index');
+Route::post('/login', 'AuthController@login');
 
     
 

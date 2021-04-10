@@ -2,18 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\ChuDe;
 use Illuminate\Http\Request;
 
 class ChuDeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $lhp = $request->header('id');
+        $lst_chude = ChuDe::where([
+            ['trangthai', 1],
+            ['malhp', $lhp]
+        ])->whereHas('baiviet', function ($query) {
+            $query->orderBy('macd');
+        })->orderBy('thutu', 'desc')->get();
     }
 
     /**

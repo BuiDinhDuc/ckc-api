@@ -23,7 +23,15 @@ class BaiViet extends Model
     }
     public function taikhoan()
     {
-        return $this->belongsTo('App\User', 'maytk', 'maytk');
+        return $this->belongsTo('App\User', 'matk', 'matk');
+    }
+    public function giangvien()
+    {
+        return $this->belongsTo('App\GiangVien', 'matk', 'matk');
+    }
+    public function sinhvien()
+    {
+        return $this->belongsTo('App\SinhVien', 'matk', 'matk');
     }
     public function filebaiviets()
     {

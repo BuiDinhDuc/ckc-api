@@ -29,8 +29,8 @@ class CreateGiangViensTable extends Migration
             $table->timestamps();
 
             $table->primary('magv');
-            $table->foreign('mabm')->references('mabm')->on('bo_mons');
-            $table->foreign('matk')->references('matk')->on('users');
+            // $table->foreign('mabm')->references('mabm')->on('bo_mons');
+            // $table->foreign('matk')->references('matk')->on('users');
             $table->foreign('province_id')->references('id')->on('provinces');
             $table->foreign('district_id')->references('id')->on('districts');
             $table->foreign('ward_id')->references('id')->on('wards');

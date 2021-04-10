@@ -27,9 +27,9 @@ class CreateLopHocPhansTable extends Migration
             $table->timestamps();
 
             $table->primary('malhp');
-            $table->foreign('malh')->references('malh')->on('lop_hocs');
-            $table->foreign('magv')->references('magv')->on('giang_viens');
-            $table->foreign('mamh')->references('mamh')->on('mon_hocs');
+            // $table->foreign('malh')->references('malh')->on('lop_hocs');
+            // $table->foreign('magv')->references('magv')->on('giang_viens');
+            // $table->foreign('mamh')->references('mamh')->on('mon_hocs');
         });
     }
 

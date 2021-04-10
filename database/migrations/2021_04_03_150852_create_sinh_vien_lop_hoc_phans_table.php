@@ -21,8 +21,8 @@ class CreateSinhVienLopHocPhansTable extends Migration
             $table->timestamps();
 
             $table->primary('masv_lhp');
-            $table->foreign('malhp')->references('malhp')->on('lop_hoc_phans');
-            $table->foreign('masv')->references('masv')->on('sinh_viens');
+            // $table->foreign('malhp')->references('malhp')->on('lop_hoc_phans');
+            // $table->foreign('masv')->references('masv')->on('sinh_viens');
         });
     }
 

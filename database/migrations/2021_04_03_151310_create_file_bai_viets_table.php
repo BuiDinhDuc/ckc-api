@@ -21,8 +21,8 @@ class CreateFileBaiVietsTable extends Migration
             $table->timestamps();
 
             $table->primary('mafile_bv');
-            $table->foreign('mafile')->references('mafile')->on('files');
-            $table->foreign('mabv')->references('mabv')->on('bai_viets');
+            // $table->foreign('mafile')->references('mafile')->on('files');
+            // $table->foreign('mabv')->references('mabv')->on('bai_viets');
         });
     }
 

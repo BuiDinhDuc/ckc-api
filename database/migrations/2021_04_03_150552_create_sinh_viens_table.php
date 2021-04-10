@@ -28,8 +28,8 @@ class CreateSinhViensTable extends Migration
             $table->boolean('trangthai')->default(1);
             $table->timestamps();
             $table->primary('masv');
-            $table->foreign('malh')->references('malh')->on('lop_hocs');
-            $table->foreign('matk')->references('matk')->on('users');
+            // $table->foreign('malh')->references('malh')->on('lop_hocs');
+            // $table->foreign('matk')->references('matk')->on('users');
 
             $table->foreign('province_id')->references('id')->on('provinces');
             $table->foreign('district_id')->references('id')->on('districts');

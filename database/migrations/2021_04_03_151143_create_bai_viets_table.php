@@ -27,9 +27,9 @@ class CreateBaiVietsTable extends Migration
             $table->timestamps();
 
             $table->primary('mabv');
-            $table->foreign('malhp')->references('malhp')->on('lop_hoc_phans');
-            $table->foreign('matk')->references('matk')->on('users');
-            $table->foreign('macd')->references('macd')->on('chu_des');
+            // $table->foreign('malhp')->references('malhp')->on('lop_hoc_phans');
+            // $table->foreign('matk')->references('matk')->on('users');
+            // $table->foreign('macd')->references('macd')->on('chu_des');
         });
     }
 

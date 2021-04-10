@@ -22,8 +22,8 @@ class CreateBinhLuansTable extends Migration
             $table->string('matk', 10);
 
             $table->primary('mabl');
-            $table->foreign('mabv')->references('mabv')->on('bai_viets');
-            $table->foreign('matk')->references('matk')->on('users');
+            // $table->foreign('mabv')->references('mabv')->on('bai_viets');
+            // $table->foreign('matk')->references('matk')->on('users');
         });
     }
 

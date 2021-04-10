@@ -22,7 +22,7 @@ class CreateBoMonsTable extends Migration
             $table->timestamps();
 
             $table->primary('mabm');
-            $table->foreign('makhoa')->references('makhoa')->on('khoas');
+            // $table->foreign('makhoa')->references('makhoa')->on('khoas');
         });
     }
 

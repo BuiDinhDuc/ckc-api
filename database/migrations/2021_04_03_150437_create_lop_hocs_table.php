@@ -21,7 +21,7 @@ class CreateLopHocsTable extends Migration
             $table->string('mabm', 10)->nullable();
             $table->timestamps();
             $table->primary('malh');
-            $table->foreign('mabm')->references('mabm')->on('bo_mons');
+            // $table->foreign('mabm')->references('mabm')->on('bo_mons');
         });
     }
 
