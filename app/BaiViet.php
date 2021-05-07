@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class BaiViet extends Model
 {
-    protected $fillable = ['mabv', 'tieude', 'noidung', 'ngaytao', 'loaibv', 'matk', 'malhp', 'trangthai', 'macd'];
-    protected $primaryKey = 'mabv';
+    protected $fillable = ['tieude', 'noidung', 'ngaytao', 'loaibv', 'matk', 'malhp', 'trangthai', 'macd'];
+
 
     public function chude()
     {
@@ -15,7 +15,7 @@ class BaiViet extends Model
     }
     public function binhluans()
     {
-        return $this->hasMany('App\BinhLuan', 'mabv', 'mabv');
+        return $this->hasMany('App\BinhLuan', 'mabv', 'id');
     }
     public function lophocphan()
     {
@@ -35,6 +35,6 @@ class BaiViet extends Model
     }
     public function filebaiviets()
     {
-        return $this->hasMany('App\FileBaiViet', 'mabv', 'mabv');
+        return $this->hasMany('App\FileBaiViet', 'mabv', 'id');
     }
 }

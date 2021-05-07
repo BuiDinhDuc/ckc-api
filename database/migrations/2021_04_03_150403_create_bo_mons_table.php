@@ -14,15 +14,11 @@ class CreateBoMonsTable extends Migration
     public function up()
     {
         Schema::create('bo_mons', function (Blueprint $table) {
-            $table->string('mabm', 10);
+            $table->bigIncrements('id');
             $table->string('tenbm')->nullable();
-            $table->date('ngaylap')->nullable();
             $table->boolean('trangthai')->default(1);
-            $table->string('makhoa', 10)->nullable();
+            $table->unsignedBigInteger('makhoa')->nullable();
             $table->timestamps();
-
-            $table->primary('mabm');
-            // $table->foreign('makhoa')->references('makhoa')->on('khoas');
         });
     }
 

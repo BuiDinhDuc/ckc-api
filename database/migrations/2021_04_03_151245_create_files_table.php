@@ -14,15 +14,15 @@ class CreateFilesTable extends Migration
     public function up()
     {
         Schema::create('files', function (Blueprint $table) {
-            $table->string('mafile', 10);
+            $table->bigIncrements('id');
             $table->text('tenfile')->nullable();
             $table->datetime('ngaytao')->nullable();
+            $table->string('path');
             $table->string('duoifile');
-            $table->string('matk', 10)->nullable();
+            $table->unsignedBigInteger('matk')->nullable();
             $table->integer('dungluong')->nullable();
             $table->boolean('trangthai')->default(1);
-
-            $table->primary('mafile');
+            $table->timestamps();
         });
     }
 

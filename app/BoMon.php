@@ -6,18 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class BoMon extends Model
 {
-    protected $fillable = ['mabm', 'tenbm', 'ngaylap', 'trangthai'];
-    protected $primaryKey = 'mabm';
+    protected $fillable = ['tenbm', 'ngaylap', 'trangthai'];
     public function khoa()
     {
         return $this->belongsTo('App\Khoa', 'makhoa', 'makhoa');
     }
     public function lophocs()
     {
-        return $this->hasMany('App\LopHoc', 'mabm', 'mabm');
+        return $this->hasMany('App\LopHoc', 'mabm', 'id');
     }
     public function giangviens()
     {
-        return $this->hasMany('App\GiangVien', 'mabm', 'mabm');
+        return $this->hasMany('App\GiangVien', 'mabm', 'id');
     }
 }

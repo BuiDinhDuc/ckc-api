@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SinhVienController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 // Route::group(['middleware' => 'auth:api'], function () {
 Route::prefix('baiviet')->group(function () {
-    Route::get('getDiscussionPostList', 'BaiVietController@getDiscussionPostList');
+    Route::get('/', 'BaiVietController@getAllB');
     Route::get('detail', 'BoMonController@detailBoMon');
     Route::post('create', 'BoMonController@createNewBoMon');
     Route::post('update', 'BoMonController@updateBoMon');
@@ -24,18 +25,23 @@ Route::prefix('baiviet')->group(function () {
 });
 
 Route::prefix('khoa')->group(function () {
-    Route::get('getAll', 'KhoaController@getAllKhoa');
+    Route::get('/', 'KhoaController@getAllKhoa');
     Route::get('detail', 'KhoaController@detailKhoa');
     Route::post('create', 'KhoaController@createNewKhoa');
     Route::post('update', 'KhoaController@updateKhoa');
     Route::post('delete', 'KhoaController@deleteKhoa');
 });
 Route::prefix('bomon')->group(function () {
-    Route::get('getAll', 'BoMonController@getAllBoMon');
+    Route::get('/', 'BoMonController@getAllBoMon');
     Route::get('detail', 'BoMonController@detailBoMon');
     Route::post('create', 'BoMonController@createNewBoMon');
     Route::post('update', 'BoMonController@updateBoMon');
     Route::post('delete', 'BoMonController@deleteBoMon');
+});
+
+Route::prefix('sinhvien')->group(function () {
+    Route::get('/', 'SinhVienController@getAllSinhVien');
+    Route::get('/{id}', 'SinhVienController@detail');
 });
 
 Route::get('/home', 'HomeController@index');

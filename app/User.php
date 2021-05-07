@@ -9,7 +9,6 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    protected $primaryKey = 'matk';
     use Notifiable;
     protected $fillable = ['email', 'password',];
     protected $hidden = ['password', 'remember_token',];
@@ -27,22 +26,22 @@ class User extends Authenticatable implements JWTSubject
 
     public function sinhvien()
     {
-        return $this->hasOne('App\SinhVien', 'matk', 'matk');
+        return $this->hasOne('App\SinhVien', 'matk', 'id');
     }
     public function giangvien()
     {
-        return $this->hasOne('App\GiangVien', 'matk', 'matk');
+        return $this->hasOne('App\GiangVien', 'matk', 'id');
     }
     public function baiviets()
     {
-        return $this->hasMany('App\BaiViet', 'matk', 'matk');
+        return $this->hasMany('App\BaiViet', 'matk', 'id');
     }
     public function binhluans()
     {
-        return $this->hasMany('App\BinhLuan', 'matk', 'matk');
+        return $this->hasMany('App\BinhLuan', 'matk', 'id');
     }
     public function files()
     {
-        return $this->hasMany('App\File', 'matk', 'matk');
+        return $this->hasMany('App\File', 'matk', 'id');
     }
 }

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\ChuDe;
+use App\LopHocPhan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ChuDeController extends Controller
 {
@@ -16,6 +18,7 @@ class ChuDeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index(Request $request)
     {
         $lhp = $request->header('id');
@@ -35,7 +38,38 @@ class ChuDeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $v = Validator::make(
+            $request->all(),
+            ['tencd' => 'required'],
+            ['tencd.required' => 'Tên chủ đề không được bỏ trống']
+        );
+
+        if ($v->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 422,
+                'message' => $v->errors()->first(),
+            ], 422);
+        }
+
+        $malph = $request->malhp;
+        $lhp = LopHocPhan::find($malph);
+        if (!empty($lhp)) {
+            $chude = ChuDe::where([['malhp', '=', $malph], ['tencd', '=', $request->tencd]])->first();
+            if (empty($chude)) {
+                ChuDe::create([
+                    'malhp' => $malph,
+                    'tencd' => $request->tencd,
+                    'thutu' => 1,
+                    'trangthai' => 1
+                ]);
+                return response()->json(['status' => 'success', 'message' => "Tạo chủ đề thành công"], 200);
+            } else {
+                return response()->json(['status' => 'error', 'message' => "Chủ đề đã tồn tại trong lớp học phần"], 422);
+            }
+        } else {
+            return response()->json(['status' => 'error', 'message' => "Lớp học phần không tồn tại"], 404);
+        }
     }
 
     /**
@@ -46,7 +80,9 @@ class ChuDeController extends Controller
      */
     public function show($id)
     {
-        //
+        $lst_chude = ChuDe::find($id)->whereHas('baiviet', function ($query) {
+            $query->orderBy('macd');
+        })->orderBy('thutu', 'desc')->get();
     }
 
     /**
@@ -58,7 +94,33 @@ class ChuDeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $v = Validator::make(
+            $request->all(),
+            ['tencd' => 'required'],
+            ['tencd.required' => 'Tên chủ đề không được bỏ trống']
+        );
+
+        if ($v->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 422,
+                'message' => $v->errors()->first(),
+            ], 422);
+        }
+
+        $chude = ChuDe::find($id);
+        if (!empty($chude)) {
+            $cd  = ChuDe::where([['malhp', '=', $request->malhp], ['tencd', '=', $request->tencd]])->first();
+            if (empty($cd)) {
+                $chude->tencd = $request->tencd;
+                $chude->malhp = $request->malhp;
+                $chude->thutu = $request->thutu;
+
+                $chude->save();
+            }
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Không tìm thấy chủ đề'], 404);
+        }
     }
 
     /**
@@ -69,6 +131,13 @@ class ChuDeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $chude = ChuDe::find($id);
+        if (!empty($chude)) {
+            $chude->trangthai = 0;
+            $chude->save();
+            return response()->json(['status' => 'success', 'message' => 'Xóa chủ đề thành công'], 200);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Không tìm thấy chủ đề'], 404);
+        }
     }
 }

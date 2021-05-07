@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ChuDe extends Model
 {
-    protected $fillable = ['macd', 'tencd', 'thutu', 'trangthai', 'malhp'];
-    protected $primaryKey = 'macd';
+    protected $fillable = ['tencd', 'thutu', 'trangthai', 'malhp'];
+
 
     public function lophocphan()
     {
@@ -15,6 +15,6 @@ class ChuDe extends Model
     }
     public function baiviets()
     {
-        return $this->hasMany('App\BaiViet', 'macd', 'macd');
+        return $this->hasMany('App\BaiViet', 'macd', 'id');
     }
 }

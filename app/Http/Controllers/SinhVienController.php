@@ -8,12 +8,21 @@ use App\SinhVien;
 
 class SinhVienController extends Controller
 {
-    public function __construct()
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
+    public function getAllSinhVien(Request $request)
     {
-        $this->middleware('auth');
+        $lst_sv = SinhVien::all();
+
+        if (!empty($lst_sv))
+            return response()->json(['status' => 'success', 'data' => $lst_sv], 200);
     }
-    public function getListSV(Request $request)
+    public function detail(Request $request, $id)
     {
-        $lst_sv = SinhVien::where('trangthai', 1)->get();
+        $sv = SinhVien::where([['id', $id]])->with('lophoc', 'taikhoan', 'tinh', 'huyen', 'xa')->first();
+        if (!empty($sv))
+            return response()->json(['status' => 'success', 'data' => $sv], 200);
     }
 }

@@ -14,14 +14,12 @@ class CreateChuDesTable extends Migration
     public function up()
     {
         Schema::create('chu_des', function (Blueprint $table) {
-            $table->string('macd', 10);
+            $table->bigIncrements('id');
             $table->string('tencd')->nullable();
             $table->integer('thutu')->nullable();
             $table->boolean('trangthai')->default(1);
-            $table->string('malhp', 10)->nullable();
-
-            $table->primary('macd');
-            // $table->foreign('malhp')->references('malhp')->on('lop_hoc_phans');
+            $table->unsignedBigInteger('malhp')->nullable();
+            $table->timestamps();
         });
     }
 

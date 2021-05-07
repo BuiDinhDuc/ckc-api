@@ -6,8 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BinhLuan extends Model
 {
-    protected $fillable = ['mabl', 'noidung', 'ngaytao', 'mabv', 'matk', 'trangthai'];
-    protected $primaryKey = 'mabl';
+    protected $fillable = ['noidung', 'ngaytao', 'mabv', 'matk', 'trangthai'];
 
     public function baiviet()
     {

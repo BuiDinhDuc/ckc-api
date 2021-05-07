@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class File extends Model
 {
-    protected $fillable = ['mafile', 'tenfile', 'ngaytao', 'duoifile', 'dungluong', 'trangthai'];
-    protected $primaryKey = 'mafile';
+    protected $fillable = ['tenfile', 'ngaytao', 'duoifile', 'dungluong', 'trangthai'];
+
     public function filebaiviets()
     {
-        return $this->hasMany('App\FileBaiViet', 'mafile', 'mafile');
+        return $this->hasMany('App\FileBaiViet', 'mafile', 'id');
     }
     public function taikhoan()
     {

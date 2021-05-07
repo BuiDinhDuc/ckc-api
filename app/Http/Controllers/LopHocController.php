@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\LopHoc;
 use Illuminate\Http\Request;
 
 class LopHocController extends Controller
@@ -17,6 +18,8 @@ class LopHocController extends Controller
      */
     public function index(Request $request)
     {
+        $lst_lophoc = LopHoc::where('trangthai', '=', 1)->get();
+        return response()->json(['status' => 'success', 'data' => $lst_lophoc]);
     }
 
     /**

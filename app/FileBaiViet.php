@@ -6,8 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class FileBaiViet extends Model
 {
-    protected $fillable = ['mafile_bv', 'mafile', 'mabv', 'trangthai'];
-    protected $primaryKey = 'mafile_bv';
+    protected $fillable = ['mafile', 'mabv', 'trangthai'];
 
     public function file()
     {

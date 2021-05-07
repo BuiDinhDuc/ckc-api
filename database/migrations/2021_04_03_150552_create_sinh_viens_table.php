@@ -14,23 +14,20 @@ class CreateSinhViensTable extends Migration
     public function up()
     {
         Schema::create('sinh_viens', function (Blueprint $table) {
-            $table->string('masv', 10);
+            $table->bigIncrements('id');
+            $table->string('hosv')->nullable();
             $table->string('tensv')->nullable();
             $table->date('ngaysinh')->nullable();
-            $table->string('diachi')->nullable();
+            $table->smallInteger('gioitinh')->nullable();
             $table->string('sdt', 10)->nullable();
             $table->string('cccd')->nullable();
-            $table->string('matk', 10)->nullable();
-            $table->string('malh', 10)->nullable();
+            $table->unsignedBigInteger('matk')->nullable();
+            $table->unsignedBigInteger('malh')->nullable();
             $table->unsignedBigInteger('province_id')->nullable();
             $table->unsignedBigInteger('district_id')->nullable();
             $table->unsignedBigInteger('ward_id')->nullable();
             $table->boolean('trangthai')->default(1);
             $table->timestamps();
-            $table->primary('masv');
-            // $table->foreign('malh')->references('malh')->on('lop_hocs');
-            // $table->foreign('matk')->references('matk')->on('users');
-
             $table->foreign('province_id')->references('id')->on('provinces');
             $table->foreign('district_id')->references('id')->on('districts');
             $table->foreign('ward_id')->references('id')->on('wards');

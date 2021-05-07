@@ -6,10 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class MonHoc extends Model
 {
-    protected $fillable = ['mamh', 'tenmh', 'tinchi', 'trangthai'];
-    protected $primaryKey = 'mamh';
+    protected $fillable = ['tenmh', 'tinchi', 'trangthai'];
     public function lophocphans()
     {
-        return $this->hasMany('App\LopHocPhan', 'mamh', 'mamh');
+        return $this->hasMany('App\LopHocPhan', 'mamh', 'id');
     }
 }

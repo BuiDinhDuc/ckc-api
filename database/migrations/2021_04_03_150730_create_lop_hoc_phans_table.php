@@ -14,22 +14,17 @@ class CreateLopHocPhansTable extends Migration
     public function up()
     {
         Schema::create('lop_hoc_phans', function (Blueprint $table) {
-            $table->string('malhp', 10);
+            $table->bigIncrements('id');
             $table->string('tenlhp')->nullable();
             $table->date('ngaytao')->nullable();
             $table->smallInteger('hocky')->nullable();
             $table->smallInteger('chinhsach')->nullable();
-            $table->string('namhoc')->nullable();
-            $table->string('magv', 10)->nullable();
-            $table->string('malh', 10)->nullable();
-            $table->string('mamh', 10)->nullable();
+            $table->integer('namhoc')->nullable();
+            $table->unsignedBigInteger('magv')->nullable();
+            $table->unsignedBigInteger('malh')->nullable();
+            $table->unsignedBigInteger('mamh')->nullable();
             $table->boolean('trangthai')->default(1);
             $table->timestamps();
-
-            $table->primary('malhp');
-            // $table->foreign('malh')->references('malh')->on('lop_hocs');
-            // $table->foreign('magv')->references('magv')->on('giang_viens');
-            // $table->foreign('mamh')->references('mamh')->on('mon_hocs');
         });
     }
 

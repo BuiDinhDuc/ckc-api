@@ -11,17 +11,9 @@ class LopHocSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker\Factory::create();
-
-        $limit = 100;
-
-        for ($i = 1; $i <= $limit; $i++) {
-            DB::table('lop_hocs')->insert([
-                'malh' => $i,
-                'tenlop' => $faker->text('50'),
-                'mabm' =>  $faker->numberBetween(1, 16),
-                'trangthai' => 1,
-            ]);
-        }
+        DB::table('lop_hocs')->insert(['tenlop' => "CĐ TH 18 PMA", 'mabm' =>  11, 'trangthai' => 1,]);
+        DB::table('lop_hocs')->insert(['tenlop' => "CĐ TH 18 PMB", 'mabm' =>  11, 'trangthai' => 1,]);
+        DB::table('lop_hocs')->insert(['tenlop' => "CĐ TH 18 PMC", 'mabm' =>  11, 'trangthai' => 1,]);
+        DB::table('lop_hocs')->insert(['tenlop' => "CĐ TH 18 MMT", 'mabm' =>  11, 'trangthai' => 1,]);
     }
 }

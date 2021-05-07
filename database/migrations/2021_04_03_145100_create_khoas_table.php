@@ -14,13 +14,10 @@ class CreateKhoasTable extends Migration
     public function up()
     {
         Schema::create('khoas', function (Blueprint $table) {
-            $table->string('makhoa', 10);
+            $table->bigIncrements('id');
             $table->string('tenkhoa')->nullable();
-            $table->date('ngaylap')->nullable();
             $table->boolean('trangthai')->default(1);
             $table->timestamps();
-
-            $table->primary('makhoa');
         });
     }
 

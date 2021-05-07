@@ -6,9 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class GiangVien extends Model
 {
-    protected $fillable = ['magv', 'tengv', 'ngaysinh', 'diachi', 'sdt', 'email', 'matk', 'mabm'];
-    protected $primaryKey = 'magv';
-
+    protected $fillable = ['tengv', 'ngaysinh', 'diachi', 'sdt', 'email', 'matk', 'mabm'];
     public function taikhoan()
     {
         return $this->belongsTo('App\User', 'matk', 'matk');
@@ -19,6 +17,6 @@ class GiangVien extends Model
     }
     public function lophocphans()
     {
-        return $this->hasMany('App\LopHocPhan', 'magv', 'magv');
+        return $this->hasMany('App\LopHocPhan', 'magv', 'id');
     }
 }
