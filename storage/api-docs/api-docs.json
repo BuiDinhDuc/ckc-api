@@ -1,0 +1,433 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Gateway",
+        "description": "CKC Classroom API Server",
+        "version": "3.0"
+    },
+    "paths": {
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login",
+                "description": "Login",
+                "operationId": "login",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "email",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "password",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
+                    }
+                }
+            }
+        },
+        "/api/baiviet/discussion-post": {
+            "get": {
+                "tags": [
+                    "Bài viết"
+                ],
+                "summary": "Danh sách bài viết thảo luận",
+                "description": "Danh sách bài viết thảo luận",
+                "operationId": "App\\Http\\Controllers\\BaiVietController::getDiscussionPostList",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "header",
+                        "description": "lhp_id",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/baiviet/teacher-post": {
+            "get": {
+                "tags": [
+                    "Bài viết"
+                ],
+                "summary": "Danh sách bài viết giáo viên",
+                "description": "Danh sách bài viết giáo viên",
+                "operationId": "App\\Http\\Controllers\\BaiVietController::getTeacherPostList",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "header",
+                        "description": "lhp_id",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/baiviet/create": {
+            "post": {
+                "tags": [
+                    "Bài viết"
+                ],
+                "summary": "Tạo bài viết",
+                "description": "Tạo bài viết",
+                "operationId": "App\\Http\\Controllers\\BaiVietController::store",
+                "parameters": [
+                    {
+                        "name": "noidung",
+                        "in": "query",
+                        "description": "noidung",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tieude",
+                        "in": "query",
+                        "description": "tieude",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "loaibv",
+                        "in": "query",
+                        "description": "loaibv",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "malhp",
+                        "in": "query",
+                        "description": "malhp",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "macd",
+                        "in": "query",
+                        "description": "macd",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/bomon": {
+            "get": {
+                "tags": [
+                    "Bộ môn"
+                ],
+                "summary": "Danh sách bộ môn",
+                "description": "Danh sách bộ môn",
+                "operationId": "App\\Http\\Controllers\\BoMonController::getAllBoMon",
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/bomon/detail": {
+            "get": {
+                "tags": [
+                    "Bộ môn"
+                ],
+                "summary": "Chi tiết bộ môn",
+                "description": "Chi tiết bộ môn",
+                "operationId": "App\\Http\\Controllers\\BoMonController::detailBomon",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "id",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/bomon/create": {
+            "post": {
+                "tags": [
+                    "Bộ môn"
+                ],
+                "summary": "Thêm bộ môn",
+                "description": "Thêm bộ môn",
+                "operationId": "App\\Http\\Controllers\\BoMonController::createNewBoMon",
+                "parameters": [
+                    {
+                        "name": "tenbm",
+                        "in": "query",
+                        "description": "tenbm",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "makhoa",
+                        "in": "query",
+                        "description": "makhoa",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/bomon/update": {
+            "put": {
+                "tags": [
+                    "Bộ môn"
+                ],
+                "summary": "Chỉnh sửa bộ môn",
+                "description": "Chỉnh sửa bộ môn",
+                "operationId": "App\\Http\\Controllers\\BoMonController::updateBoMon",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "id",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "tenbm",
+                        "in": "query",
+                        "description": "tenbm",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "makhoa",
+                        "in": "query",
+                        "description": "makhoa",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/bomon/delete": {
+            "delete": {
+                "tags": [
+                    "Bộ môn"
+                ],
+                "summary": "Xóa bộ môn",
+                "description": "Xóa bộ môn",
+                "operationId": "App\\Http\\Controllers\\BoMonController::deleteBoMon",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "id",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/lophoc": {
+            "get": {
+                "tags": [
+                    "Lớp học"
+                ],
+                "summary": "Danh sách lớp học",
+                "description": "Danh sách lớp học",
+                "operationId": "App\\Http\\Controllers\\LopHocController::index",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "id",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "Authorization",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}

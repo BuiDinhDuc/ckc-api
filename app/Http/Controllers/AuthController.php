@@ -32,6 +32,46 @@ class AuthController extends Controller
             'expires_in' => $this->guard()->factory()->getTTL() * 60
         ];
     }
+    /**
+     * * @OA\Post(
+     *     path="/api/login",
+     *     summary="Login",
+     *     tags={"Auth"},
+     *     description= "Login",
+     *     operationId="login",
+     *     @OA\Parameter(
+     *         name="email",
+     *         in="query",
+     *         description="email",
+     *       
+     *         @OA\Schema(
+     *             type="string",
+     *         )
+     *     ),
+     *      @OA\Parameter(
+     *         name="password",
+     *         in="query",
+     *         description="password",
+     *       
+     *         @OA\Schema(
+     *             type="string",
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation",
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Invalid tag value",
+     *     ),
+     * )
+     * 
+     */
     public function login(Request $request)
     {
         $v = Validator::make(
@@ -54,10 +94,10 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
         if ($token = $this->guard()->attempt($credentials)) {
             // var_dump($token);exit;
-            $account =  User::where('matk', Auth::user()->matk)->first();
+            $account =  User::where('id', Auth::user()->id)->first();
             $account =  array_merge($account->toArray(), $this->respondWithToken($token));
             return response()->json([
-                'status' => 'Login success',
+                'status' => 'Login successfully',
                 'userData' => $account,
             ], 200);
         }

@@ -9,7 +9,7 @@ class BoMon extends Model
     protected $fillable = ['tenbm', 'ngaylap', 'trangthai'];
     public function khoa()
     {
-        return $this->belongsTo('App\Khoa', 'makhoa', 'makhoa');
+        return $this->belongsTo('App\Khoa', 'makhoa', 'id');
     }
     public function lophocs()
     {

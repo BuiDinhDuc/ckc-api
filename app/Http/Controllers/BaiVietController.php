@@ -8,17 +8,51 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\File;
 use App\FileBaiViet;
+use Carbon\Carbon;
 
 class BaiVietController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
+     */
+
+    /**
+     *   @OA\Get(
+     *     path="/api/baiviet/discussion-post",
+     *     summary="Danh sách bài viết thảo luận",
+     *     tags={"Bài viết"},
+     *     description= "Danh sách bài viết thảo luận",
+     *       @OA\Parameter(
+     *         name="id",
+     *         in="header",
+     *         description="lhp_id",
+     *       
+     *         @OA\Schema(
+     *             type="string",
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation",
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Invalid tag value",
+     *     ),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     },
+     * )
      */
     public function getDiscussionPostList(Request $request)
     {
@@ -34,6 +68,39 @@ class BaiVietController extends Controller
         else
             return response()->json(['status' => 'failed', 'message' => 'Không có bài thảo luận nào'], 200);
     }
+
+    /**
+     *   @OA\Get(
+     *     path="/api/baiviet/teacher-post",
+     *     summary="Danh sách bài viết giáo viên",
+     *     tags={"Bài viết"},
+     *     description= "Danh sách bài viết giáo viên",
+     *       @OA\Parameter(
+     *         name="id",
+     *         in="header",
+     *         description="lhp_id",
+     *       
+     *         @OA\Schema(
+     *             type="string",
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation",
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Invalid tag value",
+     *     ),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     },
+     * )
+     */
 
     public function getTeacherPostList(Request $request)
     {
@@ -56,6 +123,75 @@ class BaiVietController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    /**
+     *   @OA\Post(
+     *     path="/api/baiviet/create",
+     *     summary="Tạo bài viết",
+     *     tags={"Bài viết"},
+     *     description= "Tạo bài viết",
+     *       @OA\Parameter(
+     *         name="noidung",
+     *         in="query",
+     *         description="noidung",
+     *       
+     *         @OA\Schema(
+     *             type="string",
+     *         )
+     *     ),
+     *  @OA\Parameter(
+     *         name="tieude",
+     *         in="query",
+     *         description="tieude",
+     *       
+     *         @OA\Schema(
+     *             type="string",
+     *         )
+     *     ),
+     *  *  @OA\Parameter(
+     *         name="loaibv",
+     *         in="query",
+     *         description="loaibv",
+     *       
+     *         @OA\Schema(
+     *             type="integer",
+     *         )
+     *     ),
+     *    @OA\Parameter(
+     *         name="malhp",
+     *         in="query",
+     *         description="malhp",
+     *       
+     *         @OA\Schema(
+     *             type="integer",
+     *         )
+     *     ),
+     *  @OA\Parameter(
+     *         name="macd",
+     *         in="query",
+     *         description="macd",
+     *       
+     *         @OA\Schema(
+     *             type="integer",
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation",
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Invalid tag value",
+     *     ),
+     *     security={
+     *         {"bearerAuth": {}}
+     *     },
+     * )
+     */
     public function store(Request $request)
     {
         $v = Validator::make($request->all(), [
@@ -76,11 +212,11 @@ class BaiVietController extends Controller
         $baiviet =  BaiViet::create([
             'tieude'     => $request->tieude,
             'noidung'    => $request->noidung,
-            'ngaytao'    => $request->ngaytao,
+            'ngaytao'    => Carbon::now('Asia/Ho_Chi_Minh'),
             'loaibv'     => $request->loaibv,
             'matk'       => Auth::user()->id,
             'malhp'      => $request->malhp,
-            'chude'      => $request->macd,
+            'macd'      => $request->macd,
             'trangthai'  => 1,
         ]);
 
@@ -148,7 +284,12 @@ class BaiVietController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
+        $baiviet = BaiViet::find($request->id);
+        if(!empty($baiviet)){
+            $baiviet->trangthai = 0;
+            $baiviet->save();
+        }
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\SinhVienController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,37 +17,42 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Route::group(['middleware' => 'auth:api'], function () {
-Route::prefix('baiviet')->group(function () {
-    Route::get('/', 'BaiVietController@getAllB');
-    Route::get('detail', 'BoMonController@detailBoMon');
-    Route::post('create', 'BoMonController@createNewBoMon');
-    Route::post('update', 'BoMonController@updateBoMon');
-    Route::post('delete', 'BoMonController@deleteBoMon');
-});
+    Route::prefix('baiviet')->group(function () {
+        Route::get('/discussion-post', 'BaiVietController@getDiscussionPostList');
+        Route::get('/teacher-post', 'BaiVietController@getTeacherPostList');
+        Route::get('detail', 'BaiVietController@detailBoMon');
+        Route::post('create', 'BaiVietController@createNewBoMon');   //chưa xong
+        Route::post('update', 'BaiVietController@updateBoMon');      //chưa xong
+        Route::post('delete', 'BaiVietController@deleteBoMon');
+    });
 
-Route::prefix('khoa')->group(function () {
-    Route::get('/', 'KhoaController@getAllKhoa');
-    Route::get('detail', 'KhoaController@detailKhoa');
-    Route::post('create', 'KhoaController@createNewKhoa');
-    Route::post('update', 'KhoaController@updateKhoa');
-    Route::post('delete', 'KhoaController@deleteKhoa');
-});
-Route::prefix('bomon')->group(function () {
-    Route::get('/', 'BoMonController@getAllBoMon');
-    Route::get('detail', 'BoMonController@detailBoMon');
-    Route::post('create', 'BoMonController@createNewBoMon');
-    Route::post('update', 'BoMonController@updateBoMon');
-    Route::post('delete', 'BoMonController@deleteBoMon');
-});
+    Route::prefix('khoa')->group(function () {
+        Route::get('/', 'KhoaController@getAllKhoa');
+        Route::get('detail', 'KhoaController@detailKhoa');
+        Route::post('create', 'KhoaController@createNewKhoa');
+        Route::put('update', 'KhoaController@updateKhoa');
+        Route::delete('delete', 'KhoaController@deleteKhoa');
+    });
+    Route::prefix('bomon')->group(function () {
+        Route::get('/', 'BoMonController@getAllBoMon');
+        Route::get('detail', 'BoMonController@detailBoMon');
+        Route::post('create', 'BoMonController@createNewBoMon');
+        Route::put('update', 'BoMonController@updateBoMon');
+        Route::delete('delete', 'BoMonController@deleteBoMon');
+    });
 
-Route::prefix('sinhvien')->group(function () {
-    Route::get('/', 'SinhVienController@getAllSinhVien');
-    Route::get('/{id}', 'SinhVienController@detail');
-});
+    Route::prefix('sinhvien')->group(function () {
+        Route::get('/', 'SinhVienController@getAllSinhVien');
+        Route::get('/{id}', 'SinhVienController@detail');
+    });
 
-Route::get('/home', 'HomeController@index');
+    Route::apiResource('lophocphan', 'LopHocPhanController');
+    Route::apiResource('lophoc', 'LopHocController');
+// });
+// Route::get('/home', 'HomeController@index');
 Route::post('/login', 'AuthController@login');
 
-    
+Route::get('/province','ProvinceController@getProvince');
+Route::get('/district','ProvinceController@getDistrict');
+Route::get('/ward','ProvinceController@getWard');
 
-// });
