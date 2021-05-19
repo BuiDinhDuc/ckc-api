@@ -44,6 +44,8 @@ use Illuminate\Support\Facades\Route;
     Route::prefix('sinhvien')->group(function () {
         Route::get('/', 'SinhVienController@getAllSinhVien');
         Route::get('/{id}', 'SinhVienController@detail');
+        Route::post('/', 'SinhVienController@store');
+        Route::post('/edit/{id}', 'SinhVienController@update');
     });
 
     Route::apiResource('lophocphan', 'LopHocPhanController');
