@@ -47,10 +47,12 @@ Route::prefix('sinhvien')->group(function () {
     Route::post('/', 'SinhVienController@store');
     Route::post('/edit/{id}', 'SinhVienController@update');
     Route::post('/delete/{id}', 'SinhVienController@delete');
+    Route::post('/search', 'SinhVienController@timkiemSV');
 });
 
 Route::apiResource('lophocphan', 'LopHocPhanController');
 Route::apiResource('lophoc', 'LopHocController');
+Route::apiResource('giangvien','GiangVienController');
 // });
 // Route::get('/home', 'HomeController@index');
 Route::post('/login', 'AuthController@login');

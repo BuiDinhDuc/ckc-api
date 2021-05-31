@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\GiangVien;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+
 
 class GiangVienController extends Controller
 {
@@ -17,7 +21,9 @@ class GiangVienController extends Controller
      */
     public function index()
     {
-        //
+        $lst_giangvien = GiangVien::where('trangthai','<>',0)->get();
+
+        return response()->json(['status' => 'success','data' => $lst_giangvien],200);
     }
 
     /**
@@ -28,7 +34,43 @@ class GiangVienController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        do {
+            $email = rand(0, 9999999999);
+            $len = strlen($email);
+            for ($i = 0; $i < 10 - $len; $i++) {
+                $email = '0' . $email;
+            }
+            $email .= '@caothang.edu.vn';
+            $user = User::where('email', $email)->first();
+        } while (!empty($user));
+
+        $user = User::create([
+            'email' => $email,
+            'trangthai' => 1,
+            'password'  => Hash::make($request->cccd)
+        ]);
+
+        if (!empty($user)) {
+            $gv = GiangVien::create([
+                'hogv' => $request->hosv,
+                'tengv' => $request->tensv,
+                'ngaysinh' => $request->ngaysinh,
+                'gioitinh' => $request->gioitinh,
+                'sdt' => $request->sdt,
+                'cccd' => $request->cccd,
+                'matk' => $user->id,
+                'mabm' => $request->lop,
+                'province_id' => $request->tinh,
+                'district_id' => $request->huyen,
+                'ward_id' => $request->xa,
+                'trangthai' => 1,
+
+            ]);
+            if (!empty($gv)) {
+                return response()->json(['status' => 'success', 'message' => 'Thêm thành công'], 200);
+            }
+            return response()->json(['status' => 'error', 'message' => 'Thêm thất bại'], 403);
+        }
     }
 
     /**
@@ -39,7 +81,9 @@ class GiangVienController extends Controller
      */
     public function show($id)
     {
-        //
+        $sv = GiangVien::where([['id', $id]])->with('bomon', 'taikhoan','lophocphans' ,'tinh', 'huyen', 'xa')->first();
+        if (!empty($sv))
+            return response()->json(['status' => 'success', 'data' => $sv], 200);
     }
 
     /**
@@ -51,7 +95,25 @@ class GiangVienController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $gv = GiangVien::find($id);
+        $gv->update([
+            'hogv' => $request->hosv,
+            'tengv' => $request->tensv,
+            'ngaysinh' => $request->ngaysinh,
+            'gioitinh' => $request->gioitinh,
+            'sdt' => $request->sdt,
+            'cccd' => $request->cccd,
+            'mabm' => $request->lop,
+            'province_id' => $request->tinh,
+            'district_id' => $request->huyen,
+            'ward_id' => $request->xa,
+            'trangthai' => 1,
+
+        ]);
+        if (!empty($gv)) {
+            return response()->json(['status' => 'success', 'message' => 'Sửa thành công'], 200);
+        }
+        return response()->json(['status' => 'error', 'message' => 'Sửa thất bại'], 403);
     }
 
     /**
@@ -62,6 +124,17 @@ class GiangVienController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $gv = GiangVien::find($id);
+        if (!empty($gv)) {
+            if ($gv->trangthai == 0) {
+                return response()->json(['status' => 'error', 'message' => 'Giảng viên đã bị xóa'], 403);
+            } else {
+                $gv->trangthai = 0;
+                $gv->save();
+                return response()->json(['status' => 'success', 'message' => 'Xóa thành công'], 200);
+            }
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Giảng viên không tồn tại'], 404);
+        }
     }
 }

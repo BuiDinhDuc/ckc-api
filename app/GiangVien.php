@@ -19,4 +19,16 @@ class GiangVien extends Model
     {
         return $this->hasMany('App\LopHocPhan', 'magv', 'id');
     }
+    public function tinh()
+    {
+        return $this->hasOne('App\Province', 'id', 'province_id');
+    }
+    public function huyen()
+    {
+        return $this->hasOne('App\District', 'id', 'district_id');
+    }
+    public function xa()
+    {
+        return $this->hasOne('App\Ward', 'id', 'ward_id');
+    }
 }

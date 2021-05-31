@@ -134,4 +134,17 @@ class SinhVienController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Sinh viên không tồn tại'], 404);
         }
     }
+    public function timkiemSV(Request $request){
+        if($request->key_word == null){
+            $lst_sv = SinhVien::where('trangthai', '<>', 0)->get();
+            if (!empty($lst_sv))
+                return response()->json(['status' => 'success', 'data' => $lst_sv], 200);
+        }
+        else{
+            $lst_sv = SinhVien::where('hosv','like','%'.$request->key_word.'%')
+            ->orWhere('tensv','like','%'.$request->key_word.'%');
+            if (!empty($lst_sv))
+                return response()->json(['status' => 'success', 'data' => $lst_sv->where('trangthai','<>',0)->get()], 200);
+        }
+    }
 }
