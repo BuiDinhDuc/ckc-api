@@ -16,7 +16,7 @@ class CreateMonHocsTable extends Migration
         Schema::create('mon_hocs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('tenmh')->nullable();
-            $table->date('tinchi')->nullable();
+            $table->integer('tinchi')->nullable();
             $table->boolean('trangthai')->default(1);
             $table->timestamps();
         });

@@ -53,6 +53,8 @@ Route::prefix('sinhvien')->group(function () {
 Route::apiResource('lophocphan', 'LopHocPhanController');
 Route::apiResource('lophoc', 'LopHocController');
 Route::apiResource('giangvien','GiangVienController');
+Route::apiResource('monhoc','MonHocController');
+Route::post('monhoc/search','MonHocController@timkiemMH');
 // });
 // Route::get('/home', 'HomeController@index');
 Route::post('/login', 'AuthController@login');
