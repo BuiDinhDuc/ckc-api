@@ -56,7 +56,7 @@ class LopHocController extends Controller
 
     public function index(Request $request)
     {
-        $lst_lophoc = LopHoc::where('trangthai', '=', 1)->get();
+        $lst_lophoc = LopHoc::where('trangthai', '=', 1)->with('bomon')->get();
         return response()->json(['status' => 'success', 'data' => $lst_lophoc]);
     }
 

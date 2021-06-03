@@ -55,6 +55,8 @@ Route::apiResource('lophoc', 'LopHocController');
 Route::apiResource('giangvien','GiangVienController');
 Route::apiResource('monhoc','MonHocController');
 Route::post('monhoc/search','MonHocController@timkiemMH');
+Route::post('/giangvien/update/{id}', 'GiangVienController@update');
+Route::post('/giangvien/delete/{id}', 'GiangVienController@destroy');
 // });
 // Route::get('/home', 'HomeController@index');
 Route::post('/login', 'AuthController@login');

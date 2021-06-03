@@ -10,10 +10,10 @@ use Illuminate\Support\Facades\Hash;
 
 class GiangVienController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
     /**
      * Display a listing of the resource.
      *
@@ -52,14 +52,14 @@ class GiangVienController extends Controller
 
         if (!empty($user)) {
             $gv = GiangVien::create([
-                'hogv' => $request->hosv,
-                'tengv' => $request->tensv,
+                'hogv' => $request->hogv,
+                'tengv' => $request->tengv,
                 'ngaysinh' => $request->ngaysinh,
                 'gioitinh' => $request->gioitinh,
                 'sdt' => $request->sdt,
                 'cccd' => $request->cccd,
                 'matk' => $user->id,
-                'mabm' => $request->lop,
+                'mabm' => $request->bomon,
                 'province_id' => $request->tinh,
                 'district_id' => $request->huyen,
                 'ward_id' => $request->xa,
@@ -81,7 +81,7 @@ class GiangVienController extends Controller
      */
     public function show($id)
     {
-        $sv = GiangVien::where([['id', $id]])->with('bomon', 'taikhoan','lophocphans' ,'tinh', 'huyen', 'xa')->first();
+        $sv = GiangVien::where('id',$id)->with('bomon', 'taikhoan','lophocphans' ,'tinh', 'huyen', 'xa')->first();
         if (!empty($sv))
             return response()->json(['status' => 'success', 'data' => $sv], 200);
     }
@@ -97,13 +97,13 @@ class GiangVienController extends Controller
     {
         $gv = GiangVien::find($id);
         $gv->update([
-            'hogv' => $request->hosv,
-            'tengv' => $request->tensv,
+            'hogv' => $request->hogv,
+            'tengv' => $request->tengv,
             'ngaysinh' => $request->ngaysinh,
             'gioitinh' => $request->gioitinh,
             'sdt' => $request->sdt,
             'cccd' => $request->cccd,
-            'mabm' => $request->lop,
+            'mabm' => $request->bomon,
             'province_id' => $request->tinh,
             'district_id' => $request->huyen,
             'ward_id' => $request->xa,
