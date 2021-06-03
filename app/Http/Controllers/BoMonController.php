@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 
 class BoMonController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
 
     /**
      * *  @OA\Get(
@@ -40,8 +40,7 @@ class BoMonController extends Controller
     public function getAllBoMon(Request $request)
     {
         $lst_bomon = BoMon::where('trangthai', 1)->withCount('lophocs')->with('khoa')->get();
-        $data['list'] = $lst_bomon;
-        return response()->json(['status' => 'success', 'data' => $data], 200);
+        return response()->json(['status' => 'success', 'data' => $lst_bomon], 200);
     }
 
     /**

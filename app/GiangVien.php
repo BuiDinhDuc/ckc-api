@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class GiangVien extends Model
 {
-    protected $fillable = ['tengv', 'ngaysinh', 'diachi', 'sdt', 'email', 'matk', 'mabm'];
+    protected $fillable = ['tengv','hogv', 'ngaysinh', 'diachi', 'sdt', 'email', 'matk', 'mabm','gioitinh','cccd','province_id','ward_id','district_id'];
     public function taikhoan()
     {
-        return $this->belongsTo('App\User', 'matk', 'matk');
+        return $this->belongsTo('App\User', 'matk', 'id');
     }
     public function bomon()
     {
-        return $this->belongsTo('App\BoMon', 'mabm', 'mabm');
+        return $this->belongsTo('App\BoMon', 'mabm', 'id');
     }
     public function lophocphans()
     {
