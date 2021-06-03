@@ -22,9 +22,9 @@ class KhoaController extends Controller
         else
             return response()->json(['status' => 'failed', 'message' => 'Không có khoa nào'], 404);
     }
-    public function detailKhoa(Request $request)
+    public function detailKhoa(Request $request,$id)
     {
-        $khoa = Khoa::where('makhoa', $request->makhoa)->get();
+        $khoa = Khoa::find($id);
         if (!empty($khoa))
             return response()->json(['status' => 'success', 'data' => $khoa], 200);
         else

@@ -28,7 +28,7 @@ Route::prefix('baiviet')->group(function () {
 
 Route::prefix('khoa')->group(function () {
     Route::get('/', 'KhoaController@getAllKhoa');
-    Route::get('detail', 'KhoaController@detailKhoa');
+    Route::get('detail/{id}', 'KhoaController@detailKhoa');
     Route::post('create', 'KhoaController@createNewKhoa');
     Route::put('update', 'KhoaController@updateKhoa');
     Route::delete('delete', 'KhoaController@deleteKhoa');
