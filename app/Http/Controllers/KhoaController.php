@@ -9,10 +9,10 @@ use App\BoMon;
 class KhoaController extends Controller
 {
 
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     public function getAllKhoa(Request $request)
     {

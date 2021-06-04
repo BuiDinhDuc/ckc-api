@@ -103,6 +103,14 @@ class AuthController extends Controller
         }
         return response()->json([
             'status' => 'Invalid account or password',
-        ], 200);
+        ], 422);
+    }
+    public function logout()
+    {
+        Auth::logout();
+        return response()->json([
+            'status' => 'Login successfully',
+            'message' => 'Đăng xuất thành công',
+        ], 422);
     }
 }
