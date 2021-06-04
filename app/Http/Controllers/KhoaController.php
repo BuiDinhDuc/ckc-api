@@ -22,7 +22,7 @@ class KhoaController extends Controller
         else
             return response()->json(['status' => 'failed', 'message' => 'Không có khoa nào'], 404);
     }
-    public function detailKhoa(Request $request,$id)
+    public function detailKhoa($id)
     {
         $khoa = Khoa::find($id);
         if (!empty($khoa))
@@ -33,21 +33,19 @@ class KhoaController extends Controller
     public function createNewKhoa(Request $request)
     {
         $khoa = new Khoa();
-        $makhoa =  $this->taoma();
-        $khoa->makhoa  = $makhoa;
         $khoa->tenkhoa = $request->tenkhoa;
-        $khoa->ngaylap  = $request->ngaylap;
+        // $khoa->ngaylap  = $request->ngaylap;
         $khoa->trangthai  = 1;
         $khoa->save();
         $lst_khoa = Khoa::where('trangthai', 1)->get();
         return response()->json(['status' => 'success', 'data' => $lst_khoa], 200);
     }
-    public function updateKhoa(Request $request)
+    public function updateKhoa(Request $request,$id)
     {
-        $khoa = Khoa::find($request->makhoa);
+        $khoa = Khoa::find($id);
         if (!empty($khoa)) {
             $khoa->tenkhoa      = $request->tenkhoa;
-            $khoa->ngaylap      = $request->ngaylap;
+            // $khoa->ngaylap      = $request->ngaylap;
             $khoa->trangthai    = 1;
             $khoa->save();
             $lst_khoa = Khoa::where('trangthai', 1)->get();
@@ -56,23 +54,16 @@ class KhoaController extends Controller
             return response()->json(['status' => 'failed', 'message' => 'Không tìm thấy khoa'], 404);
         }
     }
-    public function deleteKhoa(Request $request)
+    public function deleteKhoa($id)
     {
-        $khoa = Khoa::where('makhoa', '=', $request->makhoa)->first();
-        $bomon = BoMon::where('makhoa', '=', $request->makhoa);
-        if (empty($bomon)) {
-            $khoa->trangthai  = 1;
+        $khoa = Khoa::find($id);
+        if (!empty($khoa)) {
+            $khoa->trangthai  = 0;
             $khoa->save();
-            $lst_khoa = Khoa::where('trangthai', 1)->get();
-            return response()->json(['status' => 'success', 'data' => $lst_khoa], 200);
+            return response()->json(['status' => 'success', 'message' => 'Xóa thành công'], 200);
         } else {
             return response()->json(['status' => 'failed', 'message' => 'Không thể xóa khoa vì có bộ môn'], 404);
         }
     }
-    function taoma()
-    {
-        $makhoa =  Khoa::count() + 1;
-        if ($makhoa < 10) $makhoa = '0' . $makhoa;
-        return $makhoa;
-    }
+ 
 }
