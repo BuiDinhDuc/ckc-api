@@ -30,8 +30,8 @@ Route::prefix('khoa')->group(function () {
     Route::get('/', 'KhoaController@getAllKhoa');
     Route::get('detail/{id}', 'KhoaController@detailKhoa');
     Route::post('create', 'KhoaController@createNewKhoa');
-    Route::put('update', 'KhoaController@updateKhoa');
-    Route::delete('delete', 'KhoaController@deleteKhoa');
+    Route::post('update/{id}', 'KhoaController@updateKhoa');
+    Route::post('delete/{id}', 'KhoaController@deleteKhoa');
 });
 Route::prefix('bomon')->group(function () {
     Route::get('/', 'BoMonController@getAllBoMon');
