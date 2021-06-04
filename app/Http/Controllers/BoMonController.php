@@ -134,7 +134,7 @@ class BoMonController extends Controller
         $bomon->makhoa        = $request->makhoa;
         $bomon->save();
         $lst_bomon = BoMon::where('trangthai', 1)->get();
-        return response()->json(['status' => 'success', 'data' => $lst_bomon], 200);
+        return response()->json(['status' => 'success', 'message' => "Thêm bộ môn thành công"], 200);
     }
     /**
      *   @OA\Put(
@@ -239,5 +239,18 @@ class BoMonController extends Controller
         $bomon->save();
         $lst_bomon = BoMon::where('trangthai', 1)->get();
         return response()->json(['status' => 'success', 'data' => $lst_bomon], 200);
+    }
+
+    public function timkiemBoMon(Request $request){
+        if($request->key_word == null){
+            $lst_bomon = BoMon::where('trangthai', '<>', 0)->withCount('lophocs')->with('khoa')->get();
+            if (!empty($lst_bomon))
+                return response()->json(['status' => 'success', 'data' => $lst_bomon], 200);
+        }
+        else{
+            $lst_bomon = BoMon::where([['tenbm','like','%'.$request->key_word.'%'],['trangthai','<>',0]])->withCount('lophocs')->with('khoa')->get();
+            if (!empty($lst_bomon))
+                return response()->json(['status' => 'success', 'data' => $lst_bomon], 200);
+        }
     }
 }

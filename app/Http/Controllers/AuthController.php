@@ -98,7 +98,7 @@ class AuthController extends Controller
             $account =  array_merge($account->toArray(), $this->respondWithToken($token));
             return response()->json([
                 'status' => 'Login successfully',
-                'userData' => $account,
+                'data' => $account,
             ], 200);
         }
         return response()->json([

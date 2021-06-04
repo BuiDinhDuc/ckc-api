@@ -12,10 +12,10 @@ use Illuminate\Support\Facades\Validator;
 
 class LopHocPhanController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
     /**
      * Display a listing of the resource.
      *
@@ -67,7 +67,7 @@ class LopHocPhanController extends Controller
 
         $lhp = LopHocPhan::create([
             'tenlhp'    => $monhoc->tenmh . ' ' . $lophoc->tenlop,
-            'ngaytao'   => Carbon::now(),
+            'ngaytao'   => Carbon::now()->toDateString(),
             'hocky'     => $request->hocky,
             'chinhsach' => $request->chinhsach,
             'namhoc'    => $request->namhoc,
@@ -77,6 +77,7 @@ class LopHocPhanController extends Controller
             'trangthai' => 1
         ]);
         if ($lhp) {
+
             return response()->json(['status' => 'success', 'message' => 'Tạo lớp học phần thành công'], 200);
         }
         return response()->json(['status' => 'error', 'message' => 'Tạo lớp học phần không thành công'], 422);

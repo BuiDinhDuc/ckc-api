@@ -39,6 +39,7 @@ Route::prefix('bomon')->group(function () {
     Route::post('create', 'BoMonController@createNewBoMon');
     Route::put('update', 'BoMonController@updateBoMon');
     Route::delete('delete', 'BoMonController@deleteBoMon');
+    Route::post('search','BoMonController@timkiemBoMon');
 });
 
 Route::prefix('sinhvien')->group(function () {
