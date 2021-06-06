@@ -29,7 +29,7 @@ class AuthController extends Controller
         return [
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => $this->guard()->factory()->getTTL() * 60
+            'expires_in' => $this->guard()->factory()->getTTL() * 604800;
         ];
     }
     /**
