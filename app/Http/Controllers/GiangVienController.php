@@ -137,4 +137,18 @@ class GiangVienController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Giảng viên không tồn tại'], 404);
         }
     }
+    public function timkiemGV(Request $request){
+        if($request->key_word == null){
+            $lst_gv = GiangVien::where('trangthai', '<>', 0)->get();
+            if (!empty($lst_gv))
+                return response()->json(['status' => 'success', 'data' => $lst_gv], 200);
+        }
+        else{
+            $lst_gv = GiangVien::where('hogv','like','%'.$request->key_word.'%')
+            ->orWhere('tengv','like','%'.$request->key_word.'%');
+            if (!empty($lst_gv))
+                return response()->json(['status' => 'success', 'data' => $lst_gv->where('trangthai','<>',0)->get()], 200);
+        }
+    }
+    
 }

@@ -65,5 +65,17 @@ class KhoaController extends Controller
             return response()->json(['status' => 'failed', 'message' => 'Không thể xóa khoa vì có bộ môn'], 404);
         }
     }
- 
+    public function timkiemKhoa(Request $request){
+        if($request->key_word == null){
+            $lst_khoa = Khoa::where('trangthai', '<>', 0)->get();
+            if (!empty($lst_khoa))
+                return response()->json(['status' => 'success', 'data' => $lst_khoa], 200);
+        }
+        else{
+            $lst_khoa = Khoa::where([['tenkhoa','like','%'.$request->key_word.'%'],['trangthai','<>',0]])->get();
+            if (!empty($lst_khoa))
+                return response()->json(['status' => 'success', 'data' => $lst_khoa], 200);
+        }
+    }
+
 }

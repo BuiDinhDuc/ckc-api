@@ -159,4 +159,16 @@ class LopHocController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Lớp học không tồn tại'], 404);
         }
     }
+    public function timkiemLopHoc(Request $request){
+        if($request->key_word == null){
+            $lst_lh = LopHoc::where('trangthai', '<>', 0)->with('bomon')->get();
+            if (!empty($lst_lh))
+                return response()->json(['status' => 'success', 'data' => $lst_lh], 200);
+        }
+        else{
+            $lst_lh = LopHoc::where([['tenlop','like','%'.$request->key_word.'%'],['trangthai','<>',0]])->with('bomon')->get();
+            if (!empty($lst_lh))
+                return response()->json(['status' => 'success', 'data' => $lst_lh], 200);
+        }
+    }
 }

@@ -67,7 +67,11 @@ Route::prefix('lophocphan')->group(function () {
 Route::apiResource('lophoc', 'LopHocController');
 Route::apiResource('giangvien','GiangVienController');
 Route::apiResource('monhoc','MonHocController');
-Route::post('monhoc/search','MonHocController@timkiemMH');
+Route::post('monhoc/search','MonHocController@timkiemLopHoc');
+
+Route::post('lophoc/search','LopHocController@timkiemLopHoc');
+Route::post('khoa/search','KhoaController@timkiemKhoa');
+Route::post('giangvien/search','GiangVienController@timkiemGV');
 Route::post('/giangvien/update/{id}', 'GiangVienController@update');
 Route::post('/giangvien/delete/{id}', 'GiangVienController@destroy');
 // });
