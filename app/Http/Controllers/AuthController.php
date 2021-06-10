@@ -24,12 +24,22 @@ class AuthController extends Controller
     {
         return Auth::guard();
     }
+    public function refresh()
+    {
+        if ($token = $this->guard()->refresh()) {
+            return response()
+                ->json(['status' => 'successs'], 200)
+                ->header('Authorization', $token);
+        }
+
+        return response()->json(['error' => 'refresh_token_error'], 401);
+    }
     protected function respondWithToken($token)
     {
         return [
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => $this->guard()->factory()->getTTL() * 604800
+            'expires_in' => $this->guard()->factory()->getTTL() * 60
         ];
     }
     /**
@@ -107,10 +117,10 @@ class AuthController extends Controller
     }
     public function logout()
     {
-        Auth::logout();
+        $this->guard();
         return response()->json([
             'status' => 'Login successfully',
             'message' => 'Đăng xuất thành công',
-        ], 422);
+        ], 200);
     }
 }
