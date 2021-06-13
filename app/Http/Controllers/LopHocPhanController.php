@@ -26,7 +26,7 @@ class LopHocPhanController extends Controller
 
     public function index()
     {
-        $lst_lhp = LopHocPhan::where('trangthai', '=', 1)->get();
+        $lst_lhp = LopHocPhan::where('trangthai', '=', 1)->paginate(5);
         return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
     }
 
