@@ -10,10 +10,10 @@ use Illuminate\Support\Facades\Hash;
 
 class GiangVienController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +21,7 @@ class GiangVienController extends Controller
      */
     public function index()
     {
-        $lst_giangvien = GiangVien::where('trangthai','<>',0)->get();
+        $lst_giangvien = GiangVien::where('trangthai','<>',0)->paginate(10);
 
         return response()->json(['status' => 'success','data' => $lst_giangvien],200);
     }

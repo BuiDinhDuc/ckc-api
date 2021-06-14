@@ -9,13 +9,13 @@ use Illuminate\Support\Facades\Hash;
 
 class SinhVienController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
     public function getAllSinhVien(Request $request)
     {
-        $lst_sv = SinhVien::where('trangthai', '<>', 0)->get();
+        $lst_sv = SinhVien::where('trangthai', '<>', 0)->paginate(10);
 
         if (!empty($lst_sv))
             return response()->json(['status' => 'success', 'data' => $lst_sv], 200);

@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Validator;
 
 class LopHocController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
     /**
      * Display a listing of the resource.
      *
@@ -55,6 +55,12 @@ class LopHocController extends Controller
      */
 
     public function index(Request $request)
+    {
+        $lst_lophoc = LopHoc::where('trangthai', '=', 1)->with('bomon')->paginate(10);
+        return response()->json(['status' => 'success', 'data' => $lst_lophoc]);
+    }
+
+    public function dsLopHoc(Request $request)
     {
         $lst_lophoc = LopHoc::where('trangthai', '=', 1)->with('bomon')->get();
         return response()->json(['status' => 'success', 'data' => $lst_lophoc]);

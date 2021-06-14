@@ -9,14 +9,14 @@ use App\BoMon;
 class KhoaController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
 
     public function getAllKhoa(Request $request)
     {
-        $lst_khoa = Khoa::where('trangthai', 1)->get();
+        $lst_khoa = Khoa::where('trangthai', 1)->paginate(10);
         if (!empty($lst_khoa))
             return response()->json(['status' => 'success', 'data' => $lst_khoa], 200);
         else

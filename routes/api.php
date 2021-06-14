@@ -64,12 +64,24 @@ Route::prefix('lophocphan')->group(function () {
     Route::get('/getLHPGV/{id}','LopHocPhanController@lstLopHocPhanTheoGV');
 });
 
-Route::apiResource('lophoc', 'LopHocController');
+Route::prefix('lophoc')->group(function(){
+    Route::get('/', 'LopHocPhanController@index');
+    Route::get('detail/{id}', 'LopHocController@show');
+    Route::post('create', 'LopHocController@store');
+    Route::post('update', 'LopHocController@update');
+    Route::post('delete', 'LopHocController@destroy');
+    Route::post('search','LopHocController@search');
+});
+
+
+
+
 Route::apiResource('giangvien','GiangVienController');
 Route::apiResource('monhoc','MonHocController');
 Route::post('monhoc/search','MonHocController@timkiemLopHoc');
 
 Route::post('lophoc/search','LopHocController@timkiemLopHoc');
+Route::get('lophoc/dsLopHoc','LopHocController@dsLopHoc');
 Route::post('khoa/search','KhoaController@timkiemKhoa');
 Route::post('giangvien/search','GiangVienController@timkiemGV');
 Route::post('/giangvien/update/{id}', 'GiangVienController@update');

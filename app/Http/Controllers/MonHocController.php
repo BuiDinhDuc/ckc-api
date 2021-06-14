@@ -7,10 +7,10 @@ use Illuminate\Http\Request;
 
 class MonHocController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +18,7 @@ class MonHocController extends Controller
      */
     public function index()
     {
-        $lst_monhoc = MonHoc::where('trangthai','<>',0)->with('bomon')->get();
+        $lst_monhoc = MonHoc::where('trangthai','<>',0)->with('bomon')->paginate(10);
 
         return response()->json(['status'=> 'success','data'=>$lst_monhoc],200);
     }
