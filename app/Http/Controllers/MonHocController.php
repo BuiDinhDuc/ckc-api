@@ -61,9 +61,9 @@ class MonHocController extends Controller
      */
     public function show($id)
     {
-        $monhoc = MonHoc::find($id);
+        $monhoc = MonHoc::where([['id',$id]])->with('bomon')->first();
         if(!empty($monhoc)){
-            return response()->json(['status' =>'success','data'=>$monhoc->with('bomon','lophocphans')],200);
+            return response()->json(['status' =>'success','data'=> $monhoc],200);
         }
         return response()->json(['status' =>'failed','message'=>'Không tìm thấy môn học'],404);
     }
@@ -80,7 +80,7 @@ class MonHocController extends Controller
         $monhoc = MonHoc::find($id);
         if(!empty($monhoc)){
             $monhoc->update([
-                'temmh' => $request->tenmh,
+                'tenmh' => $request->tenmh,
                 'tinchi' =>$request->tinchi,
                 'mabm'  =>$request->mabm
             ]);

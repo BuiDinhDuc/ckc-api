@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\SinhVien;
+
 class LopHocPhanController extends Controller
 {
     // public function __construct()
@@ -44,11 +45,11 @@ class LopHocPhanController extends Controller
     }
     public function lstLopHocPhanTheoSV($id_sinhvien)
     {
-     
+
         $lst_lhp = LopHocPhan::where('trangthai', '=', 1)
             ->whereHas('sinhvienlophocphans', function (Builder $query) use ($id_sinhvien) {
                 $query->where('masv', '=', $id_sinhvien);
-            })->with('giangvien','lophoc','monhoc')->withCount('sinhvienlophocphans')->get();
+            })->with('giangvien', 'lophoc', 'monhoc')->withCount('sinhvienlophocphans')->get();
         return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
     }
 
@@ -81,11 +82,12 @@ class LopHocPhanController extends Controller
             'magv'      => $id_giangvien,
             'malh'      => $id_lophoc,
             'mamh'      => $id_monhoc,
+            'chinhsach' => 1,
             'trangthai' => 1
         ]);
         if ($lhp) {
-            $lst_sv = SinhVien::where('malh',$lhp->malh)->get();
-            foreach($lst_sv as $sv){
+            $lst_sv = SinhVien::where('malh', $lhp->malh)->get();
+            foreach ($lst_sv as $sv) {
                 SinhVienLopHocPhan::create([
                     'masv' => $sv->id,
                     'malhp' => $lhp->id,
@@ -105,13 +107,13 @@ class LopHocPhanController extends Controller
      */
     public function show($id)
     {
-        $lhp = LopHocPhan::where('id',$id)->with('giangvien', 'lophoc', 'monhoc')->get();
+        $lhp = LopHocPhan::where('id', $id)->with('giangvien', 'lophoc', 'monhoc')->get();
 
         $data['lhp'] = $lhp[0];
 
-        $sv_id = SinhVienLopHocPhan::where('malhp',$id)->get()->pluck('masv');
+        $sv_id = SinhVienLopHocPhan::where('malhp', $id)->get()->pluck('masv');
 
-        $lst_sv = SinhVien::whereIn('id',$sv_id)->where('trangthai',1)->get();
+        $lst_sv = SinhVien::whereIn('id', $sv_id)->where('trangthai', 1)->get();
         $data['lst_sv'] = $lst_sv;
 
         if (!empty($lhp)) {
@@ -185,14 +187,14 @@ class LopHocPhanController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Lớp học phần không tồn tại'], 404);
     }
 
-    public function timkiemLHP(Request $request){
-        if($request->key_word == null){
+    public function timkiemLHP(Request $request)
+    {
+        if ($request->key_word == null) {
             $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->paginate(10);
             if (!empty($lst_lhp))
                 return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
-        }
-        else{
-            $lst_lhp = LopHocPhan::where([['tenlhp','like','%'.$request->key_word.'%'],['trangthai','<>',0]])->paginate(10);
+        } else {
+            $lst_lhp = LopHocPhan::where([['tenlhp', 'like', '%' . $request->key_word . '%'], ['trangthai', '<>', 0]])->paginate(10);
             if (!empty($lst_lhp))
                 return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
         }
