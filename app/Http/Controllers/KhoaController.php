@@ -14,15 +14,25 @@ class KhoaController extends Controller
     //     $this->middleware('auth');
     // }
 
-    public function getAllKhoa(Request $request)
+    public function index()
     {
-        $lst_khoa = Khoa::where('trangthai', 1)->paginate(10);
+        $lst_khoa = Khoa::where('trangthai', 1)->withCount('bomons')->paginate(10);
         if (!empty($lst_khoa))
             return response()->json(['status' => 'success', 'data' => $lst_khoa], 200);
         else
             return response()->json(['status' => 'failed', 'message' => 'Không có khoa nào'], 404);
     }
-    public function detailKhoa($id)
+
+    public function getAll()
+    {
+        $lst_khoa = Khoa::where('trangthai', 1)->get();
+        if (!empty($lst_khoa))
+            return response()->json(['status' => 'success', 'data' => $lst_khoa], 200);
+        else
+            return response()->json(['status' => 'failed', 'message' => 'Không có khoa nào'], 404);
+    }
+
+    public function show($id)
     {
         $khoa = Khoa::find($id);
         if (!empty($khoa))
@@ -30,17 +40,15 @@ class KhoaController extends Controller
         else
             return response()->json(['status' => 'failed', 'message' => 'Không tìm thấy khoa'], 200);
     }
-    public function createNewKhoa(Request $request)
+    public function store(Request $request)
     {
         $khoa = new Khoa();
         $khoa->tenkhoa = $request->tenkhoa;
-        // $khoa->ngaylap  = $request->ngaylap;
         $khoa->trangthai  = 1;
         $khoa->save();
-        $lst_khoa = Khoa::where('trangthai', 1)->get();
-        return response()->json(['status' => 'success', 'data' => $lst_khoa], 200);
+        return response()->json(['status' => 'success', 'message' => 'Thêm thành công','data'=>$khoa->id], 200);
     }
-    public function updateKhoa(Request $request,$id)
+    public function update(Request $request,$id)
     {
         $khoa = Khoa::find($id);
         if (!empty($khoa)) {
@@ -48,13 +56,12 @@ class KhoaController extends Controller
             // $khoa->ngaylap      = $request->ngaylap;
             $khoa->trangthai    = 1;
             $khoa->save();
-            $lst_khoa = Khoa::where('trangthai', 1)->get();
-            return response()->json(['status' => 'success', 'data' => $lst_khoa], 200);
+            return response()->json(['status' => 'success', 'message' => 'Sửa thành công'], 200);
         } else {
             return response()->json(['status' => 'failed', 'message' => 'Không tìm thấy khoa'], 404);
         }
     }
-    public function deleteKhoa($id)
+    public function destroy($id)
     {
         $khoa = Khoa::find($id);
         if (!empty($khoa)) {
@@ -67,12 +74,12 @@ class KhoaController extends Controller
     }
     public function timkiemKhoa(Request $request){
         if($request->key_word == null){
-            $lst_khoa = Khoa::where('trangthai', '<>', 0)->get();
+            $lst_khoa = Khoa::where('trangthai', '<>', 0)->withCount('bomons')->paginate(10);
             if (!empty($lst_khoa))
                 return response()->json(['status' => 'success', 'data' => $lst_khoa], 200);
         }
         else{
-            $lst_khoa = Khoa::where([['tenkhoa','like','%'.$request->key_word.'%'],['trangthai','<>',0]])->get();
+            $lst_khoa = Khoa::where([['tenkhoa','like','%'.$request->key_word.'%'],['trangthai','<>',0]])->withCount('bomons')->paginate(10);
             if (!empty($lst_khoa))
                 return response()->json(['status' => 'success', 'data' => $lst_khoa], 200);
         }

@@ -13,14 +13,22 @@ class SinhVienController extends Controller
     // {
     //     $this->middleware('auth');
     // }
-    public function getAllSinhVien(Request $request)
+    public function index()
     {
         $lst_sv = SinhVien::where('trangthai', '<>', 0)->paginate(10);
 
         if (!empty($lst_sv))
             return response()->json(['status' => 'success', 'data' => $lst_sv], 200);
     }
-    public function detail(Request $request, $id)
+
+    public function getAll()
+    {
+        $lst_sv = SinhVien::where('trangthai', '<>', 0)->get();
+
+        if (!empty($lst_sv))
+            return response()->json(['status' => 'success', 'data' => $lst_sv], 200);
+    }
+    public function show(Request $request, $id)
     {
         $sv = SinhVien::where([['id', $id]])->with('lophoc', 'taikhoan', 'tinh', 'huyen', 'xa')->first();
         if (!empty($sv))
@@ -29,24 +37,15 @@ class SinhVienController extends Controller
     public function store(Request $request)
     {
 
-        do {
-            $email = rand(0, 9999999999);
-            $len = strlen($email);
-            for ($i = 0; $i < 10 - $len; $i++) {
-                $email = '0' . $email;
-            }
-            $email .= '@caothang.edu.vn';
-            $user = User::where('email', $email)->first();
-        } while (!empty($user));
-
         $user = User::create([
-            'email' => $email,
+            'email' => $request->mssv.'@caothang.edu.vn',
             'trangthai' => 1,
             'password'  => Hash::make($request->cccd)
         ]);
 
         if (!empty($user)) {
             $sv = SinhVien::create([
+                'mssv'  =>$request->mssv,
                 'hosv' => $request->hosv,
                 'tensv' => $request->tensv,
                 'ngaysinh' => $request->ngaysinh,
@@ -62,7 +61,7 @@ class SinhVienController extends Controller
 
             ]);
             if (!empty($sv)) {
-                return response()->json(['status' => 'success', 'message' => 'Thêm thành công'], 200);
+                return response()->json(['status' => 'success', 'message' => 'Thêm thành công','data'=>$sv->id], 200);
             }
             return response()->json(['status' => 'error', 'message' => 'Thêm thất bại'], 403);
         }
@@ -81,7 +80,6 @@ class SinhVienController extends Controller
             'province_id' => $request->tinh,
             'district_id' => $request->huyen,
             'ward_id' => $request->xa,
-            'trangthai' => 1,
 
         ]);
         if (!empty($sv)) {
@@ -89,7 +87,7 @@ class SinhVienController extends Controller
         }
         return response()->json(['status' => 'error', 'message' => 'Sửa thất bại'], 403);
     }
-    public function delete($id)
+    public function destroy($id)
     {
         $sinhvien = SinhVien::find($id);
         if (!empty($sinhvien)) {
@@ -136,7 +134,7 @@ class SinhVienController extends Controller
     }
     public function timkiemSV(Request $request){
         if($request->key_word == null){
-            $lst_sv = SinhVien::where('trangthai', '<>', 0)->get();
+            $lst_sv = SinhVien::where('trangthai', '<>', 0)->paginate(10);
             if (!empty($lst_sv))
                 return response()->json(['status' => 'success', 'data' => $lst_sv], 200);
         }
@@ -144,7 +142,7 @@ class SinhVienController extends Controller
             $lst_sv = SinhVien::where('hosv','like','%'.$request->key_word.'%')
             ->orWhere('tensv','like','%'.$request->key_word.'%');
             if (!empty($lst_sv))
-                return response()->json(['status' => 'success', 'data' => $lst_sv->where('trangthai','<>',0)->get()], 200);
+                return response()->json(['status' => 'success', 'data' => $lst_sv->where('trangthai','<>',0)->paginate(10)], 200);
         }
     }
 }

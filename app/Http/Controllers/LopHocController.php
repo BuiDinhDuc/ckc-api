@@ -56,11 +56,11 @@ class LopHocController extends Controller
 
     public function index(Request $request)
     {
-        $lst_lophoc = LopHoc::where('trangthai', '=', 1)->with('bomon')->paginate(10);
+        $lst_lophoc = LopHoc::where('trangthai', '<>', 0)->with('bomon')->withCount('sinhviens')->paginate(10);
         return response()->json(['status' => 'success', 'data' => $lst_lophoc]);
     }
 
-    public function dsLopHoc(Request $request)
+    public function getAll(Request $request)
     {
         $lst_lophoc = LopHoc::where('trangthai', '=', 1)->with('bomon')->get();
         return response()->json(['status' => 'success', 'data' => $lst_lophoc]);
@@ -165,7 +165,7 @@ class LopHocController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Lớp học không tồn tại'], 404);
         }
     }
-    public function timkiemLopHoc(Request $request){
+    public function timkiemLH(Request $request){
         if($request->key_word == null){
             $lst_lh = LopHoc::where('trangthai', '<>', 0)->with('bomon')->get();
             if (!empty($lst_lh))

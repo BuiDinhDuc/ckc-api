@@ -37,9 +37,16 @@ class BoMonController extends Controller
      *     },
      * )
      */
-    public function getAllBoMon(Request $request)
+    public function index(Request $request)
     {
         $lst_bomon = BoMon::where('trangthai','<>' ,0)->withCount('lophocs')->with('khoa')->paginate(10);
+      
+        return response()->json(['status' => 'success', 'data' => $lst_bomon], 200);
+    }
+
+    public function getAll(Request $request)
+    {
+        $lst_bomon = BoMon::where('trangthai','<>' ,0)->withCount('lophocs')->with('khoa')->get();
       
         return response()->json(['status' => 'success', 'data' => $lst_bomon], 200);
     }
@@ -79,7 +86,7 @@ class BoMonController extends Controller
      * )
      */
 
-    public function detailBomon(Request $request)
+    public function show(Request $request)
     {
         $bomon = BoMon::where('id', $request->id)->with('lophocs', 'khoa')->get();
         return response()->json(['status' => 'success', 'data' => $bomon], 200);
@@ -126,7 +133,7 @@ class BoMonController extends Controller
      *     },
      * )
      */
-    public function createNewBoMon(Request $request)
+    public function store(Request $request)
     {
         $bomon = new BoMon();
         $bomon->tenbm       = $request->tenbm;
@@ -187,14 +194,14 @@ class BoMonController extends Controller
      * )
      */
 
-    public function updateBoMon(Request $request)
+    public function update(Request $request)
     {
         $bomon = BoMon::find($request->id);
         $bomon->tenbm = $request->tenbm;
         $bomon->makhoa = $request->makhoa;
         $bomon->save();
         $lst_bomon = BoMon::where('trangthai', 1)->get();
-        return response()->json(['status' => 'success', 'data' => $lst_bomon], 200);
+        return response()->json(['status' => 'success', 'message' => "Sửa bộ môn thành công"], 200);
     }
 
     /**
@@ -232,7 +239,7 @@ class BoMonController extends Controller
      */
 
 
-    public function deleteBoMon(Request $request)
+    public function destroy(Request $request)
     {
         $bomon = BoMon::find($request->id);
         $bomon->trangthai = 0;
@@ -241,14 +248,14 @@ class BoMonController extends Controller
         return response()->json(['status' => 'success', 'data' => $lst_bomon], 200);
     }
 
-    public function timkiemBoMon(Request $request){
+    public function timkiemBM(Request $request){
         if($request->key_word == null){
-            $lst_bomon = BoMon::where('trangthai', '<>', 0)->withCount('lophocs')->with('khoa')->get();
+            $lst_bomon = BoMon::where('trangthai', '<>', 0)->withCount('lophocs')->with('khoa')->paginate(10);
             if (!empty($lst_bomon))
                 return response()->json(['status' => 'success', 'data' => $lst_bomon], 200);
         }
         else{
-            $lst_bomon = BoMon::where([['tenbm','like','%'.$request->key_word.'%'],['trangthai','<>',0]])->withCount('lophocs')->with('khoa')->get();
+            $lst_bomon = BoMon::where([['tenbm','like','%'.$request->key_word.'%'],['trangthai','<>',0]])->withCount('lophocs')->with('khoa')->paginate(10);
             if (!empty($lst_bomon))
                 return response()->json(['status' => 'success', 'data' => $lst_bomon], 200);
         }

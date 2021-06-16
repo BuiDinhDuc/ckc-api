@@ -30,6 +30,13 @@ class LopHocPhanController extends Controller
         return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
     }
 
+    public function getAll()
+    {
+        $lst_lhp = LopHocPhan::where('trangthai', '=', 1)->paginate(10);
+        return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
+    }
+
+
     public function lstLopHocPhanTheoGV($id_giangvien)
     {
         $lst_lhp = LopHocPhan::where([['trangthai', '=', 1], ['magv', '=', $id_giangvien]])->get();
@@ -176,5 +183,18 @@ class LopHocPhanController extends Controller
             return response()->json(['status' => 'success', 'message' => 'Xóa lớp học phần thành công'], 200);
         } else
             return response()->json(['status' => 'error', 'message' => 'Lớp học phần không tồn tại'], 404);
+    }
+
+    public function timkiemLHP(Request $request){
+        if($request->key_word == null){
+            $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->paginate(10);
+            if (!empty($lst_lhp))
+                return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
+        }
+        else{
+            $lst_lhp = LopHocPhan::where([['tenlhp','like','%'.$request->key_word.'%'],['trangthai','<>',0]])->paginate(10);
+            if (!empty($lst_lhp))
+                return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
+        }
     }
 }

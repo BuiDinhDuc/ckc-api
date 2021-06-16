@@ -23,6 +23,13 @@ class MonHocController extends Controller
         return response()->json(['status'=> 'success','data'=>$lst_monhoc],200);
     }
 
+    public function getAll()
+    {
+        $lst_monhoc = MonHoc::where('trangthai','<>',0)->with('bomon')->get();
+
+        return response()->json(['status'=> 'success','data'=>$lst_monhoc],200);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -102,12 +109,12 @@ class MonHocController extends Controller
 
     public function timkiemMH(Request $request){
         if($request->key_word == null){
-            $lst_sv = MonHoc::where('trangthai', '<>', 0)->with('bomon')->get();
+            $lst_sv = MonHoc::where('trangthai', '<>', 0)->with('bomon')->paginate(10);
             if (!empty($lst_sv))
                 return response()->json(['status' => 'success', 'data' => $lst_sv], 200);
         }
         else{
-            $lst_sv = MonHoc::where([['tenmh','like','%'.$request->key_word.'%'],['trangthai','<>',0]])->with('bomon')->get();
+            $lst_sv = MonHoc::where([['tenmh','like','%'.$request->key_word.'%'],['trangthai','<>',0]])->with('bomon')->paginate(10);
             if (!empty($lst_sv))
                 return response()->json(['status' => 'success', 'data' => $lst_sv], 200);
         }

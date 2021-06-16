@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class LopHoc extends Model
 {
     protected $table="lop_hocs";
-    protected $fillable = ['tenlop', 'ngaytao', 'trangthai', 'mabm'];
+    protected $fillable = ['tenlop', 'trangthai', 'mabm'];
     public function bomon()
     {
         return $this->belongsTo('App\BoMon', 'mabm', 'id');

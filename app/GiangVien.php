@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class GiangVien extends Model
 {
-    protected $fillable = ['tengv','hogv', 'ngaysinh', 'diachi', 'sdt', 'email', 'matk', 'mabm','gioitinh','cccd','province_id','ward_id','district_id'];
+    protected $fillable = ['tengv','hogv', 'ngaysinh', 'diachi', 'sdt', 'email', 'matk', 'mabm','gioitinh','cccd','province_id','ward_id','district_id','msgv'];
     public function taikhoan()
     {
         return $this->belongsTo('App\User', 'matk', 'id');
