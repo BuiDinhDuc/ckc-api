@@ -47,7 +47,8 @@ use Illuminate\Support\Facades\Route;
         Route::get('detail/{id}', 'KhoaController@show');
         Route::post('update/{id}', 'KhoaController@update');
         Route::post('delete/{id}', 'KhoaController@destroy');
-    
+        Route::post('lock/{id}', 'KhoaController@lock');
+        Route::post('unlock/{id}', 'KhoaController@unlock');
         Route::get('index','KhoaController@getAll');
         Route::post('search','KhoaController@timkiemKhoa');
     });
@@ -58,7 +59,8 @@ use Illuminate\Support\Facades\Route;
         Route::get('detail/{id}', 'BoMonController@show');
         Route::post('update/{id}', 'BoMonController@update');
         Route::post('delete/{id}', 'BoMonController@destroy');
-       
+        Route::post('lock/{id}', 'BoMonController@lock');
+        Route::post('unlock/{id}', 'BoMonController@unlock');
         Route::get('index', 'BoMonController@getAll');
         Route::post('search','BoMonController@timkiemBM');
     });
