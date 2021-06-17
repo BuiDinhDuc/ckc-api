@@ -25,7 +25,8 @@ use Illuminate\Support\Facades\Route;
         Route::get('detail/{id}','GiangVienController@show');
         Route::post('update/{id}', 'GiangVienController@update');
         Route::post('delete/{id}', 'GiangVienController@destroy');
-
+        Route::post('lock/{id}', 'GiangVienController@lock');
+        Route::post('unlock/{id}', 'GiangVienController@unlock');
         Route::get('index','GiangVienController@getAll');
         Route::post('search','GiangVienController@timkiemGV');
     });
@@ -36,7 +37,8 @@ use Illuminate\Support\Facades\Route;
         Route::get('detail/{id}', 'SinhVienController@show');
         Route::post('update/{id}', 'SinhVienController@update');
         Route::post('delete/{id}', 'SinhVienController@destroy');
-      
+        Route::post('lock/{id}', 'SinhVienController@lock');
+        Route::post('unlock/{id}', 'SinhVienController@unlock');
         Route::get('index', 'SinhVienController@getAll');
         Route::post('search', 'SinhVienController@timkiemSV');
     });
@@ -71,7 +73,8 @@ use Illuminate\Support\Facades\Route;
         Route::post('store', 'LopHocController@store');
         Route::post('update/{id}', 'LopHocController@update');
         Route::post('delete/{id}', 'LopHocController@destroy');
-
+        Route::post('lock/{id}', 'LopHocController@lock');
+        Route::post('unlock/{id}', 'LopHocController@unlock');
         Route::post('search','LopHocController@timkiemLH');
         Route::get('index','LopHocController@getAll');
 
@@ -83,7 +86,8 @@ use Illuminate\Support\Facades\Route;
         Route::get('detail/{id}','MonHocController@show');
         Route::post('update/{id}', 'MonHocController@update');
         Route::post('delete/{id}', 'MonHocController@destroy');
-
+        Route::post('lock/{id}', 'MonHocController@lock');
+        Route::post('unlock/{id}', 'MonHocController@unlock');
         Route::get('index','MonHocController@getAll');
         Route::post('search','MonHocController@timkiemMH');
     });
@@ -95,7 +99,8 @@ use Illuminate\Support\Facades\Route;
         Route::post('store', 'LopHocPhanController@store');
         Route::post('update/{id}', 'LopHocPhanController@update');
         Route::post('delete/{id}', 'LopHocPhanController@destroy');
-
+        Route::post('lock/{id}', 'LopHocPhanController@lock');
+        Route::post('unlock/{id}', 'LopHocPhanController@unlock');
         Route::get('index', 'LopHocPhanController@index');
         Route::post('search','LopHocPhanController@timkiemLHP');
         Route::get('/getLHPSV/{id}','LopHocPhanController@lstLopHocPhanTheoSV');

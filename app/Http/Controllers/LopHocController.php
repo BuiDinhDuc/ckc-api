@@ -167,6 +167,22 @@ class LopHocController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Lớp học không tồn tại'], 404);
         }
     }
+    public function lock(Request $request)
+    {
+        $lop = LopHoc::find($request->id);
+        $lop->trangthai = 2;
+        $lop->save();
+        $lst_lophoc = LopHoc::where('trangthai', 1)->get();
+        return response()->json(['status' => 'success', 'message' => "Đã khóa"], 200);
+    }
+    public function unlock(Request $request)
+    {
+        $lop = LopHoc::find($request->id);
+        $lop->trangthai = 1;
+        $lop->save();
+        $lst_lophoc = LopHoc::where('trangthai', 2)->get();
+        return response()->json(['status' => 'success', 'message' => "Đã mở khóa"], 200);
+    }
     public function timkiemLH(Request $request){
         if($request->key_word == null){
             $lst_lh = LopHoc::where('trangthai', '<>', 0)->with('bomon')->withCount('sinhviens')->paginate(10);
