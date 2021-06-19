@@ -17,15 +17,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Route::group(['middleware' => 'auth:api'], function () {
-
-//Giảng viên api
 Route::prefix('giangvien')->group(function () {
     Route::get('/', 'GiangVienController@index');
     Route::post('store', 'GiangVienController@store');
     Route::get('detail/{id}', 'GiangVienController@show');
     Route::post('update/{id}', 'GiangVienController@update');
     Route::post('delete/{id}', 'GiangVienController@destroy');
-
+    Route::post('lock/{id}', 'GiangVienController@lock');
+    Route::post('unlock/{id}', 'GiangVienController@unlock');
     Route::get('getListGVByBoMon/{id}', 'GiangVienController@getListGVByBoMon');
     Route::get('index', 'GiangVienController@getAll');
     Route::post('search', 'GiangVienController@timkiemGV');
@@ -37,7 +36,8 @@ Route::prefix('sinhvien')->group(function () {
     Route::get('detail/{id}', 'SinhVienController@show');
     Route::post('update/{id}', 'SinhVienController@update');
     Route::post('delete/{id}', 'SinhVienController@destroy');
-
+    Route::post('lock/{id}', 'SinhVienController@lock');
+    Route::post('unlock/{id}', 'SinhVienController@unlock');
     Route::get('index', 'SinhVienController@getAll');
     Route::post('search', 'SinhVienController@timkiemSV');
 });
@@ -73,18 +73,19 @@ Route::prefix('lophoc')->group(function () {
     Route::post('update/{id}', 'LopHocController@update');
     Route::post('delete/{id}', 'LopHocController@destroy');
     Route::get('getListLopByBoMonAndKhoa/{id}', 'LopHocController@getLopHocByBoMonAndKhoa');
-
+    Route::post('lock/{id}', 'LopHocController@lock');
+    Route::post('unlock/{id}', 'LopHocController@unlock');
     Route::post('search', 'LopHocController@timkiemLH');
     Route::get('index', 'LopHocController@getAll');
 });
-
 Route::prefix('monhoc')->group(function () {
     Route::get('/', 'MonHocController@index');
     Route::post('store', 'MonHocController@store');
     Route::get('detail/{id}', 'MonHocController@show');
     Route::post('update/{id}', 'MonHocController@update');
     Route::post('delete/{id}', 'MonHocController@destroy');
-
+    Route::post('lock/{id}', 'MonHocController@lock');
+    Route::post('unlock/{id}', 'MonHocController@unlock');
     Route::get('index', 'MonHocController@getAll');
     Route::post('search', 'MonHocController@timkiemMH');
 });
@@ -96,7 +97,8 @@ Route::prefix('lophocphan')->group(function () {
     Route::post('store', 'LopHocPhanController@store');
     Route::post('update/{id}', 'LopHocPhanController@update');
     Route::post('delete/{id}', 'LopHocPhanController@destroy');
-
+    Route::post('lock/{id}', 'LopHocPhanController@lock');
+    Route::post('unlock/{id}', 'LopHocPhanController@unlock');
     Route::get('index', 'LopHocPhanController@index');
     Route::post('search', 'LopHocPhanController@timkiemLHP');
     Route::get('/getLHPSV/{id}', 'LopHocPhanController@lstLopHocPhanTheoSV');
@@ -116,14 +118,6 @@ Route::prefix('file')->group(function () {
     Route::get('/{id}', 'FileController@index');
     Route::post('uploadFile', 'FileController@store');
 });
-
-
-
-
-
-
-
-
 // });
 // Route::get('/home', 'HomeController@index');
 Route::post('/login', 'AuthController@login');

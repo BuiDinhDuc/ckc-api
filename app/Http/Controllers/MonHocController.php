@@ -106,6 +106,23 @@ class MonHocController extends Controller
         else 
         return response()->json(['status' =>'failed','message'=>'Không tìm thấy môn học'],404);
     }
+    public function lock(Request $request)
+    {
+        $monhoc = MonHoc::find($request->id);
+        $monhoc->trangthai = 2;
+        $monhoc->save();
+        $lst_monhoc = MonHoc::where('trangthai', 1)->get();
+        return response()->json(['status' => 'success', 'message' => "Đã khóa"], 200);
+    }
+    public function unlock(Request $request)
+    {
+        $monhoc = MonHoc::find($request->id);
+        $monhoc->trangthai = 1;
+        $monhoc->save();
+        $lst_monhoc = MonHoc::where('trangthai', 2)->get();
+        return response()->json(['status' => 'success', 'message' => "Đã mở khóa"], 200);
+    }
+
 
     public function timkiemMH(Request $request){
         if($request->key_word == null){

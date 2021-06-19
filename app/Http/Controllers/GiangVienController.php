@@ -72,6 +72,7 @@ class GiangVienController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Thêm thất bại'], 403);
         }
     }
+    
 
     public function show($id)
     {
@@ -116,6 +117,22 @@ class GiangVienController extends Controller
         } else {
             return response()->json(['status' => 'error', 'message' => 'Giảng viên không tồn tại'], 404);
         }
+    }
+    public function lock(Request $request)
+    {
+        $gv = GiangVien::find($request->id);
+        $gv->trangthai = 2;
+        $gv->save();
+        $lst_gv = GiangVien::where('trangthai', 1)->get();
+        return response()->json(['status' => 'success', 'message' => "Đã khóa"], 200);
+    }
+    public function unlock(Request $request)
+    {
+        $gv = GiangVien::find($request->id);
+        $gv->trangthai = 1;
+        $gv->save();
+        $lst_gv = GiangVien::where('trangthai', 2)->get();
+        return response()->json(['status' => 'success', 'message' => "Đã mở khóa"], 200);
     }
     public function timkiemGV(Request $request){
         if($request->key_word == null){
