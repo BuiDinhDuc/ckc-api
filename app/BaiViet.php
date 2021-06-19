@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class BaiViet extends Model
 {
-    protected $fillable = ['tieude', 'noidung', 'ngaytao', 'loaibv', 'matk', 'malhp', 'trangthai', 'macd'];
+    protected $fillable = ['tieude', 'noidung', 'ngaytao', 'loaibv', 'matk', 'malhp', 'trangthai', 'macd', 'ngayketthuc'];
 
 
     public function chude()
     {
-        return $this->belongsTo('App\ChuDe', 'macd', 'macd');
+        return $this->belongsTo('App\ChuDe', 'macd', 'id');
     }
     public function binhluans()
     {
@@ -19,19 +19,19 @@ class BaiViet extends Model
     }
     public function lophocphan()
     {
-        return $this->belongsTo('App\LopHocPhan', 'malhp', 'malhp');
+        return $this->belongsTo('App\LopHocPhan', 'malhp', 'id');
     }
     public function taikhoan()
     {
-        return $this->belongsTo('App\User', 'matk', 'matk');
+        return $this->belongsTo('App\User', 'matk', 'id');
     }
     public function giangvien()
     {
-        return $this->belongsTo('App\GiangVien', 'matk', 'matk');
+        return $this->belongsTo('App\GiangVien', 'matk', 'id');
     }
     public function sinhvien()
     {
-        return $this->belongsTo('App\SinhVien', 'matk', 'matk');
+        return $this->belongsTo('App\SinhVien', 'matk', 'id');
     }
     public function filebaiviets()
     {
