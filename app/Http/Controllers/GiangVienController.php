@@ -32,6 +32,13 @@ class GiangVienController extends Controller
 
         return response()->json(['status' => 'success','data' => $lst_giangvien],200);
     }
+    public function getListGVByBoMon($mabm)
+    {
+        $lst_giangvien = GiangVien::where('trangthai',1)->where('mabm',$mabm)->with('bomon')->get();
+
+        return response()->json(['status' => 'success','data' => $lst_giangvien],200);
+    }
+    
 
     public function store(Request $request)
     {

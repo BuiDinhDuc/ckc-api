@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class File extends Model
 {
-    protected $fillable = ['tenfile', 'ngaytao', 'duoifile', 'dungluong', 'trangthai'];
+    protected $fillable = ['tenfile', 'ngaytao', 'duoifile', 'dungluong', 'trangthai', 'path', 'matk'];
 
     public function filebaiviets()
     {

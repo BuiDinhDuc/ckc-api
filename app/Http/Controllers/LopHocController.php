@@ -65,6 +65,21 @@ class LopHocController extends Controller
         $lst_lophoc = LopHoc::where('trangthai', '=', 1)->with('bomon')->get();
         return response()->json(['status' => 'success', 'data' => $lst_lophoc]);
     }
+    public function getLopHocByBoMonAndKhoa($bomon,Request $request)
+    {
+        if(empty($bomon)){
+            $lst_lophoc = LopHoc::where('trangthai', '=', 1)->where('khoa',$request->khoa)->get();
+            return response()->json(['status' => 'success', 'data' => $lst_lophoc]);
+        }
+        if(empty($request->khoa)){
+            $lst_lophoc = LopHoc::where('trangthai', '=', 1)->where('mabm',$bomon)->get();
+            return response()->json(['status' => 'success', 'data' => $lst_lophoc]);
+        }
+
+        $lst_lophoc = LopHoc::where('trangthai', '=', 1)->where('mabm',$bomon)->where('khoa',$request->khoa)->get();
+        return response()->json(['status' => 'success', 'data' => $lst_lophoc]);
+        
+    }
 
     /**
      * Store a newly created resource in storage.

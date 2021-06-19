@@ -40,15 +40,15 @@ class LopHocPhanController extends Controller
 
     public function lstLopHocPhanTheoGV($id_giangvien)
     {
-        $lst_lhp = LopHocPhan::where([['trangthai', '=', 1], ['magv', '=', $id_giangvien]])->get();
+        $lst_lhp = LopHocPhan::where([['trangthai', '=', 1], ['magv', '=', $id_giangvien]])->with('giangvien', 'lophoc', 'monhoc')->withCount('sinhvienlophocphans')->get();
         return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
     }
     public function lstLopHocPhanTheoSV($id_sinhvien)
     {
-
+        $sv = SinhVien::where('matk', $id_sinhvien)->first();
         $lst_lhp = LopHocPhan::where('trangthai', '=', 1)
-            ->whereHas('sinhvienlophocphans', function (Builder $query) use ($id_sinhvien) {
-                $query->where('masv', '=', $id_sinhvien);
+            ->whereHas('sinhvienlophocphans', function (Builder $query) use ($sv) {
+                $query->where('masv', '=', $sv->id);
             })->with('giangvien', 'lophoc', 'monhoc')->withCount('sinhvienlophocphans')->get();
         return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
     }
