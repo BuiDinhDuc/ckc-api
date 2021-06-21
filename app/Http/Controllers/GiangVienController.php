@@ -123,16 +123,18 @@ class GiangVienController extends Controller
         $gv = GiangVien::find($request->id);
         $gv->trangthai = 2;
         $gv->save();
-        $lst_gv = GiangVien::where('trangthai', 1)->get();
-        return response()->json(['status' => 'success', 'message' => "Đã khóa"], 200);
+        // $lst_gv = GiangVien::where('trangthai', 1)->get();
+        $lst_giangvien = GiangVien::where('trangthai','<>',0)->with('bomon')->paginate(10);
+        return response()->json(['status' => 'success', 'message' => "Đã khóa", 'data'=>$lst_giangvien], 200);
     }
     public function unlock(Request $request)
     {
         $gv = GiangVien::find($request->id);
         $gv->trangthai = 1;
         $gv->save();
-        $lst_gv = GiangVien::where('trangthai', 2)->get();
-        return response()->json(['status' => 'success', 'message' => "Đã mở khóa"], 200);
+        // $lst_gv = GiangVien::where('trangthai', 2)->get();
+        $lst_giangvien = GiangVien::where('trangthai','<>',0)->with('bomon')->paginate(10);
+        return response()->json(['status' => 'success', 'message' => "Đã mở khóa", 'data'=>$lst_giangvien], 200);
     }
     public function timkiemGV(Request $request){
         if($request->key_word == null){

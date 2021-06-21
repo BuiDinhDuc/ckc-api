@@ -27,7 +27,7 @@ class LopHocPhanController extends Controller
 
     public function index()
     {
-        $lst_lhp = LopHocPhan::where('trangthai', '=', 1)->paginate(10);
+        $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->paginate(10);
         return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
     }
 
@@ -94,9 +94,9 @@ class LopHocPhanController extends Controller
                     'trangthai' => 1
                 ]);
             }
-            return response()->json(['status' => 'success', 'message' => 'Tạo lớp học phần thành công'], 200);
+            return response()->json(['status' => 'success', 'message' => 'Thêm lớp học phần thành công'], 200);
         }
-        return response()->json(['status' => 'error', 'message' => 'Tạo lớp học phần không thành công'], 422);
+        return response()->json(['status' => 'error', 'message' => 'Thêm lớp học phần không thành công'], 422);
     }
 
     /**
@@ -165,9 +165,9 @@ class LopHocPhanController extends Controller
             $lhp->malh      = $id_lophoc;
             $lhp->mamh      = $id_monhoc;
             $lhp->save();
-            return response()->json(['status' => 'success', 'message' => 'Thành công'], 200);
+            return response()->json(['status' => 'success', 'message' => 'Sửa thành công'], 200);
         }
-        return response()->json(['status' => 'error', 'message' => 'Không thành công'], 422);
+        return response()->json(['status' => 'error', 'message' => 'Sửa không thành công'], 422);
     }
 
     /**
@@ -191,16 +191,18 @@ class LopHocPhanController extends Controller
         $lhp = LopHocPhan::find($request->id);
         $lhp->trangthai = 2;
         $lhp->save();
-        $lst_lhp = LopHocPhan::where('trangthai', 1)->get();
-        return response()->json(['status' => 'success', 'message' => "Đã khóa"], 200);
+        // $lst_lhp = LopHocPhan::where('trangthai', 1)->get();
+        $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->paginate(10);
+        return response()->json(['status' => 'success', 'message' => "Đã khóa",'data'=>$lst_lhp], 200);
     }
     public function unlock(Request $request)
     {
         $lhp = LopHocPhan::find($request->id);
         $lhp->trangthai = 1;
         $lhp->save();
-        $lst_lhp = LopHocPhan::where('trangthai', 2)->get();
-        return response()->json(['status' => 'success', 'message' => "Đã mở khóa"], 200);
+        // $lst_lhp = LopHocPhan::where('trangthai', 2)->get();
+        $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->paginate(10);
+        return response()->json(['status' => 'success', 'message' => "Đã mở khóa",'data'=>$lst_lhp], 200);
     }
 
     public function timkiemLHP(Request $request)

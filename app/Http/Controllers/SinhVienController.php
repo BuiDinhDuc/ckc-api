@@ -104,33 +104,48 @@ class SinhVienController extends Controller
     }
     public function lock($id)
     {
-        $sinhvien = SinhVien::find($id);
-        if (!empty($sinhvien)) {
-            if ($sinhvien->trangthai == 2) {
-                return response()->json(['status' => 'error', 'message' => 'Sinh viên đã khóa'], 403);
-            } else {
-                $sinhvien->trangthai = 2;
-                $sinhvien->save();
-                return response()->json(['status' => 'success', 'message' => 'Khóa thành công'], 200);
-            }
-        } else {
-            return response()->json(['status' => 'error', 'message' => 'Sinh viên không tồn tại'], 404);
-        }
+        // $sinhvien = SinhVien::find($id);
+        // if (!empty($sinhvien)) {
+        //     if ($sinhvien->trangthai == 2) {
+        //         return response()->json(['status' => 'error', 'message' => 'Sinh viên đã khóa'], 403);
+        //     } else {
+        //         $lst_sv = SinhVien::where('trangthai', '<>', 0)->paginate(10);
+        //         $sinhvien->save();
+        //         return response()->json(['status' => 'success', 'message' => 'Khóa thành công','data'=>$lst_sv], 200);
+        //     }
+        // } else {
+        //     return response()->json(['status' => 'error', 'message' => 'Sinh viên không tồn tại'], 404);
+        // }
+        // return response()->json(['status' => 'success', 'message' => $id]);
+        $sinhvien = SinhVien::where('id',$id)->first();
+        
+        $sinhvien->trangthai = 2;
+        $sinhvien->save();
+        // $lst_gv = GiangVien::where('trangthai', 1)->get();
+        $lst_sv = SinhVien::where('trangthai', '<>', 0)->paginate(10);
+        return response()->json(['status' => 'success', 'message' => "Đã khóa", 'data'=>$lst_sv], 200);
     }
     public function unlock($id)
     {
+        // $sinhvien = SinhVien::find($id);
+        // if (!empty($sinhvien)) {
+        //     if ($sinhvien->trangthai == 1) {
+        //         return response()->json(['status' => 'error', 'message' => 'Sinh viên không bị khóa'], 403);
+        //     } else {
+        //         $lst_sv = SinhVien::where('trangthai', '<>', 0)->paginate(10);
+        //         $sinhvien->save();
+        //         return response()->json(['status' => 'success', 'message' => 'Mở khóa thành công', 'data'=>$lst_sv], 200);
+        //     }
+        // } else {
+        //     return response()->json(['status' => 'error', 'message' => 'Sinh viên không tồn tại'], 404);
+        // }
         $sinhvien = SinhVien::find($id);
-        if (!empty($sinhvien)) {
-            if ($sinhvien->trangthai == 1) {
-                return response()->json(['status' => 'error', 'message' => 'Sinh viên không bị khóa'], 403);
-            } else {
-                $sinhvien->trangthai = 1;
-                $sinhvien->save();
-                return response()->json(['status' => 'success', 'message' => 'Mở khóa thành công'], 200);
-            }
-        } else {
-            return response()->json(['status' => 'error', 'message' => 'Sinh viên không tồn tại'], 404);
-        }
+        $sinhvien->trangthai = 1;
+        $sinhvien->save();
+        // $lst_gv = GiangVien::where('trangthai', 2)->get();
+        $lst_sv = SinhVien::where('trangthai', '<>', 0)->paginate(10);
+        return response()->json(['status' => 'success', 'message' => "Đã mở khóa", 'data'=>$lst_sv], 200);
+
     }
     public function timkiemSV(Request $request){
         if($request->key_word == null){

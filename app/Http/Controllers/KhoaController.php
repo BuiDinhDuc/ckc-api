@@ -74,19 +74,22 @@ class KhoaController extends Controller
     }
     public function lock(Request $request)
     {
+        
         $khoa = Khoa::find($request->id);
         $khoa->trangthai = 2;
         $khoa->save();
-        $lst_bomon = BoMon::where('trangthai', 1)->get();
-        return response()->json(['status' => 'success', 'message' => "Đã khóa khoa"], 200);
+        // $lst_bomon = BoMon::where('trangthai', 1)->get();
+        $lst_khoa = Khoa::where('trangthai','<>',0)->withCount('bomons')->paginate(10);
+        return response()->json(['status' => 'success', 'message' => "Đã khóa",'data' => $lst_khoa], 200);
     }
     public function unlock(Request $request)
     {
         $khoa = Khoa::find($request->id);
         $khoa->trangthai = 1;
         $khoa->save();
-        $lst_bomon = BoMon::where('trangthai', 2)->get();
-        return response()->json(['status' => 'success', 'message' => "Đã mở khóa khoa"], 200);
+        // $lst_bomon = BoMon::where('trangthai', 2)->get();
+        $lst_khoa = Khoa::where('trangthai','<>',0)->withCount('bomons')->paginate(10);
+        return response()->json(['status' => 'success', 'message' => "Đã mở khóa", 'data'=>$lst_khoa], 200);
     }
     public function timkiemKhoa(Request $request){
         if($request->key_word == null){

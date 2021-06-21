@@ -253,16 +253,18 @@ class BoMonController extends Controller
         $bomon = BoMon::find($request->id);
         $bomon->trangthai = 2;
         $bomon->save();
-        $lst_bomon = BoMon::where('trangthai', 1)->get();
-        return response()->json(['status' => 'success', 'message' => "Đã khóa bộ môn"], 200);
+        // $lst_bomon = BoMon::where('trangthai', 1)->get();
+        $lst_bomon = BoMon::where('trangthai','<>' ,0)->withCount('lophocs')->with('khoa')->paginate(10);
+        return response()->json(['status' => 'success', 'message' => "Đã khóa", 'data'=>$lst_bomon], 200);
     }
     public function unlock(Request $request)
     {
         $bomon = BoMon::find($request->id);
         $bomon->trangthai = 1;
         $bomon->save();
-        $lst_bomon = BoMon::where('trangthai', 2)->get();
-        return response()->json(['status' => 'success', 'message' => "Đã mở khóa bộ môn"], 200);
+        // $lst_bomon = BoMon::where('trangthai', 2)->get();
+        $lst_bomon = BoMon::where('trangthai','<>' ,0)->withCount('lophocs')->with('khoa')->paginate(10);
+        return response()->json(['status' => 'success', 'message' => "Đã mở khóa", 'data'=>$lst_bomon], 200);
     }
 
     public function timkiemBM(Request $request){

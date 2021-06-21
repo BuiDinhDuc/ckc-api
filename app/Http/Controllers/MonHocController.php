@@ -111,16 +111,18 @@ class MonHocController extends Controller
         $monhoc = MonHoc::find($request->id);
         $monhoc->trangthai = 2;
         $monhoc->save();
-        $lst_monhoc = MonHoc::where('trangthai', 1)->get();
-        return response()->json(['status' => 'success', 'message' => "Đã khóa"], 200);
+        // $lst_monhoc = MonHoc::where('trangthai', 1)->get();
+        $lst_monhoc = MonHoc::where('trangthai','<>',0)->with('bomon')->paginate(10);
+        return response()->json(['status' => 'success', 'message' => "Đã khóa", 'data'=>$lst_monhoc], 200);
     }
     public function unlock(Request $request)
     {
         $monhoc = MonHoc::find($request->id);
         $monhoc->trangthai = 1;
         $monhoc->save();
-        $lst_monhoc = MonHoc::where('trangthai', 2)->get();
-        return response()->json(['status' => 'success', 'message' => "Đã mở khóa"], 200);
+        // $lst_monhoc = MonHoc::where('trangthai', 2)->get();
+        $lst_monhoc = MonHoc::where('trangthai','<>',0)->with('bomon')->paginate(10);
+        return response()->json(['status' => 'success', 'message' => "Đã mở khóa", 'data'=>$lst_monhoc], 200);
     }
 
 

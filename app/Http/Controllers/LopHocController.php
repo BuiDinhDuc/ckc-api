@@ -187,16 +187,18 @@ class LopHocController extends Controller
         $lop = LopHoc::find($request->id);
         $lop->trangthai = 2;
         $lop->save();
-        $lst_lophoc = LopHoc::where('trangthai', 1)->get();
-        return response()->json(['status' => 'success', 'message' => "Đã khóa"], 200);
+        // $lst_lophoc = LopHoc::where('trangthai', 1)->get();
+        $lst_lophoc = LopHoc::where('trangthai', '<>', 0)->with('bomon')->withCount('sinhviens')->paginate(10);
+        return response()->json(['status' => 'success', 'message' => "Đã khóa",'data'=>$lst_lophoc], 200);
     }
     public function unlock(Request $request)
     {
         $lop = LopHoc::find($request->id);
         $lop->trangthai = 1;
         $lop->save();
-        $lst_lophoc = LopHoc::where('trangthai', 2)->get();
-        return response()->json(['status' => 'success', 'message' => "Đã mở khóa"], 200);
+        // $lst_lophoc = LopHoc::where('trangthai', 2)->get();
+        $lst_lophoc = LopHoc::where('trangthai', '<>', 0)->with('bomon')->withCount('sinhviens')->paginate(10);
+        return response()->json(['status' => 'success', 'message' => "Đã mở khóa",'data'=>$lst_lophoc], 200);
     }
     public function timkiemLH(Request $request){
         if($request->key_word == null){
