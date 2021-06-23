@@ -40,6 +40,7 @@ Route::prefix('sinhvien')->group(function () {
     Route::post('unlock/{id}', 'SinhVienController@unlock');
     Route::get('index', 'SinhVienController@getAll');
     Route::post('search', 'SinhVienController@timkiemSV');
+    Route::get('getThongTin/{id}', 'SinhVienController@getThongTin');
 });
 
 Route::prefix('khoa')->group(function () {
@@ -103,6 +104,9 @@ Route::prefix('lophocphan')->group(function () {
     Route::post('search', 'LopHocPhanController@timkiemLHP');
     Route::get('/getLHPSV/{id}', 'LopHocPhanController@lstLopHocPhanTheoSV');
     Route::get('/getLHPGV/{id}', 'LopHocPhanController@lstLopHocPhanTheoGV');
+
+    Route::post('themSV/{id}', 'LopHocPhanController@themSV');
+    Route::post('khoaSV/{id}', 'LopHocPhanController@khoaSV');
 });
 
 Route::prefix('baiviet')->group(function () {
