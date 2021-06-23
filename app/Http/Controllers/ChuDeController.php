@@ -30,6 +30,26 @@ class ChuDeController extends Controller
         })->orderBy('thutu', 'desc')->get();
     }
 
+    public function getAllChuDeTheoLHP($malhp)
+    {
+        $lst_chude = ChuDe::where([
+            ['trangthai', 1],
+            ['malhp', $malhp]
+        ])
+            ->orderBy('thutu', 'ASC')->get();
+
+        return response()->json(['status' => 'Success', 'data' => $lst_chude], 200);
+    }
+    public function getBaiTapTheoChuDe($malhp)
+    {
+        $lst_chude = ChuDe::where([
+            ['trangthai', 1],
+            ['malhp', $malhp]
+        ])->with('baitaps')
+            ->orderBy('thutu', 'ASC');
+
+        return response()->json(['status' => 'Success', 'data' => $lst_chude], 200);
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -52,18 +72,23 @@ class ChuDeController extends Controller
             ], 422);
         }
 
-        $malph = $request->malhp;
-        $lhp = LopHocPhan::find($malph);
+        $malhp = $request->malhp;
+        $lhp = LopHocPhan::find($malhp);
         if (!empty($lhp)) {
-            $chude = ChuDe::where([['malhp', '=', $malph], ['tencd', '=', $request->tencd]])->first();
+            $chude = ChuDe::where([['malhp', '=', $malhp], ['tencd', '=', $request->tencd]])->first();
             if (empty($chude)) {
                 ChuDe::create([
-                    'malhp' => $malph,
+                    'malhp' => $malhp,
                     'tencd' => $request->tencd,
                     'thutu' => 1,
                     'trangthai' => 1
                 ]);
-                return response()->json(['status' => 'success', 'message' => "Tạo chủ đề thành công"], 200);
+                $lst_chude = ChuDe::where([
+                    ['trangthai', 1],
+                    ['malhp', $malhp]
+                ])->with('baitaps')
+                    ->orderBy('thutu', 'ASC')->get();
+                return response()->json(['status' => 'success', 'message' => "Tạo chủ đề thành công", 'data' => $lst_chude], 200);
             } else {
                 return response()->json(['status' => 'error', 'message' => "Chủ đề đã tồn tại trong lớp học phần"], 422);
             }

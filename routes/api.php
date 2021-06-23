@@ -122,6 +122,11 @@ Route::prefix('file')->group(function () {
     Route::get('/{id}', 'FileController@index');
     Route::post('uploadFile', 'FileController@store');
 });
+
+Route::prefix('chude')->group(function () {
+    Route::post('store', 'ChuDeController@store');
+    Route::get('index/{id}', 'ChuDeController@getAllChuDeTheoLHP');
+});
 // });
 // Route::get('/home', 'HomeController@index');
 Route::post('/login', 'AuthController@login');

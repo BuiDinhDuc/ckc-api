@@ -13,7 +13,7 @@ class ChuDe extends Model
     {
         return $this->belongsTo('App\LopHocPhan', 'malhp', 'malhp');
     }
-    public function baiviets()
+    public function baitaps()
     {
         return $this->hasMany('App\BaiViet', 'macd', 'id');
     }
