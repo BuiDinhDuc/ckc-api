@@ -56,7 +56,7 @@ class LopHocController extends Controller
 
     public function index(Request $request)
     {
-        $lst_lophoc = LopHoc::where('trangthai', '<>', 0)->with('bomon')->withCount('sinhviens')->paginate(10);
+        $lst_lophoc = LopHoc::where('trangthai', '<>', 0)->with('bomon')->withCount('sinhviens')->orderBy('id','DESC')->paginate(10);
         return response()->json(['status' => 'success', 'data' => $lst_lophoc]);
     }
 
@@ -188,7 +188,7 @@ class LopHocController extends Controller
         $lop->trangthai = 2;
         $lop->save();
         // $lst_lophoc = LopHoc::where('trangthai', 1)->get();
-        $lst_lophoc = LopHoc::where('trangthai', '<>', 0)->with('bomon')->withCount('sinhviens')->paginate(10);
+        $lst_lophoc = LopHoc::where('trangthai', '<>', 0)->with('bomon')->withCount('sinhviens')->orderBy('id','DESC')->paginate(10);
         return response()->json(['status' => 'success', 'message' => "Đã khóa",'data'=>$lst_lophoc], 200);
     }
     public function unlock(Request $request)
@@ -197,17 +197,17 @@ class LopHocController extends Controller
         $lop->trangthai = 1;
         $lop->save();
         // $lst_lophoc = LopHoc::where('trangthai', 2)->get();
-        $lst_lophoc = LopHoc::where('trangthai', '<>', 0)->with('bomon')->withCount('sinhviens')->paginate(10);
+        $lst_lophoc = LopHoc::where('trangthai', '<>', 0)->with('bomon')->withCount('sinhviens')->orderBy('id','DESC')->paginate(10);
         return response()->json(['status' => 'success', 'message' => "Đã mở khóa",'data'=>$lst_lophoc], 200);
     }
     public function timkiemLH(Request $request){
         if($request->key_word == null){
-            $lst_lh = LopHoc::where('trangthai', '<>', 0)->with('bomon')->withCount('sinhviens')->paginate(10);
+            $lst_lh = LopHoc::where('trangthai', '<>', 0)->with('bomon')->withCount('sinhviens')->orderBy('id','DESC')->paginate(10);
             if (!empty($lst_lh))
                 return response()->json(['status' => 'success', 'data' => $lst_lh], 200);
         }
         else{
-            $lst_lh = LopHoc::where([['tenlop','like','%'.$request->key_word.'%'],['trangthai','<>',0]])->with('bomon')->withCount('sinhviens')->paginate(10);
+            $lst_lh = LopHoc::where([['tenlop','like','%'.$request->key_word.'%'],['trangthai','<>',0]])->with('bomon')->withCount('sinhviens')->orderBy('id','DESC')->paginate(10);
             if (!empty($lst_lh))
                 return response()->json(['status' => 'success', 'data' => $lst_lh], 200);
         }

@@ -21,7 +21,7 @@ class GiangVienController extends Controller
      */
     public function index()
     {
-        $lst_giangvien = GiangVien::where('trangthai','<>',0)->with('bomon')->paginate(10);
+        $lst_giangvien = GiangVien::where('trangthai','<>',0)->with('bomon')->orderBy('id','DESC')->paginate(10);
 
         return response()->json(['status' => 'success','data' => $lst_giangvien],200);
     }
@@ -124,7 +124,7 @@ class GiangVienController extends Controller
         $gv->trangthai = 2;
         $gv->save();
         // $lst_gv = GiangVien::where('trangthai', 1)->get();
-        $lst_giangvien = GiangVien::where('trangthai','<>',0)->with('bomon')->paginate(10);
+        $lst_giangvien = GiangVien::where('trangthai','<>',0)->with('bomon')->orderBy('id','DESC')->paginate(10);
         return response()->json(['status' => 'success', 'message' => "Đã khóa", 'data'=>$lst_giangvien], 200);
     }
     public function unlock(Request $request)
@@ -133,12 +133,12 @@ class GiangVienController extends Controller
         $gv->trangthai = 1;
         $gv->save();
         // $lst_gv = GiangVien::where('trangthai', 2)->get();
-        $lst_giangvien = GiangVien::where('trangthai','<>',0)->with('bomon')->paginate(10);
+        $lst_giangvien = GiangVien::where('trangthai','<>',0)->with('bomon')->orderBy('id','DESC')->paginate(10);
         return response()->json(['status' => 'success', 'message' => "Đã mở khóa", 'data'=>$lst_giangvien], 200);
     }
     public function timkiemGV(Request $request){
         if($request->key_word == null){
-            $lst_gv = GiangVien::where('trangthai', '<>', 0)->with('bomon')->paginate(10);
+            $lst_gv = GiangVien::where('trangthai', '<>', 0)->with('bomon')->orderBy('id','DESC')->paginate(10);
             if (!empty($lst_gv))
                 return response()->json(['status' => 'success', 'data' => $lst_gv], 200);
         }
@@ -146,7 +146,7 @@ class GiangVienController extends Controller
             $lst_gv = GiangVien::where('hogv','like','%'.$request->key_word.'%')
             ->orWhere('tengv','like','%'.$request->key_word.'%');
             if (!empty($lst_gv))
-                return response()->json(['status' => 'success', 'data' => $lst_gv->where('trangthai','<>',0)->with('bomon')->paginate(10)], 200);
+                return response()->json(['status' => 'success', 'data' => $lst_gv->where('trangthai','<>',0)->with('bomon')->orderBy('id','DESC')->paginate(10)], 200);
         }
     }
     

@@ -15,7 +15,7 @@ class SinhVienController extends Controller
     // }
     public function index()
     {
-        $lst_sv = SinhVien::where('trangthai', '<>', 0)->with('lophoc')->paginate(10);
+        $lst_sv = SinhVien::where('trangthai', '<>', 0)->with('lophoc')->orderBy('id','DESC')->paginate(10);
 
         if (!empty($lst_sv))
             return response()->json(['status' => 'success', 'data' => $lst_sv], 200);
@@ -122,7 +122,7 @@ class SinhVienController extends Controller
         $sinhvien->trangthai = 2;
         $sinhvien->save();
         // $lst_gv = GiangVien::where('trangthai', 1)->get();
-        $lst_sv = SinhVien::where('trangthai', '<>', 0)->paginate(10);
+        $lst_sv = SinhVien::where('trangthai', '<>', 0)->with('lophoc')->orderBy('id','DESC')->paginate(10);
         return response()->json(['status' => 'success', 'message' => "Đã khóa", 'data'=>$lst_sv], 200);
     }
     public function unlock($id)
@@ -143,27 +143,27 @@ class SinhVienController extends Controller
         $sinhvien->trangthai = 1;
         $sinhvien->save();
         // $lst_gv = GiangVien::where('trangthai', 2)->get();
-        $lst_sv = SinhVien::where('trangthai', '<>', 0)->paginate(10);
+        $lst_sv = SinhVien::where('trangthai', '<>', 0)->with('lophoc')->orderBy('id','DESC')->paginate(10);
         return response()->json(['status' => 'success', 'message' => "Đã mở khóa", 'data'=>$lst_sv], 200);
 
     }
     public function timkiemSV(Request $request){
         if($request->key_word == null){
-            $lst_sv = SinhVien::where('trangthai', '<>', 0)->paginate(10);
+            $lst_sv = SinhVien::where('trangthai', '<>', 0)->orderBy('id','DESC')->paginate(10);
             if (!empty($lst_sv))
-                return response()->json(['status' => 'success', 'data' => $lst_sv], 200);
+                return response()->json(['status' => 'success', 'data' => $lst_sv->with('lophoc')], 200);
         }
         else{
             $lst_sv = SinhVien::where('hosv','like','%'.$request->key_word.'%')
             ->orWhere('tensv','like','%'.$request->key_word.'%');
             if (!empty($lst_sv))
-                return response()->json(['status' => 'success', 'data' => $lst_sv->where('trangthai','<>',0)->paginate(10)], 200);
+                return response()->json(['status' => 'success', 'data' => $lst_sv->with('lophoc')->where('trangthai','<>',0)->paginate(10)], 200);
         }
     }
     public function getThongTin($id)
     {
         $sv = SinhVien::where([['mssv', $id]])->with('lophoc')->first();
-        if (!empty($sv))
+       
             return response()->json(['status' => 'success', 'data' => $sv], 200);
     }
 }

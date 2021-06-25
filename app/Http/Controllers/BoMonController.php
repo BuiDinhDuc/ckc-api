@@ -39,7 +39,7 @@ class BoMonController extends Controller
      */
     public function index(Request $request)
     {
-        $lst_bomon = BoMon::where('trangthai','<>' ,0)->withCount('lophocs')->with('khoa')->paginate(10);
+        $lst_bomon = BoMon::where('trangthai','<>' ,0)->withCount('lophocs')->with('khoa')->orderBy('id','DESC')->paginate(10);
       
         return response()->json(['status' => 'success', 'data' => $lst_bomon], 200);
     }
@@ -254,7 +254,7 @@ class BoMonController extends Controller
         $bomon->trangthai = 2;
         $bomon->save();
         // $lst_bomon = BoMon::where('trangthai', 1)->get();
-        $lst_bomon = BoMon::where('trangthai','<>' ,0)->withCount('lophocs')->with('khoa')->paginate(10);
+        $lst_bomon = BoMon::where('trangthai','<>' ,0)->withCount('lophocs')->with('khoa')->orderBy('id','DESC')->paginate(10);
         return response()->json(['status' => 'success', 'message' => "Đã khóa", 'data'=>$lst_bomon], 200);
     }
     public function unlock(Request $request)
@@ -263,18 +263,18 @@ class BoMonController extends Controller
         $bomon->trangthai = 1;
         $bomon->save();
         // $lst_bomon = BoMon::where('trangthai', 2)->get();
-        $lst_bomon = BoMon::where('trangthai','<>' ,0)->withCount('lophocs')->with('khoa')->paginate(10);
+        $lst_bomon = BoMon::where('trangthai','<>' ,0)->withCount('lophocs')->with('khoa')->orderBy('id','DESC')->paginate(10);
         return response()->json(['status' => 'success', 'message' => "Đã mở khóa", 'data'=>$lst_bomon], 200);
     }
 
     public function timkiemBM(Request $request){
         if($request->key_word == null){
-            $lst_bomon = BoMon::where('trangthai', '<>', 0)->withCount('lophocs')->with('khoa')->paginate(10);
+            $lst_bomon = BoMon::where('trangthai', '<>', 0)->withCount('lophocs')->with('khoa')->orderBy('id','DESC')->paginate(10);
             if (!empty($lst_bomon))
                 return response()->json(['status' => 'success', 'data' => $lst_bomon], 200);
         }
         else{
-            $lst_bomon = BoMon::where([['tenbm','like','%'.$request->key_word.'%'],['trangthai','<>',0]])->withCount('lophocs')->with('khoa')->paginate(10);
+            $lst_bomon = BoMon::where([['tenbm','like','%'.$request->key_word.'%'],['trangthai','<>',0]])->withCount('lophocs')->with('khoa')->orderBy('id','DESC')->paginate(10);
             if (!empty($lst_bomon))
                 return response()->json(['status' => 'success', 'data' => $lst_bomon], 200);
         }
