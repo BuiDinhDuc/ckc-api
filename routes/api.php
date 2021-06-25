@@ -108,10 +108,13 @@ Route::prefix('lophocphan')->group(function () {
 Route::prefix('baiviet')->group(function () {
     Route::get('/discussion-post', 'BaiVietController@getDiscussionPostList');
     Route::get('/teacher-post', 'BaiVietController@getTeacherPostList');
-    Route::get('detail', 'BaiVietController@detailBoMon');
+    Route::get('baitap/{id}', 'BaiVietController@getBaiTap');
     Route::post('create', 'BaiVietController@createNewBoMon');   //chưa xong
     Route::post('update', 'BaiVietController@updateBoMon');      //chưa xong
     Route::post('delete', 'BaiVietController@deleteBoMon');
+    Route::post('taoBaiTap', 'BaiVietController@taoBaiTap');
+    Route::get('getBaiTap/{id}', 'BaiVietController@getAllBaiTap');
+    Route::post('deleteBaiTap/{id}', 'BaiVietController@deleteBaiTap');
 });
 
 Route::prefix('file')->group(function () {
@@ -122,6 +125,11 @@ Route::prefix('file')->group(function () {
 Route::prefix('chude')->group(function () {
     Route::post('store', 'ChuDeController@store');
     Route::get('index/{id}', 'ChuDeController@getAllChuDeTheoLHP');
+    Route::post('update/{id}', 'ChuDeController@update');
+    Route::get('detail/{id}', 'ChuDeController@show');
+    Route::post('delete/{id}', 'ChuDeController@destroy');
+});
+Route::prefix('baiviet')->group(function () {
 });
 // });
 // Route::get('/home', 'HomeController@index');

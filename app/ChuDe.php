@@ -13,8 +13,12 @@ class ChuDe extends Model
     {
         return $this->belongsTo('App\LopHocPhan', 'malhp', 'malhp');
     }
-    public function baitaps()
+    public function baitapscochude()
     {
-        return $this->hasMany('App\BaiViet', 'macd', 'id');
+        return $this->hasMany('App\BaiViet', 'macd', 'id')->where([
+            ['loaibv', 2],
+            ['trangthai', 1],
+            ['macd', '<>', 0]
+        ]);
     }
 }

@@ -86,7 +86,7 @@ class ChuDeController extends Controller
                 $lst_chude = ChuDe::where([
                     ['trangthai', 1],
                     ['malhp', $malhp]
-                ])->with('baitaps')
+                ])->with('baitapscochude')
                     ->orderBy('thutu', 'ASC')->get();
                 return response()->json(['status' => 'success', 'message' => "Tạo chủ đề thành công", 'data' => $lst_chude], 200);
             } else {
@@ -105,9 +105,8 @@ class ChuDeController extends Controller
      */
     public function show($id)
     {
-        $lst_chude = ChuDe::find($id)->whereHas('baiviet', function ($query) {
-            $query->orderBy('macd');
-        })->orderBy('thutu', 'desc')->get();
+        $chude = ChuDe::find($id);
+        return response()->json(['status' => 'success', 'data' => $chude], 200);
     }
 
     /**
@@ -119,29 +118,27 @@ class ChuDeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $v = Validator::make(
-            $request->all(),
-            ['tencd' => 'required'],
-            ['tencd.required' => 'Tên chủ đề không được bỏ trống']
-        );
+        // $v = Validator::make(
+        //     $request->all(),
+        //     ['tencd' => 'required'],
+        //     ['tencd.required' => 'Tên chủ đề không được bỏ trống']
+        // );
 
-        if ($v->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'code'   => 422,
-                'message' => $v->errors()->first(),
-            ], 422);
-        }
+        // if ($v->fails()) {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'code'   => 422,
+        //         'message' => $v->errors()->first(),
+        //     ], 422);
+        // }
 
         $chude = ChuDe::find($id);
         if (!empty($chude)) {
             $cd  = ChuDe::where([['malhp', '=', $request->malhp], ['tencd', '=', $request->tencd]])->first();
             if (empty($cd)) {
                 $chude->tencd = $request->tencd;
-                $chude->malhp = $request->malhp;
-                $chude->thutu = $request->thutu;
-
                 $chude->save();
+                return response()->json(['status' => 'success', 'message' => 'Thành công'], 200);
             }
         } else {
             return response()->json(['status' => 'error', 'message' => 'Không tìm thấy chủ đề'], 404);

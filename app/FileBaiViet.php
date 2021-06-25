@@ -10,7 +10,7 @@ class FileBaiViet extends Model
 
     public function file()
     {
-        $this->belongsTo('App\File', 'mafile', 'mafile');
+        $this->belongsTo('App\File', 'mafile', 'id');
     }
     public function baiviet()
     {

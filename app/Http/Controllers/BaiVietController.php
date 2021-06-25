@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\BaiViet;
+use App\ChuDe;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -192,53 +193,48 @@ class BaiVietController extends Controller
      *     },
      * )
      */
-    public function store(Request $request)
+    public function taoBaiTap(Request $request)
     {
-        $v = Validator::make($request->all(), [
-            'tieude'             => 'required',
-            'noidung'            => 'required',
-        ], [
-            'tieude.required'             => 'Tiêu đề không được bỏ trống',
-            'noidung.required'      => 'Nội dung không được bỏ trống',
-        ]);
-        if ($v->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'code'   => 422,
-                'message' => $v->errors()->first(),
-            ], 422);
-        }
+        // $v = Validator::make($request->all(), [
+        //     'tieude'             => 'required',
+        //     'noidung'            => 'required',
+        // ], [
+        //     'tieude.required'             => 'Tiêu đề không được bỏ trống',
+        //     'noidung.required'      => 'Nội dung không được bỏ trống',
+        // ]);
+        // if ($v->fails()) {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'code'   => 422,
+        //         'message' => $v->errors()->first(),
+        //     ], 422);
+        // }
+
 
         $baiviet =  BaiViet::create([
-            'tieude'     => $request->tieude,
-            'noidung'    => $request->noidung,
-            'ngaytao'    => Carbon::now('Asia/Ho_Chi_Minh'),
-            'loaibv'     => $request->loaibv,
-            'matk'       => Auth::user()->id,
-            'malhp'      => $request->malhp,
-            'macd'      => $request->macd,
-            'trangthai'  => 1,
+            'tieude'         => $request->tieude,
+            'noidung'        => $request->noidung,
+            'ngaytao'        => Carbon::now('Asia/Ho_Chi_Minh'),
+            'loaibv'         => 2,
+            'matk'           => $request->matk,
+            'malhp'          => $request->malhp,
+            'macd'           => $request->macd,
+            'ngayketthuc'    => $request->ngayketthuc,
+            'trangthai'      => 1,
         ]);
 
         if (!empty($baiviet)) {
-            if ($request->hasFile('files')) {
-                foreach ($request->file('files') as $key => $file) {
-                    $name_file = $file->getClientOriginalName();
-                    if (isset($request->tenthumuc)) {
-                        $path = public_path('document/' . $baiviet->malhp . '/' . $request->tenthumuc);
-                    } else {
-                        $path = public_path('document/' . $baiviet->malhp);
-                    }
-                    $file->move($path, $name_file);
-                    // $parent = File::find($account->document_id);
-                    // $child = $parent->children()->create([
-                    //     'name' => $name_file,
-                    //     'filterPath' => isset($request->folder_name) ? $request->folder_name : '/',
-                    //     'size' => $size,
-                    //     'type' => '.' . $file->getClientOriginalExtension()
-                    // ]);
+            if (!empty($request->dsFile)) {
+                $dsFile = explode(',', $request->dsFile);
+                foreach ($dsFile as $file_id) {
+                    FileBaiViet::create([
+                        'mafile'    => $file_id,
+                        'mabv'      => $baiviet->id,
+                        'trangthai' => 1
+                    ]);
                 }
             }
+
             return response()->json(['status' => 'success', 'message' => 'Thêm thành công']);
         } else {
             return response()->json(['status' => 'error', 'message' => 'Thêm thất bại']);
@@ -287,9 +283,46 @@ class BaiVietController extends Controller
     public function destroy(Request $request)
     {
         $baiviet = BaiViet::find($request->id);
-        if(!empty($baiviet)){
+        if (!empty($baiviet)) {
             $baiviet->trangthai = 0;
             $baiviet->save();
         }
+    }
+    public function getAllBaiTap($malhp)
+    {
+        $lst_baitapkhongchude = BaiViet::where([
+            ['loaibv', 2],
+            ['malhp', $malhp],
+            ['trangthai', 1],
+            ['macd', 0]
+        ])->get();
+
+        $lst_baitaptheochude = ChuDe::where([
+            ['trangthai', 1],
+            ['malhp', $malhp]
+        ])->with('baitapscochude')->get();
+
+        $data['lst_baitapkhongchude'] = $lst_baitapkhongchude;
+        $data['lst_baitaptheochude'] = $lst_baitaptheochude;
+        return response()->json(['message' => 'success', 'data' => $data]);
+    }
+
+    public function getBaiTap($id)
+    {
+        $baitap = BaiViet::where('id', $id)->where('loaibv', 2)->with('chude', 'filebaiviets')->first();
+        return response()->json(['status' => 'success', 'data' => $baitap]);
+    }
+
+    public function deleteBaiTap($id)
+    {
+        $baitap = BaiViet::where('id', $id)->where('loaibv', 2)->first();
+
+        if (!empty($baitap)) {
+            $baitap->trangthai = 0;
+            $baitap->save();
+
+            return response()->json(['status' => 'success', 'message' => 'Xóa thành công']);
+        }
+        return response()->json(['status' => 'error', 'message' => "Không tìm thấy bài tập"], 404);
     }
 }
