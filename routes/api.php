@@ -107,6 +107,7 @@ Route::prefix('lophocphan')->group(function () {
 
     Route::post('themSV/{id}', 'LopHocPhanController@themSV');
     Route::post('khoaSV/{id}', 'LopHocPhanController@khoaSV');
+    Route::post('moSV/{id}', 'LopHocPhanController@moSV');
 });
 
 Route::prefix('baiviet')->group(function () {

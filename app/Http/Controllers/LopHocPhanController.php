@@ -27,13 +27,13 @@ class LopHocPhanController extends Controller
 
     public function index()
     {
-        $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->paginate(10);
+        $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->orderBy('id','DESC')->paginate(10);
         return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
     }
 
     public function getAll()
     {
-        $lst_lhp = LopHocPhan::where('trangthai', '=', 1)->paginate(10);
+        $lst_lhp = LopHocPhan::where('trangthai', '=', 1)->orderBy('id','DESC')->paginate(10);
         return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
     }
 
@@ -113,9 +113,13 @@ class LopHocPhanController extends Controller
 
         $sv_id = SinhVienLopHocPhan::where('malhp', $id)->get()->pluck('masv');
 
-        $lst_sv = SinhVien::whereIn('id', $sv_id)->where('trangthai', 1)->get();
+        $lst_sv = SinhVien::whereIn('id', $sv_id)->with('sinhvienlophocphans')
+        // )->with('sinhvienlophocphans')
+        ->where('trangthai', 1)->get();
         $data['lst_sv'] = $lst_sv;
 
+        $sv_lhp = SinhVienLopHocPhan::where('malhp',$id)->with('sinhviens')->get();
+        $data['sv_lhp'] = $sv_lhp;
         if (!empty($lhp)) {
             return response()->json(
                 [
@@ -192,7 +196,7 @@ class LopHocPhanController extends Controller
         $lhp->trangthai = 2;
         $lhp->save();
         // $lst_lhp = LopHocPhan::where('trangthai', 1)->get();
-        $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->paginate(10);
+        $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->orderBy('id','DESC')->paginate(10);
         return response()->json(['status' => 'success', 'message' => "Đã khóa",'data'=>$lst_lhp], 200);
     }
     public function unlock(Request $request)
@@ -201,18 +205,18 @@ class LopHocPhanController extends Controller
         $lhp->trangthai = 1;
         $lhp->save();
         // $lst_lhp = LopHocPhan::where('trangthai', 2)->get();
-        $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->paginate(10);
+        $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->orderBy('id','DESC')->paginate(10);
         return response()->json(['status' => 'success', 'message' => "Đã mở khóa",'data'=>$lst_lhp], 200);
     }
 
     public function timkiemLHP(Request $request)
     {
         if ($request->key_word == null) {
-            $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->paginate(10);
+            $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->orderBy('id','DESC')->paginate(10);
             if (!empty($lst_lhp))
                 return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
         } else {
-            $lst_lhp = LopHocPhan::where([['tenlhp', 'like', '%' . $request->key_word . '%'], ['trangthai', '<>', 0]])->paginate(10);
+            $lst_lhp = LopHocPhan::where([['tenlhp', 'like', '%' . $request->key_word . '%'], ['trangthai', '<>', 0]])->orderBy('id','DESC')->paginate(10);
             if (!empty($lst_lhp))
                 return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
         }
@@ -228,16 +232,21 @@ class LopHocPhanController extends Controller
 
         return response()->json(['status' => 'success','message' =>"Thêm thành công"]);
     }
-    public function khoaSV(Request $request,$id)
+    public function khoaSV($id)
     {
         //id là id lhp 
-        $sv_lhp = SinhVienLopHocPhan::where([
-            ['masv', $request->sv_id],
-            ['malhp' , $id]
-        ])->first();
+        $sv_lhp = SinhVienLopHocPhan::where('id',$id)->first();
         $sv_lhp->trangthai = 2;
         $sv_lhp->save();
         return response()->json(['status' => 'success','message' =>"Khóa thành công"]);
+    }
+    public function moSV($id)
+    {
+        //id là id lhp 
+        $sv_lhp = SinhVienLopHocPhan::where('id',$id)->first();
+        $sv_lhp->trangthai = 1;
+        $sv_lhp->save();
+        return response()->json(['status' => 'success','message' =>"Đã mở khóa"]);
     }
     
 }

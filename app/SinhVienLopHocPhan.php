@@ -8,7 +8,7 @@ class SinhVienLopHocPhan extends Model
 {
     protected $fillable = ['masv', 'malhp', 'trangthai'];
 
-    public function sinhvien(){
-        return $this->hasOne('App\SinhVien', 'masv', 'id');
+    public function sinhviens(){
+        return $this->hasMany('App\SinhVien', 'id', 'masv');
     }
 }
