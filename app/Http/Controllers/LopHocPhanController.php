@@ -217,4 +217,27 @@ class LopHocPhanController extends Controller
                 return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
         }
     }
+    public function themSV(Request $request,$id)
+    {
+        //id là id lhp 
+        SinhVienLopHocPhan::create([
+            'masv' => $request->sv_id,
+            'malhp' => $id,
+            'trangthai' => 1
+        ]);
+
+        return response()->json(['status' => 'success','message' =>"Thêm thành công"]);
+    }
+    public function khoaSV(Request $request,$id)
+    {
+        //id là id lhp 
+        $sv_lhp = SinhVienLopHocPhan::where([
+            ['masv', $request->sv_id],
+            ['malhp' , $id]
+        ])->first();
+        $sv_lhp->trangthai = 2;
+        $sv_lhp->save();
+        return response()->json(['status' => 'success','message' =>"Khóa thành công"]);
+    }
+    
 }

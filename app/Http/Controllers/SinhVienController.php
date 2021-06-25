@@ -15,7 +15,7 @@ class SinhVienController extends Controller
     // }
     public function index()
     {
-        $lst_sv = SinhVien::where('trangthai', '<>', 0)->paginate(10);
+        $lst_sv = SinhVien::where('trangthai', '<>', 0)->with('lophoc')->paginate(10);
 
         if (!empty($lst_sv))
             return response()->json(['status' => 'success', 'data' => $lst_sv], 200);
@@ -159,5 +159,11 @@ class SinhVienController extends Controller
             if (!empty($lst_sv))
                 return response()->json(['status' => 'success', 'data' => $lst_sv->where('trangthai','<>',0)->paginate(10)], 200);
         }
+    }
+    public function getThongTin($id)
+    {
+        $sv = SinhVien::where([['mssv', $id]])->with('lophoc')->first();
+        if (!empty($sv))
+            return response()->json(['status' => 'success', 'data' => $sv], 200);
     }
 }
