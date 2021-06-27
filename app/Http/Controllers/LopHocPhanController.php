@@ -28,13 +28,13 @@ class LopHocPhanController extends Controller
 
     public function index()
     {
-        $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->orderBy('id', 'DESC')->paginate(10);
+        $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->with('lophoc')->orderBy('id', 'DESC')->paginate(10);
         return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
     }
 
     public function getAll()
     {
-        $lst_lhp = LopHocPhan::where('trangthai', '=', 1)->orderBy('id', 'DESC')->paginate(10);
+        $lst_lhp = LopHocPhan::where('trangthai', '=', 1)->with('lophoc')->orderBy('id', 'DESC')->get();
         return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
     }
 
@@ -198,7 +198,7 @@ class LopHocPhanController extends Controller
         $lhp->trangthai = 2;
         $lhp->save();
         // $lst_lhp = LopHocPhan::where('trangthai', 1)->get();
-        $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->orderBy('id', 'DESC')->paginate(10);
+        $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->with('lophoc')->orderBy('id', 'DESC')->paginate(10);
         return response()->json(['status' => 'success', 'message' => "Đã khóa", 'data' => $lst_lhp], 200);
     }
     public function unlock(Request $request)
@@ -207,14 +207,14 @@ class LopHocPhanController extends Controller
         $lhp->trangthai = 1;
         $lhp->save();
         // $lst_lhp = LopHocPhan::where('trangthai', 2)->get();
-        $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->orderBy('id', 'DESC')->paginate(10);
+        $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->with('lophoc')->orderBy('id', 'DESC')->paginate(10);
         return response()->json(['status' => 'success', 'message' => "Đã mở khóa", 'data' => $lst_lhp], 200);
     }
 
     public function timkiemLHP(Request $request)
     {
         if ($request->key_word == null) {
-            $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->orderBy('id', 'DESC')->paginate(10);
+            $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->with('lophoc')->orderBy('id', 'DESC')->paginate(10);
             if (!empty($lst_lhp))
                 return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
         } else {
