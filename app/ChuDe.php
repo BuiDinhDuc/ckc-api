@@ -16,9 +16,8 @@ class ChuDe extends Model
     public function baitapscochude()
     {
         return $this->hasMany('App\BaiViet', 'macd', 'id')->where([
-            ['loaibv', 2],
             ['trangthai', 1],
             ['macd', '<>', 0]
-        ]);
+        ])->whereIn('loaibv', [2, 3])->orderBy('id', 'DESC');
     }
 }

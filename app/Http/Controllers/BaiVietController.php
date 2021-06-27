@@ -220,6 +220,7 @@ class BaiVietController extends Controller
             'malhp'          => $request->malhp,
             'macd'           => $request->macd,
             'ngayketthuc'    => $request->ngayketthuc,
+            'gioketthuc'    => $request->gioketthuc,
             'trangthai'      => 1,
         ]);
 
@@ -241,6 +242,113 @@ class BaiVietController extends Controller
         }
     }
 
+    public function taoHocLieu(Request $request)
+    {
+        // $v = Validator::make($request->all(), [
+        //     'tieude'             => 'required',
+        //     'noidung'            => 'required',
+        // ], [
+        //     'tieude.required'             => 'Tiêu đề không được bỏ trống',
+        //     'noidung.required'      => 'Nội dung không được bỏ trống',
+        // ]);
+        // if ($v->fails()) {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'code'   => 422,
+        //         'message' => $v->errors()->first(),
+        //     ], 422);
+        // }
+
+
+        $baiviet =  BaiViet::create([
+            'tieude'         => $request->tieude,
+            'noidung'        => $request->noidung,
+            'ngaytao'        => Carbon::now('Asia/Ho_Chi_Minh'),
+            'loaibv'         => 3,
+            'matk'           => $request->matk,
+            'malhp'          => $request->malhp,
+            'macd'           => $request->macd,
+            'trangthai'      => 1,
+        ]);
+
+        if (!empty($baiviet)) {
+            if (!empty($request->dsFile)) {
+                $dsFile = explode(',', $request->dsFile);
+                foreach ($dsFile as $file_id) {
+                    FileBaiViet::create([
+                        'mafile'    => $file_id,
+                        'mabv'      => $baiviet->id,
+                        'trangthai' => 1
+                    ]);
+                }
+            }
+
+            return response()->json(['status' => 'success', 'message' => 'Thêm thành công']);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Thêm thất bại']);
+        }
+    }
+
+    public function suaBaiTap($id, Request $request)
+    {
+
+        $baiviet = BaiViet::where('id', $id)->first();
+        $baiviet->update([
+            'tieude'         => $request->tieude,
+            'noidung'        => $request->noidung,
+            'macd'           => $request->macd,
+            'ngayketthuc'    => $request->ngayketthuc,
+            'gioketthuc'    => $request->gioketthuc,
+
+        ]);
+
+        if (!empty($baiviet)) {
+            if (!empty($request->dsFile)) {
+                $dsFile = explode(',', $request->dsFile);
+
+
+                $dsFile_BaiViet = FileBaiViet::where('mabv', $id)->pluck('mafile');
+
+                // return response()->json(['status' => 'success', 'data1' => $dsFile, 'data2' => $dsFile_BaiViet]);
+
+                if (count($dsFile_BaiViet) > 0) {
+                    return response()->json(['status' => 'success', 'data' => $dsFile_BaiViet]);
+
+                    $dsFileMoi = array_diff($dsFile, $dsFile_BaiViet);
+                    $dsFileCu = array_diff($dsFile_BaiViet, $dsFile);
+                } else {
+                    $dsFileMoi = $dsFile;
+                    $dsFileCu = [];
+                }
+                foreach ($dsFileMoi as $file_id) {
+                    FileBaiViet::create([
+                        'mafile'    => $file_id,
+                        'mabv'      => $baiviet->id,
+                        'trangthai' => 1
+                    ]);
+                }
+                foreach ($dsFileCu as $file_id) {
+                    $file = FileBaiViet::where([
+                        'mafile'    => $file_id,
+                        'mabv'      => $baiviet->id,
+                        'trangthai' => 1
+                    ]);
+                    $file->trangthai = 0;
+                    $file->save();
+                }
+            } else {
+                $dsFileCu = FileBaiViet::where('mabv', $id)->get();
+                foreach ($dsFileCu as $file) {
+                    $file->trangthai = 0;
+                    $file->save();
+                }
+            }
+
+            return response()->json(['status' => 'success', 'message' => 'Sửa thành công']);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Sửa thất bại']);
+        }
+    }
     /**
      * Display the specified resource.
      *
@@ -291,16 +399,16 @@ class BaiVietController extends Controller
     public function getAllBaiTap($malhp)
     {
         $lst_baitapkhongchude = BaiViet::where([
-            ['loaibv', 2],
+
             ['malhp', $malhp],
             ['trangthai', 1],
             ['macd', 0]
-        ])->get();
+        ])->whereIn('loaibv', [2, 3])->orderBy('id', 'DESC')->get();
 
         $lst_baitaptheochude = ChuDe::where([
             ['trangthai', 1],
             ['malhp', $malhp]
-        ])->with('baitapscochude')->get();
+        ])->orderBy('id', 'DESC')->with('baitapscochude')->get();
 
         $data['lst_baitapkhongchude'] = $lst_baitapkhongchude;
         $data['lst_baitaptheochude'] = $lst_baitaptheochude;

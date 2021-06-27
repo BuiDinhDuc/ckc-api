@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BaiViet extends Model
 {
-    protected $fillable = ['tieude', 'noidung', 'ngaytao', 'loaibv', 'matk', 'malhp', 'trangthai', 'macd', 'ngayketthuc'];
+    protected $fillable = ['tieude', 'noidung', 'ngaytao', 'loaibv', 'matk', 'malhp', 'trangthai', 'macd', 'ngayketthuc', 'gioketthuc'];
 
 
     public function chude()

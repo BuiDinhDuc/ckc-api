@@ -118,7 +118,9 @@ Route::prefix('baiviet')->group(function () {
     Route::post('update', 'BaiVietController@updateBoMon');      //chưa xong
     Route::post('delete', 'BaiVietController@deleteBoMon');
     Route::post('taoBaiTap', 'BaiVietController@taoBaiTap');
+    Route::post('taoHocLieu', 'BaiVietController@taoHocLieu');
     Route::get('getBaiTap/{id}', 'BaiVietController@getAllBaiTap');
+    Route::post('suaBaiTap/{id}', 'BaiVietController@suaBaiTap');
     Route::post('deleteBaiTap/{id}', 'BaiVietController@deleteBaiTap');
 });
 
