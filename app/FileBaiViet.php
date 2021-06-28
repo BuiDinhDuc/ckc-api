@@ -14,6 +14,6 @@ class FileBaiViet extends Model
     }
     public function baiviet()
     {
-        $this->belongsTo('App\BaiViet', 'mabv', 'mabv');
+        $this->belongsTo('App\BaiViet', 'mabv', 'id');
     }
 }

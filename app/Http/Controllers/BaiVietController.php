@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use App\File;
 use App\FileBaiViet;
 use Carbon\Carbon;
+use App\User;
+use App\GiangVien;
 
 class BaiVietController extends Controller
 {
@@ -474,6 +476,18 @@ class BaiVietController extends Controller
     {
         $baitap = BaiViet::where('id', $id)->where('loaibv', 2)->with('chude', 'filebaiviets')->first();
         return response()->json(['status' => 'success', 'data' => $baitap]);
+    }
+    public function getChiTietBaiTap($id)
+    {
+        $baitap = BaiViet::where('id', $id)->where('loaibv', 2)->with('chude', 'filebaiviets')->first();
+        $tk = User::where('id', $baitap->matk)->first();
+        $giangvien = GiangVien::where('matk', $tk->id)->first();
+        $file_id = FileBaiViet::where('mabv', $id)->pluck('mafile');
+        $dsFile = File::whereIn('id', $file_id)->get();
+        $data['baitap'] = $baitap;
+        $data['giangvien'] = $giangvien;
+        $data['file'] = $dsFile;
+        return response()->json(['status' => 'success', 'data' => $data]);
     }
     public function getHocLieu($id)
     {

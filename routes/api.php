@@ -114,6 +114,7 @@ Route::prefix('baiviet')->group(function () {
     Route::get('/discussion-post', 'BaiVietController@getDiscussionPostList');
     Route::get('/teacher-post', 'BaiVietController@getTeacherPostList');
     Route::get('baitap/{id}', 'BaiVietController@getBaiTap');
+    Route::get('chitietbaitap/{id}', 'BaiVietController@getChiTietBaiTap');
     Route::get('hoclieu/{id}', 'BaiVietController@getHocLieu');
     Route::post('create', 'BaiVietController@createNewBoMon');   //chưa xong
     Route::post('update', 'BaiVietController@updateBoMon');      //chưa xong

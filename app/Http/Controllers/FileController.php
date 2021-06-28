@@ -43,7 +43,7 @@ class FileController extends Controller
 
             $child = File::create([
                 'tenfile'       => $name_file,
-                'path'          => '/' . $id_account . '/',
+                'path'          => 'document/' . $id_account,
                 'dungluong'     => $size,
                 'duoifile'      => '.' . $file->getClientOriginalExtension(),
                 'trangthai'     => 1,
