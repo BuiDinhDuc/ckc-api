@@ -114,6 +114,7 @@ Route::prefix('baiviet')->group(function () {
     Route::get('/discussion-post', 'BaiVietController@getDiscussionPostList');
     Route::get('/teacher-post', 'BaiVietController@getTeacherPostList');
     Route::get('baitap/{id}', 'BaiVietController@getBaiTap');
+    Route::get('hoclieu/{id}', 'BaiVietController@getHocLieu');
     Route::post('create', 'BaiVietController@createNewBoMon');   //chưa xong
     Route::post('update', 'BaiVietController@updateBoMon');      //chưa xong
     Route::post('delete', 'BaiVietController@deleteBoMon');
@@ -121,6 +122,7 @@ Route::prefix('baiviet')->group(function () {
     Route::post('taoHocLieu', 'BaiVietController@taoHocLieu');
     Route::get('getBaiTap/{id}', 'BaiVietController@getAllBaiTap');
     Route::post('suaBaiTap/{id}', 'BaiVietController@suaBaiTap');
+    Route::post('suaHocLieu/{id}', 'BaiVietController@suaHocLieu');
     Route::post('deleteBaiTap/{id}', 'BaiVietController@deleteBaiTap');
 });
 

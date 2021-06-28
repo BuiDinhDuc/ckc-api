@@ -349,6 +349,61 @@ class BaiVietController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Sửa thất bại']);
         }
     }
+
+    public function suaHocLieu($id, Request $request)
+    {
+
+        $baiviet = BaiViet::where('id', $id)->first();
+        $baiviet->update([
+            'tieude'         => $request->tieude,
+            'noidung'        => $request->noidung,
+            'macd'           => $request->macd,
+
+
+        ]);
+
+        if (!empty($baiviet)) {
+            if (!empty($request->dsFile)) {
+                $dsFile = explode(',', $request->dsFile);
+                $dsFile_BaiViet = FileBaiViet::where('mabv', $id)->pluck('mafile');
+                if (count($dsFile_BaiViet) > 0) {
+                    return response()->json(['status' => 'success', 'data' => $dsFile_BaiViet]);
+
+                    $dsFileMoi = array_diff($dsFile, $dsFile_BaiViet);
+                    $dsFileCu = array_diff($dsFile_BaiViet, $dsFile);
+                } else {
+                    $dsFileMoi = $dsFile;
+                    $dsFileCu = [];
+                }
+                foreach ($dsFileMoi as $file_id) {
+                    FileBaiViet::create([
+                        'mafile'    => $file_id,
+                        'mabv'      => $baiviet->id,
+                        'trangthai' => 1
+                    ]);
+                }
+                foreach ($dsFileCu as $file_id) {
+                    $file = FileBaiViet::where([
+                        'mafile'    => $file_id,
+                        'mabv'      => $baiviet->id,
+                        'trangthai' => 1
+                    ]);
+                    $file->trangthai = 0;
+                    $file->save();
+                }
+            } else {
+                $dsFileCu = FileBaiViet::where('mabv', $id)->get();
+                foreach ($dsFileCu as $file) {
+                    $file->trangthai = 0;
+                    $file->save();
+                }
+            }
+
+            return response()->json(['status' => 'success', 'message' => 'Sửa thành công']);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Sửa thất bại']);
+        }
+    }
     /**
      * Display the specified resource.
      *
@@ -420,10 +475,15 @@ class BaiVietController extends Controller
         $baitap = BaiViet::where('id', $id)->where('loaibv', 2)->with('chude', 'filebaiviets')->first();
         return response()->json(['status' => 'success', 'data' => $baitap]);
     }
+    public function getHocLieu($id)
+    {
+        $baitap = BaiViet::where('id', $id)->where('loaibv', 3)->with('chude', 'filebaiviets')->first();
+        return response()->json(['status' => 'success', 'data' => $baitap]);
+    }
 
     public function deleteBaiTap($id)
     {
-        $baitap = BaiViet::where('id', $id)->where('loaibv', 2)->first();
+        $baitap = BaiViet::where('id', $id)->whereIn('loaibv', [2, 3])->first();
 
         if (!empty($baitap)) {
             $baitap->trangthai = 0;
