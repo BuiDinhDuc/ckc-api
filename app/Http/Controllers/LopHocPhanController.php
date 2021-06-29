@@ -250,4 +250,17 @@ class LopHocPhanController extends Controller
         $sv_lhp->save();
         return response()->json(['status' => 'success', 'message' => "Đã mở khóa"]);
     }
+
+    public function getLHPTheoDSLop(Request $request)
+    {
+      
+        if($request->malh!=null && $request->hocky!=null)
+        $lst_lhp = LopHocPhan::where('trangthai',1)->where('malh',$request->malh)->where('hocky',$request->hocky)->with('lophoc')->orderBy('id', 'DESC')->paginate(10);
+        if($request->malh!=null)
+        $lst_lhp = LopHocPhan::where('trangthai',1)->where('malh',$request->malh)->with('lophoc')->orderBy('id', 'DESC')->paginate(10);
+        if($request->hocky!=null)
+        $lst_lhp = LopHocPhan::where('trangthai',1)->where('hocky',$request->hocky)->with('lophoc')->orderBy('id', 'DESC')->paginate(10);
+
+        return response()->json(['status' => 'success','data' => $lst_lhp],200);
+    }
 }
