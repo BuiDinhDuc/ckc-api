@@ -12,6 +12,7 @@ use App\FileBaiViet;
 use Carbon\Carbon;
 use App\User;
 use App\GiangVien;
+use App\BinhLuan;
 
 class BaiVietController extends Controller
 {
@@ -479,20 +480,28 @@ class BaiVietController extends Controller
     }
     public function getChiTietBaiTap($id)
     {
-        $baitap = BaiViet::where('id', $id)->where('loaibv', 2)->with('chude', 'filebaiviets')->first();
+        $baitap = BaiViet::where('id', $id)->where('loaibv', 2)->with('chude', 'filebaiviets')->withCount('binhluans')->first();
         $tk = User::where('id', $baitap->matk)->first();
         $giangvien = GiangVien::where('matk', $tk->id)->first();
         $file_id = FileBaiViet::where('mabv', $id)->pluck('mafile');
         $dsFile = File::whereIn('id', $file_id)->get();
+        // $binhluan = BinhLuan::where('mabv', $id)->where('trangthai', '<>', 0)->with('taikhoan')->get();
         $data['baitap'] = $baitap;
         $data['giangvien'] = $giangvien;
         $data['file'] = $dsFile;
+        // $data['binhluan'] = $binhluan;
         return response()->json(['status' => 'success', 'data' => $data]);
     }
     public function getHocLieu($id)
     {
         $baitap = BaiViet::where('id', $id)->where('loaibv', 3)->with('chude', 'filebaiviets')->first();
         return response()->json(['status' => 'success', 'data' => $baitap]);
+    }
+
+    public function getDSBinhLuan($id)
+    {
+        $binhluan = BinhLuan::where('mabv', $id)->where('trangthai', '<>', 0)->with('taikhoan')->orderBy('id', 'DESC')->get();
+        return response()->json(['status' => 'success', 'data' => $binhluan]);
     }
 
     public function deleteBaiTap($id)

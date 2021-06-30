@@ -14,6 +14,14 @@ class BinhLuan extends Model
     }
     public function taikhoan()
     {
-        return $this->belongsTo('App\User', 'matk', 'matk');
+        return $this->belongsTo('App\User', 'matk', 'id')->with('giangvien', 'sinhvien');
+    }
+    public function giangvien()
+    {
+        return $this->belongsTo('App\GiangVien', 'matk', 'id');
+    }
+    public function sinhvien()
+    {
+        return $this->belongsTo('App\SinhVien', 'matk', 'id');
     }
 }

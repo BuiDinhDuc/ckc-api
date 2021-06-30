@@ -48,9 +48,9 @@ class BinhLuanController extends Controller
         }
         $binhluan = BinhLuan::create([
             'noidung' => $request->noidung,
-            'ngaytao' => Carbon::now(),
+            'ngaytao' => Carbon::now('Asia/Ho_Chi_Minh'),
             'mabv'    =>  $request->mabv,
-            'matk'    => Auth::user()->id
+            'matk'    => $request->matk,
         ]);
         if (!empty($binhluan)) {
             return response()->json(['status' => 'success', 'message' => 'Bình luận thành công'], 200);
