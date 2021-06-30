@@ -78,6 +78,7 @@ Route::prefix('lophoc')->group(function () {
     Route::post('unlock/{id}', 'LopHocController@unlock');
     Route::post('search', 'LopHocController@timkiemLH');
     Route::get('index', 'LopHocController@getAll');
+   
 });
 Route::prefix('monhoc')->group(function () {
     Route::get('/', 'MonHocController@index');
@@ -108,6 +109,8 @@ Route::prefix('lophocphan')->group(function () {
     Route::post('themSV/{id}', 'LopHocPhanController@themSV');
     Route::post('khoaSV/{id}', 'LopHocPhanController@khoaSV');
     Route::post('moSV/{id}', 'LopHocPhanController@moSV');
+
+    Route::post('getLHPTheoDSLop', 'LopHocPhanController@getLHPTheoDSLop');
 });
 
 Route::prefix('baiviet')->group(function () {

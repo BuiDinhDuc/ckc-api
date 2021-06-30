@@ -212,4 +212,5 @@ class LopHocController extends Controller
                 return response()->json(['status' => 'success', 'data' => $lst_lh], 200);
         }
     }
+   
 }
