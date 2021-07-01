@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\BaiLamSinhVien;
 use App\BaiViet;
 use App\ChuDe;
 use Illuminate\Support\Facades\Validator;
@@ -13,6 +14,7 @@ use Carbon\Carbon;
 use App\User;
 use App\GiangVien;
 use App\BinhLuan;
+use App\SinhVien;
 
 class BaiVietController extends Controller
 {
@@ -515,5 +517,73 @@ class BaiVietController extends Controller
             return response()->json(['status' => 'success', 'message' => 'Xóa thành công']);
         }
         return response()->json(['status' => 'error', 'message' => "Không tìm thấy bài tập"], 404);
+    }
+
+    public function luuLinkShare(Request $request, $id)
+    {
+        $sinhvien_id = SinhVien::where('matk', $request->matk)->first()->id;
+        $link = BaiLamSinhVien::create([
+            'link'       => $request->link,
+            'mabv'       => $id,
+            'mssv'       => $sinhvien_id,
+            'trangthai'  => 2
+        ]);
+        if (!empty($link))
+            return response()->json(['status' => 'success', 'message' => 'Thêm link thành công']);
+        else
+            return response()->json(['status' => 'error', 'message' => 'Thêm link thất bại']);
+    }
+
+    public function getListFileChuaNop(Request $request, $id)
+    {
+        $sinhvien_id = SinhVien::where('matk', $request->matk)->first()->id;
+        $lst_link = BaiLamSinhVien::where('mssv', $sinhvien_id)->where('mabv', $id)->where('trangthai', 2)->whereNotNull('link')->get();
+
+        $lst_file = BaiLamSinhVien::where('mssv', $sinhvien_id)->where('mabv', $id)->where('trangthai', 2)->whereNotNull('mafile')->with('file')->get();
+        $data['lst_link'] = $lst_link;
+        $data['lst_file'] = $lst_file;
+
+        return response()->json(['status' => 'success', 'data' => $data]);
+    }
+
+    public function saveFileBaiTap(Request $request, $id)
+    {
+        $sinhvien_id = SinhVien::where('matk', $request->matk)->first()->id;
+        $link = BaiLamSinhVien::create([
+            'mafile'       => $request->mafile,
+            'mabv'       => $id,
+            'mssv'       => $sinhvien_id,
+            'trangthai'  => 2
+        ]);
+        if (!empty($link))
+            return response()->json(['status' => 'success', 'message' => 'Thêm file thành công']);
+        else
+            return response()->json(['status' => 'error', 'message' => 'Thêm file thất bại']);
+    }
+
+    public function deleteBaiLam($id)
+    {
+        $bailam = BaiLamSinhVien::where('id', $id)->first();
+        if (!empty($bailam)) {
+            $bailam->trangthai = 0;
+            $bailam->save();
+            return response()->json(['status' => 'success', 'message' => 'Xóa thành công']);
+        } else
+            return response()->json(['status' => 'error', 'message' => 'Xóa thất bại']);
+    }
+
+    public function nopbai(Request $request, $id)
+    {
+        $sinhvien_id = SinhVien::where('matk', $request->matk)->first()->id;
+        $lst_bailam = BaiLamSinhVien::where('mabv', $id)->where('mssv', $sinhvien_id)->where('trangthai', 2)->get();
+
+        if (!empty($lst_bailam)) {
+            foreach ($lst_bailam as $bailam) {
+                $bailam->trangthai = 1;
+                $bailam->save();
+            }
+            return response()->json(['status' => 'success', 'message' => 'Nộp thành công']);
+        } else
+            return response()->json(['status' => 'error', 'message' => 'Nộp thất bại']);
     }
 }

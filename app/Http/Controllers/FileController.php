@@ -43,7 +43,7 @@ class FileController extends Controller
 
             $child = File::create([
                 'tenfile'       => $name_file,
-                'path'          => 'document/' . $id_account,
+                'path'          => 'document/' . $id_account . '/' . $name_file,
                 'dungluong'     => $size,
                 'duoifile'      => '.' . $file->getClientOriginalExtension(),
                 'trangthai'     => 1,
@@ -54,6 +54,35 @@ class FileController extends Controller
 
             $lst_file = File::where('matk', $id_account)->get();
             return response()->json(['status' => 'success', 'message' => 'Upload thành công', 'data' => $lst_file]);
+        }
+    }
+
+    public function uploadFileBaiLam(Request $request)
+    {
+
+        $id_account = $request->matk;
+        if ($request->hasFile('file')) {
+
+            $file        = $request->file;
+            $name_file   = $file->getClientOriginalName();
+            $file_name   = $request->tenfile;
+            $size        = $file->getSize();
+            $path        = public_path('document/' . $id_account);
+            $file->move($path, $name_file);
+
+            $child = File::create([
+                'tenfile'       => $name_file,
+                'path'          => 'document/' . $id_account . '/' . $name_file,
+                'dungluong'     => $size,
+                'duoifile'      => '.' . $file->getClientOriginalExtension(),
+                'trangthai'     => 1,
+                'matk'          => $id_account,
+                'ngaytao'       => Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString(),
+                'file_name'     => $file_name
+            ]);
+
+
+            return response()->json(['status' => 'success', 'message' => 'Upload thành công', 'data' => $child->id]);
         }
     }
 

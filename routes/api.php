@@ -78,7 +78,6 @@ Route::prefix('lophoc')->group(function () {
     Route::post('unlock/{id}', 'LopHocController@unlock');
     Route::post('search', 'LopHocController@timkiemLH');
     Route::get('index', 'LopHocController@getAll');
-   
 });
 Route::prefix('monhoc')->group(function () {
     Route::get('/', 'MonHocController@index');
@@ -129,11 +128,17 @@ Route::prefix('baiviet')->group(function () {
     Route::post('suaHocLieu/{id}', 'BaiVietController@suaHocLieu');
     Route::post('deleteBaiTap/{id}', 'BaiVietController@deleteBaiTap');
     Route::get('getBinhLuan/{id}', 'BaiVietController@getDSBinhLuan');
+    Route::post('saveShareLink/{id}', 'BaiVietController@luuLinkShare');
+    Route::post('getListFileChuaNop/{id}', 'BaiVietController@getListFileChuaNop');
+    Route::post('saveFileBaiTap/{id}', 'BaiVietController@saveFileBaiTap');
+    Route::post('deleteBaiLam/{id}', 'BaiVietController@deleteBaiLam');
+    Route::post('nopbai/{id}', 'BaiVietController@nopbai');
 });
 
 Route::prefix('file')->group(function () {
     Route::get('/{id}', 'FileController@index');
     Route::post('uploadFile', 'FileController@store');
+    Route::post('uploadFileBaiLam', 'FileController@uploadFileBaiLam');
 });
 
 Route::prefix('chude')->group(function () {
