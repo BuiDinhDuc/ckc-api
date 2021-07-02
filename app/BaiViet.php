@@ -37,4 +37,8 @@ class BaiViet extends Model
     {
         return $this->hasMany('App\FileBaiViet', 'mabv', 'id');
     }
+    public function giaobai()
+    {
+        return $this->hasMany('App\SinhVienBaiTap', 'mabv', 'id');
+    }
 }

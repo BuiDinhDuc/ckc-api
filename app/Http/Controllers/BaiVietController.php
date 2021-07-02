@@ -15,6 +15,8 @@ use App\User;
 use App\GiangVien;
 use App\BinhLuan;
 use App\SinhVien;
+use App\LopHocPhan;
+use App\SinhVienBaiTap;
 
 class BaiVietController extends Controller
 {
@@ -239,6 +241,16 @@ class BaiVietController extends Controller
                         'trangthai' => 1
                     ]);
                 }
+            }
+
+            $malh = LopHocPhan::where('id', $request->malhp)->first()->malh;
+            $lst_sv = SinhVien::where('malh', $malh)->get();
+            foreach ($lst_sv as $sv) {
+                SinhVienBaiTap::create([
+                    'mssv' => $sv->id,
+                    'mabv'  => $baiviet->id,
+                    'trangthai' => 0
+                ]);
             }
 
             return response()->json(['status' => 'success', 'message' => 'Thêm thành công']);
@@ -477,8 +489,14 @@ class BaiVietController extends Controller
 
     public function getBaiTap($id)
     {
-        $baitap = BaiViet::where('id', $id)->where('loaibv', 2)->with('chude', 'filebaiviets')->first();
-        return response()->json(['status' => 'success', 'data' => $baitap]);
+        $baitap = BaiViet::where('id', $id)->where('loaibv', 2)->with('chude', 'filebaiviets')->withCount('giaobai')->first();
+
+        $sv_danop = SinhVienBaiTap::where([['mabv', $id], ['trangthai', 1]])->with('sinhvien')->get();
+        $sv_chuanop = SinhVienBaiTap::where('mabv', $id)->where('trangthai', 0)->get();
+        $data['baitap'] = $baitap;
+        $data['sv_danop'] = $sv_danop;
+        $data['sv_chuanop'] = $sv_chuanop;
+        return response()->json(['status' => 'success', 'data' => $data]);
     }
     public function getChiTietBaiTap($id)
     {
@@ -537,9 +555,9 @@ class BaiVietController extends Controller
     public function getListFileChuaNop(Request $request, $id)
     {
         $sinhvien_id = SinhVien::where('matk', $request->matk)->first()->id;
-        $lst_link = BaiLamSinhVien::where('mssv', $sinhvien_id)->where('mabv', $id)->where('trangthai', 2)->whereNotNull('link')->get();
+        $lst_link = BaiLamSinhVien::where('mssv', $sinhvien_id)->where('mabv', $id)->where('trangthai', '<>', 0)->whereNotNull('link')->get();
 
-        $lst_file = BaiLamSinhVien::where('mssv', $sinhvien_id)->where('mabv', $id)->where('trangthai', 2)->whereNotNull('mafile')->with('file')->get();
+        $lst_file = BaiLamSinhVien::where('mssv', $sinhvien_id)->where('mabv', $id)->where('trangthai', '<>', 0)->whereNotNull('mafile')->with('file')->get();
         $data['lst_link'] = $lst_link;
         $data['lst_file'] = $lst_file;
 
@@ -582,8 +600,25 @@ class BaiVietController extends Controller
                 $bailam->trangthai = 1;
                 $bailam->save();
             }
+
+            $sv_bt = SinhVienBaiTap::where('mabv', $id)->where('mssv', $sinhvien_id)->first();
+            $sv_bt->trangthai = 1;
+            $sv_bt->save();
+
             return response()->json(['status' => 'success', 'message' => 'Nộp thành công']);
         } else
             return response()->json(['status' => 'error', 'message' => 'Nộp thất bại']);
+    }
+
+    public function getBaiLam(Request $request, $id)
+    {
+        // $sinhvien_id = SinhVien::where('matk', $request->matk)->first()->id;
+        $lst_link = BaiLamSinhVien::where('mssv', $request->mssv)->where('mabv', $id)->where('trangthai', '=', 1)->whereNotNull('link')->get();
+
+        $lst_file = BaiLamSinhVien::where('mssv',  $request->mssv)->where('mabv', $id)->where('trangthai', '=', 1)->whereNotNull('mafile')->with('file')->get();
+        $data['lst_link'] = $lst_link;
+        $data['lst_file'] = $lst_file;
+
+        return response()->json(['status' => 'success', 'data' => $data]);
     }
 }

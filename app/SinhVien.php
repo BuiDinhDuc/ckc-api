@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SinhVien extends Model
 {
-    protected $fillable = ['hosv','tensv', 'ngaysinh','gioitinh', 'diachi', 'sdt', 'cccd', 'matk', 'malh','province_id','district_id','ward_id','mssv'];
+    protected $fillable = ['hosv', 'tensv', 'ngaysinh', 'gioitinh', 'diachi', 'sdt', 'cccd', 'matk', 'malh', 'province_id', 'district_id', 'ward_id', 'mssv'];
     public function taikhoan()
     {
         return $this->belongsTo('App\User', 'matk', 'id');
@@ -30,5 +30,10 @@ class SinhVien extends Model
     public function xa()
     {
         return $this->hasOne('App\Ward', 'id', 'ward_id');
+    }
+
+    public function sinhvienbaiviets()
+    {
+        return $this->hasMany('App\SinhVienBaiTap', 'mssv', 'id');
     }
 }
