@@ -17,7 +17,7 @@ use App\BinhLuan;
 use App\SinhVien;
 use App\LopHocPhan;
 use App\SinhVienBaiTap;
-
+use App\SinhVienLopHocPhan;
 class BaiVietController extends Controller
 {
     // public function __construct()
@@ -243,11 +243,11 @@ class BaiVietController extends Controller
                 }
             }
 
-            $malh = LopHocPhan::where('id', $request->malhp)->first()->malh;
-            $lst_sv = SinhVien::where('malh', $malh)->get();
+            // $malh = LopHocPhan::where('id', $request->malhp)->first()->malh;
+            $lst_sv = SinhVienLopHocPhan::where('malhp', $request->malhp)->get();
             foreach ($lst_sv as $sv) {
                 SinhVienBaiTap::create([
-                    'mssv' => $sv->id,
+                    'mssv' => $sv->masv,
                     'mabv'  => $baiviet->id,
                     'trangthai' => 0
                 ]);
