@@ -42,19 +42,34 @@ class LopHocPhanController extends Controller
     public function lstLopHocPhanTheoGV($matk)
     {
         $id_giangvien = GiangVien::where('matk', $matk)->first()->id;
-        $lst_lhp = LopHocPhan::where([['trangthai', '=', 1], ['magv', '=', $id_giangvien]])->with('giangvien', 'lophoc', 'monhoc')->withCount('sinhvienlophocphans')->get();
+        $lst_lhp = LopHocPhan::where([['trangthai', '=', 1], ['magv', '=', $id_giangvien], ['luutru', '=', 0]])->with('giangvien', 'lophoc', 'monhoc')->withCount('sinhvienlophocphans')->get();
         return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
     }
     public function lstLopHocPhanTheoSV($id_sinhvien)
     {
         $sv = SinhVien::where('matk', $id_sinhvien)->first();
-        $lst_lhp = LopHocPhan::where('trangthai', '=', 1)
+        $lst_lhp = LopHocPhan::where([['trangthai', '=', 1], ['luutru', '=', 0]])
             ->whereHas('sinhvienlophocphans', function (Builder $query) use ($sv) {
                 $query->where('masv', '=', $sv->id);
             })->with('giangvien', 'lophoc', 'monhoc')->withCount('sinhvienlophocphans')->get();
         return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
     }
 
+    public function lstLopHocPhanLuuTruTheoGV($matk)
+    {
+        $id_giangvien = GiangVien::where('matk', $matk)->first()->id;
+        $lst_lhp = LopHocPhan::where([['trangthai', '=', 1], ['magv', '=', $id_giangvien], ['luutru', '=', 1]])->with('giangvien', 'lophoc', 'monhoc')->withCount('sinhvienlophocphans')->get();
+        return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
+    }
+    public function lstLopHocPhanLuuTruTheoSV($id_sinhvien)
+    {
+        $sv = SinhVien::where('matk', $id_sinhvien)->first();
+        $lst_lhp = LopHocPhan::where([['trangthai', '=', 1], ['luutru', '=', 1]])
+            ->whereHas('sinhvienlophocphans', function (Builder $query) use ($sv) {
+                $query->where('masv', '=', $sv->id);
+            })->with('giangvien', 'lophoc', 'monhoc')->withCount('sinhvienlophocphans')->get();
+        return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -262,5 +277,28 @@ class LopHocPhanController extends Controller
             $lst_lhp = LopHocPhan::where('trangthai', 1)->where('hocky', $request->hocky)->with('lophoc')->orderBy('id', 'DESC')->paginate(10);
 
         return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
+    }
+
+    public function luuTru($id)
+    {
+        $lhp = LopHocPhan::where('id', $id)->first();
+        $lhp->luutru = 1;
+        $lhp->save();
+        return response()->json(['status' => 'success', 'message' => 'Thành công'], 200);
+    }
+
+    public function khoiPhuc($id)
+    {
+        $lhp = LopHocPhan::where('id', $id)->first();
+        $lhp->luutru = 0;
+        $lhp->save();
+        return response()->json(['status' => 'success', 'message' => 'Thành công'], 200);
+    }
+    public function thayDoiChinhSach(Request $request, $id)
+    {
+        $lophocphan = LopHocPhan::where('id', $id)->first();
+        $lophocphan->chinhsach = $request->chinhsach;
+        $lophocphan->save();
+        return response()->json(['status' => 'success', 'message' => 'Thành công'], 200);
     }
 }

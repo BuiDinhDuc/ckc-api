@@ -104,12 +104,15 @@ Route::prefix('lophocphan')->group(function () {
     Route::post('search', 'LopHocPhanController@timkiemLHP');
     Route::get('/getLHPSV/{id}', 'LopHocPhanController@lstLopHocPhanTheoSV');
     Route::get('/getLHPGV/{id}', 'LopHocPhanController@lstLopHocPhanTheoGV');
-
+    Route::get('/getLHPLuuTruSV/{id}', 'LopHocPhanController@lstLopHocPhanLuuTruTheoSV');
+    Route::get('/getLHPLuuTruGV/{id}', 'LopHocPhanController@lstLopHocPhanLuuTruTheoGV');
     Route::post('themSV/{id}', 'LopHocPhanController@themSV');
     Route::post('khoaSV/{id}', 'LopHocPhanController@khoaSV');
     Route::post('moSV/{id}', 'LopHocPhanController@moSV');
-
     Route::post('getLHPTheoDSLop', 'LopHocPhanController@getLHPTheoDSLop');
+    Route::post('luutru/{id}', 'LopHocPhanController@luuTru');
+    Route::post('khoiphuc/{id}', 'LopHocPhanController@khoiPhuc');
+    Route::post('thayDoiChinhSach/{id}', 'LopHocPhanController@thayDoiChinhSach');
 });
 
 Route::prefix('baiviet')->group(function () {
@@ -159,11 +162,19 @@ Route::prefix('binhluan')->group(function () {
 });
 Route::prefix('baiviet')->group(function () {
 });
+Route::prefix('bangtin')->group(function () {
+    Route::post('store', 'BangTinController@store');
+    Route::get('index/{id}', 'BangTinController@index');
+    Route::post('update/{id}', 'BangTinController@update');
+    Route::get('detail/{id}', 'BangTinController@show');
+    Route::post('delete/{id}', 'BangTinController@destroy');
+});
 // });
 // Route::get('/home', 'HomeController@index');
 Route::post('/login', 'AuthController@login');
 Route::post('/logout', 'AuthController@logout');
-
+Route::post('/doimatkhau', 'AuthController@doimatkhau');
+Route::get('/getUser/{id}', 'AuthController@getUser');
 Route::get('/province', 'ProvinceController@getProvince');
 Route::get('/district', 'ProvinceController@getDistrict');
 Route::get('/ward', 'ProvinceController@getWard');

@@ -123,4 +123,21 @@ class AuthController extends Controller
             'message' => 'Đăng xuất thành công',
         ], 200);
     }
+
+    public function doimatkhau(Request $request, $matk)
+    {
+        $user = User::where('id', $matk)->first();
+        if (Hash::check($request->matkhaucu, $user->password)) {
+            $user->password = Hash::make($request->matkhaumoi);
+            $user->save();
+            return response()->json(['status' => 'success', 'message' => 'Đổi mật khẩu thành công'], 200);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Mật khẩu cũ không đúng'], 403);
+        }
+    }
+    public function getUser($matk)
+    {
+        $user = User::where('id', $matk)->first();
+        return response()->json(['status' => 'success', 'data' => $user], 200);
+    }
 }
