@@ -173,7 +173,7 @@ Route::prefix('bangtin')->group(function () {
 // Route::get('/home', 'HomeController@index');
 Route::post('/login', 'AuthController@login');
 Route::post('/logout', 'AuthController@logout');
-Route::post('/doimatkhau', 'AuthController@doimatkhau');
+Route::post('/doimatkhau/{id}', 'AuthController@doimatkhau');
 Route::get('/getUser/{id}', 'AuthController@getUser');
 Route::get('/province', 'ProvinceController@getProvince');
 Route::get('/district', 'ProvinceController@getDistrict');
