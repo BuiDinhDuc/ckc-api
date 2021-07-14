@@ -141,20 +141,20 @@ class AuthController extends Controller
         return response()->json(['status' => 'success', 'data' => $user], 200);
     }
 
-    protected function kiemtraemail($email){
-        $user = User::where('email',$email)->first();
-        if(!empty($user))
-        return true;
-        else return false;
-    }
+    // protected function kiemtraemail($email)
+    // {
+    //     $user = User::where('email', $email)->first();
+    //     if (!empty($user))
+    //         return true;
+    //     else return false;
+    // }
 
-    public function taomaxacnhan($email)
-    {
-        if(this.kiemtraemail($email)){
-
-            
-        }
-        else
-        return response()->json(['status' => 'error','message' =>'Email không tồn tại']);
-    }
+    // public function taomaxacnhan(Request $request)
+    // {
+    //     if ($this->kiemtraemail($request->email)) {
+    //         Mail::to($request->email)->send(new OrderShipped());
+    //         return response()->json(['status' => 'success', 'message' => 'OK']);
+    //     } else
+    //         return response()->json(['status' => 'error', 'message' => 'Email không tồn tại']);
+    // }
 }

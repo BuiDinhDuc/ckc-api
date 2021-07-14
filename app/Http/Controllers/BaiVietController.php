@@ -308,6 +308,30 @@ class BaiVietController extends Controller
             } else {
                 return response()->json(['status' => 'error', 'message' => 'Thêm thất bại']);
             }
+        } else if ($request->loaibv == 4) {
+            $baiviet =  BaiViet::create([
+                'noidung'        => $request->noidung,
+                'ngaytao'        => Carbon::now('Asia/Ho_Chi_Minh'),
+                'loaibv'         => 4,
+                'matk'           => $request->matk,
+                'malhp'          => $request->malhp,
+                'trangthai'      => 1,
+            ]);
+            if (!empty($baiviet)) {
+                if (!empty($request->dsFile)) {
+                    $dsFile = explode(',', $request->dsFile);
+                    foreach ($dsFile as $file_id) {
+                        FileBaiViet::create([
+                            'mafile'    => $file_id,
+                            'mabv'      => $baiviet->id,
+                            'trangthai' => 1
+                        ]);
+                    }
+                }
+                return response()->json(['status' => 'success', 'message' => 'Thêm thành công']);
+            } else {
+                return response()->json(['status' => 'error', 'message' => 'Thêm thất bại']);
+            }
         }
     }
 
@@ -681,5 +705,11 @@ class BaiVietController extends Controller
         $data['lst_file'] = $lst_file;
 
         return response()->json(['status' => 'success', 'data' => $data]);
+    }
+
+    public function getListDienDan($malhp)
+    {
+        $lst_diendan = BaiViet::where('malhp', $malhp)->where('trangthai', 1)->where('loaibv', 4)->with('taikhoan', 'lophocphan', 'filebaiviets')->withCount('binhluans')->orderBy('id', 'DESC')->get();
+        return response()->json(['status' => 'success', 'data' => $lst_diendan]);
     }
 }

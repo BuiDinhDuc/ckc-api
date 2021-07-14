@@ -137,6 +137,7 @@ Route::prefix('baiviet')->group(function () {
     Route::post('deleteBaiLam/{id}', 'BaiVietController@deleteBaiLam');
     Route::post('nopbai/{id}', 'BaiVietController@nopbai');
     Route::post('getBaiLam/{id}', 'BaiVietController@getBaiLam');
+    Route::get('getListDienDan/{id}', 'BaiVietController@getListDienDan');
 });
 
 Route::prefix('file')->group(function () {
@@ -174,6 +175,7 @@ Route::prefix('bangtin')->group(function () {
 Route::post('/login', 'AuthController@login');
 Route::post('/logout', 'AuthController@logout');
 Route::post('/doimatkhau/{id}', 'AuthController@doimatkhau');
+Route::post('/taomaxacnhan', 'AuthController@taomaxacnhan');
 Route::get('/getUser/{id}', 'AuthController@getUser');
 Route::get('/province', 'ProvinceController@getProvince');
 Route::get('/district', 'ProvinceController@getDistrict');

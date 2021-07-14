@@ -10,10 +10,10 @@ class FileBaiViet extends Model
 
     public function file()
     {
-        $this->belongsTo('App\File', 'mafile', 'id');
+        return  $this->hasOne('App\File', 'id', 'mafile');
     }
     public function baiviet()
     {
-        $this->belongsTo('App\BaiViet', 'mabv', 'id');
+        return  $this->belongsTo('App\BaiViet', 'mabv', 'id');
     }
 }
