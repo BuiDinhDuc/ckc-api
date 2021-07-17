@@ -617,6 +617,10 @@ class BaiVietController extends Controller
             $baitap->trangthai = 0;
             $baitap->save();
 
+            $bangtin = BangTin::where('mabv', $baitap->id)->first();
+            $bangtin->trangthai = 0;
+            $bangtin->save();
+
             return response()->json(['status' => 'success', 'message' => 'Xóa thành công']);
         }
         return response()->json(['status' => 'error', 'message' => "Không tìm thấy bài tập"], 404);
@@ -709,7 +713,7 @@ class BaiVietController extends Controller
 
     public function getListDienDan($malhp)
     {
-        $lst_diendan = BaiViet::where('malhp', $malhp)->where('trangthai', 1)->where('loaibv', 4)->with('taikhoan', 'lophocphan', 'filebaiviets')->withCount('binhluans')->orderBy('id', 'DESC')->get();
+        $lst_diendan = BaiViet::where('malhp', $malhp)->where('trangthai', 1)->where('loaibv', 4)->with('taikhoan', 'lophocphan', 'filebaiviets', 'binhluans')->withCount('binhluans')->orderBy('id', 'DESC')->get();
         return response()->json(['status' => 'success', 'data' => $lst_diendan]);
     }
 }

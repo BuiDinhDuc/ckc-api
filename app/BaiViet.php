@@ -15,7 +15,7 @@ class BaiViet extends Model
     }
     public function binhluans()
     {
-        return $this->hasMany('App\BinhLuan', 'mabv', 'id');
+        return $this->hasMany('App\BinhLuan', 'mabv', 'id')->with('taikhoan')->orderBy('id', 'DESC');
     }
     public function lophocphan()
     {
