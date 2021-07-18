@@ -137,7 +137,7 @@ class AuthController extends Controller
     }
     public function getUser($matk)
     {
-        $user = User::where('id', $matk)->first();
+        $user = User::where('id', $matk)->with('giangvien','sinhvien')->first();
         return response()->json(['status' => 'success', 'data' => $user], 200);
     }
 
