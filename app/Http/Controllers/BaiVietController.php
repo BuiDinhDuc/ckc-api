@@ -394,15 +394,46 @@ class BaiVietController extends Controller
     public function suaBaiTap($id, Request $request)
     {
 
-        $baiviet = BaiViet::where('id', $id)->first();
-        $baiviet->update([
-            'tieude'         => $request->tieude,
-            'noidung'        => $request->noidung,
-            'macd'           => $request->macd,
-            'ngayketthuc'    => $request->ngayketthuc,
-            'gioketthuc'    => $request->gioketthuc,
 
-        ]);
+        $baiviet = BaiViet::where('id', $id)->first();
+        $gv = GiangVien::where('matk', $request->matk)->first();
+        $bangtin = BangTin::where('mabv', $id)->first();
+        if ($baiviet->loaibv == 2) {
+            $baiviet->update([
+                'tieude'         => $request->tieude,
+                'noidung'        => $request->noidung,
+                'macd'           => $request->macd,
+                'ngayketthuc'    => $request->ngayketthuc,
+                'gioketthuc'    => $request->gioketthuc,
+
+            ]);
+
+
+            $bangtin->update([
+                'noidung'       => $gv->hogv . " " . $gv->tengv . " đã tạo bài tập : " . $baiviet->tieude,
+                'magv'          => $gv->id,
+                'loaibangtin'   => 2,
+                'ngaytao'       => Carbon::now('Asia/Ho_Chi_Minh'),
+                'trangthai'     => 1,
+                'malhp'         => $request->malhp,
+                'mabv'          => $baiviet->id
+            ]);
+        } elseif ($baiviet->loaibv == 3) {
+            $baiviet->update([
+                'tieude'         => $request->tieude,
+                'noidung'        => $request->noidung,
+                'macd'           => $request->macd,
+            ]);
+            $bangtin->update([
+                'noidung'       => $gv->hogv . " " . $gv->tengv . " đã tạo học liệu : " . $baiviet->tieude,
+                'magv'          => $gv->id,
+                'loaibangtin'   => 3,
+                'ngaytao'       => Carbon::now('Asia/Ho_Chi_Minh'),
+                'trangthai'     => 1,
+                'malhp'         => $request->malhp,
+                'mabv'          => $baiviet->id
+            ]);
+        }
 
         if (!empty($baiviet)) {
             if (!empty($request->dsFile)) {
@@ -456,12 +487,21 @@ class BaiVietController extends Controller
     {
 
         $baiviet = BaiViet::where('id', $id)->first();
+        $gv = GiangVien::where('matk', $request->matk)->first();
+        $bangtin = BangTin::where('mabv', $id)->first();
         $baiviet->update([
             'tieude'         => $request->tieude,
             'noidung'        => $request->noidung,
             'macd'           => $request->macd,
-
-
+        ]);
+        $bangtin->update([
+            'noidung'       => $gv->hogv . " " . $gv->tengv . " đã tạo học liệu : " . $baiviet->tieude,
+            'magv'          => $gv->id,
+            'loaibangtin'   => 3,
+            'ngaytao'       => Carbon::now('Asia/Ho_Chi_Minh'),
+            'trangthai'     => 1,
+            'malhp'         => $request->malhp,
+            'mabv'          => $baiviet->id
         ]);
 
         if (!empty($baiviet)) {
