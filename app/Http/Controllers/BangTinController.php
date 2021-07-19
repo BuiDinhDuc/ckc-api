@@ -89,6 +89,13 @@ class BangTinController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $bangtin = BangTin::where('id',$id)->first();
+        if (!empty($bangtin)) {
+        $bangtin->trangthai = 0;
+        $bangtin->save();
+        return response()->json(['status' => 'success', 'message' =>"Xóa thành công"], 200);
+        }
+        else
+        return response()->json(['status' => 'error', 'message' =>"Không tìm thấy"], 404);
     }
 }

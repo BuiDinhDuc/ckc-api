@@ -170,6 +170,7 @@ Route::prefix('bangtin')->group(function () {
     Route::post('update/{id}', 'BangTinController@update');
     Route::get('detail/{id}', 'BangTinController@show');
     Route::post('delete/{id}', 'BangTinController@destroy');
+    
 });
 // });
 // Route::get('/home', 'HomeController@index');
@@ -181,3 +182,6 @@ Route::get('/getUser/{id}', 'AuthController@getUser');
 Route::get('/province', 'ProvinceController@getProvince');
 Route::get('/district', 'ProvinceController@getDistrict');
 Route::get('/ward', 'ProvinceController@getWard');
+
+
+
