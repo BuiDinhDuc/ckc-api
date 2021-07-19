@@ -716,4 +716,16 @@ class BaiVietController extends Controller
         $lst_diendan = BaiViet::where('malhp', $malhp)->where('trangthai', 1)->where('loaibv', 4)->with('taikhoan', 'lophocphan', 'filebaiviets', 'binhluans')->withCount('binhluans')->orderBy('id', 'DESC')->get();
         return response()->json(['status' => 'success', 'data' => $lst_diendan]);
     }
+
+    public function xoaDienDan($id)
+    {
+        $baiviet = BaiViet::where('id', $id)->first();
+        if (!empty($baiviet)) {
+            $baiviet->trangthai = 0;
+            $baiviet->save();
+
+            return response()->json(['status' => 'success', 'message' => 'Thành công']);
+        } else
+            return response()->json(['status' => 'error', 'message' => 'Thất bại']);
+    }
 }

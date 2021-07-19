@@ -138,6 +138,7 @@ Route::prefix('baiviet')->group(function () {
     Route::post('nopbai/{id}', 'BaiVietController@nopbai');
     Route::post('getBaiLam/{id}', 'BaiVietController@getBaiLam');
     Route::get('getListDienDan/{id}', 'BaiVietController@getListDienDan');
+    Route::post('xoadiendan/{id}', 'BaiVietController@xoaDienDan');
 });
 
 Route::prefix('file')->group(function () {
@@ -156,10 +157,10 @@ Route::prefix('chude')->group(function () {
 
 Route::prefix('binhluan')->group(function () {
     Route::post('store', 'BinhLuanController@store');
-    Route::get('index/{id}', 'ChuDeController@getAllChuDeTheoLHP');
-    Route::post('update/{id}', 'ChuDeController@update');
-    Route::get('detail/{id}', 'ChuDeController@show');
-    Route::post('delete/{id}', 'ChuDeController@destroy');
+    Route::get('index/{id}', 'BinhLuanController@index');
+    Route::post('update/{id}', 'BinhLuanController@update');
+    Route::get('detail/{id}', 'BinhLuanController@show');
+    Route::post('delete/{id}', 'BinhLuanController@destroy');
 });
 Route::prefix('baiviet')->group(function () {
 });

@@ -79,7 +79,13 @@ class BinhLuanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $binhluan = BinhLuan::where('id', $id)->first();
+        if (!empty($binhluan)) {
+            $binhluan->noidung = $request->noidung;
+            $binhluan->save();
+            return response()->json(['status' => 'success', 'message' => 'Sửa bình luận thành công'], 200);
+        }
+        return response()->json(['status' => 'error', 'message' => 'Không tìm thấy bình luận'], 404);
     }
 
     /**
