@@ -63,7 +63,8 @@ class BangTinController extends Controller
      */
     public function show($id)
     {
-        //
+        $bangtin = BangTin::where('id', $id)->where('trangthai', 1)->with('giangvien', 'lophocphan', 'file_bang_tin')->first();
+        return response()->json(['status' => 'success', 'data' => $bangtin]);
     }
 
     /**
@@ -75,11 +76,29 @@ class BangTinController extends Controller
      */
     public function update(Request $request, $id)
     {
+        
         $bangtin = BangTin::where('id', $id)->first();
-        $bangtin->update([
-            'noidung'       => $request->noidung,
-        ]);
+        if(!empty($bangtin)){
+            $bangtin->update([
+                'noidung'       => $request->noidung,
+            ]);
+            if (!empty($request->dsFile)) {
+                $dsFile = explode(',', $request->dsFile);
+                foreach ($dsFile as $file) {
+                    FileBangTin::create([
+                        'mafile'    => $file,
+                        'mabangtin' => $bangtin->id,
+                        'trangthai' => 1
+                    ]);
+                }
+            }
+            return response()->json(['status' => 'success','message' =>"Sửa thành công"],200);
+        }    
+        else{
+            return response()->json(['status' => 'error','message' =>"Không tìm thấy"],404);
+        }
     }
+    
 
     /**
      * Remove the specified resource from storage.

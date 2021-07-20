@@ -415,7 +415,7 @@ class BaiVietController extends Controller
                 'loaibangtin'   => 2,
                 'ngaytao'       => Carbon::now('Asia/Ho_Chi_Minh'),
                 'trangthai'     => 1,
-                'malhp'         => $request->malhp,
+                
                 'mabv'          => $baiviet->id
             ]);
         } elseif ($baiviet->loaibv == 3) {
@@ -430,7 +430,7 @@ class BaiVietController extends Controller
                 'loaibangtin'   => 3,
                 'ngaytao'       => Carbon::now('Asia/Ho_Chi_Minh'),
                 'trangthai'     => 1,
-                'malhp'         => $request->malhp,
+               
                 'mabv'          => $baiviet->id
             ]);
         }

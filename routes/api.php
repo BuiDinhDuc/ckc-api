@@ -171,6 +171,7 @@ Route::prefix('bangtin')->group(function () {
     Route::get('detail/{id}', 'BangTinController@show');
     Route::post('delete/{id}', 'BangTinController@destroy');
     
+    
 });
 // });
 // Route::get('/home', 'HomeController@index');
