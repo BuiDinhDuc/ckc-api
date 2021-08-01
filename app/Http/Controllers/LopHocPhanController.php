@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\BaiViet;
 use App\GiangVien;
 use App\LopHoc;
 use App\LopHocPhan;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\SinhVien;
+use App\SinhVienBaiTap;
 
 class LopHocPhanController extends Controller
 {
@@ -247,6 +249,15 @@ class LopHocPhanController extends Controller
             'trangthai' => 1
         ]);
 
+        $lst_baiviet = BaiViet::where('loaibv', 2)->where('malhp', $id)->where('trangthai', 1)->pluck('id');
+        foreach ($lst_baiviet as $baiviet) {
+            SinhVienBaiTap::create([
+                'mssv' => $request->sv_id,
+                'mabv'  => $baiviet,
+                'trangthai' => 0
+            ]);
+        }
+
         return response()->json(['status' => 'success', 'message' => "Thêm thành công"]);
     }
     public function khoaSV($id)
@@ -300,5 +311,14 @@ class LopHocPhanController extends Controller
         $lophocphan->chinhsach = $request->chinhsach;
         $lophocphan->save();
         return response()->json(['status' => 'success', 'message' => 'Thành công'], 200);
+    }
+
+    public function getChinhSachLopHocPhan($id)
+    {
+        $lhp = LopHocPhan::where('id', $id)->first();
+        if (!empty($lhp)) {
+            return response()->json(['status' => 'success', 'data' => $lhp->chinhsach]);
+        } else
+            return response()->json(['status' => 'error', 'message' => "Không tìm thấy lớp học phần"], 404);
     }
 }

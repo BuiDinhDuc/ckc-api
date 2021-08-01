@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\BoMon;
+use App\District;
 use App\GiangVien;
+use App\Province;
 use App\User;
+use App\Ward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -21,29 +25,29 @@ class GiangVienController extends Controller
      */
     public function index()
     {
-        $lst_giangvien = GiangVien::where('trangthai','<>',0)->with('bomon')->orderBy('id','DESC')->paginate(10);
+        $lst_giangvien = GiangVien::where('trangthai', '<>', 0)->with('bomon')->orderBy('id', 'DESC')->paginate(10);
 
-        return response()->json(['status' => 'success','data' => $lst_giangvien],200);
+        return response()->json(['status' => 'success', 'data' => $lst_giangvien], 200);
     }
 
     public function getAll()
     {
-        $lst_giangvien = GiangVien::where('trangthai','<>',0)->get();
+        $lst_giangvien = GiangVien::where('trangthai', '<>', 0)->get();
 
-        return response()->json(['status' => 'success','data' => $lst_giangvien],200);
+        return response()->json(['status' => 'success', 'data' => $lst_giangvien], 200);
     }
     public function getListGVByBoMon($mabm)
     {
-        $lst_giangvien = GiangVien::where('trangthai',1)->where('mabm',$mabm)->with('bomon')->get();
+        $lst_giangvien = GiangVien::where('trangthai', 1)->where('mabm', $mabm)->with('bomon')->get();
 
-        return response()->json(['status' => 'success','data' => $lst_giangvien],200);
+        return response()->json(['status' => 'success', 'data' => $lst_giangvien], 200);
     }
-    
+
 
     public function store(Request $request)
     {
         $user = User::create([
-            'email' => $request->msgv.'@caothang.edu.vn',
+            'email' => $request->msgv . '@caothang.edu.vn',
             'trangthai' => 1,
             'password'  => Hash::make($request->cccd),
             'role'      => 1
@@ -60,23 +64,21 @@ class GiangVienController extends Controller
                 'cccd' => $request->cccd,
                 'matk' => $user->id,
                 'mabm' => $request->bomon,
-                'province_id' => $request->tinh,
-                'district_id' => $request->huyen,
-                'ward_id' => $request->xa,
+                'diachi' => $request->diachi,
                 'trangthai' => 1,
 
             ]);
             if (!empty($gv)) {
-                return response()->json(['status' => 'success', 'message' => 'Thêm thành công','data' => $gv->id], 200);
+                return response()->json(['status' => 'success', 'message' => 'Thêm thành công', 'data' => $gv->id], 200);
             }
             return response()->json(['status' => 'error', 'message' => 'Thêm thất bại'], 403);
         }
     }
-    
+
 
     public function show($id)
     {
-        $sv = GiangVien::where('id',$id)->with('bomon', 'taikhoan','lophocphans' ,'tinh', 'huyen', 'xa')->first();
+        $sv = GiangVien::where('id', $id)->with('bomon', 'taikhoan', 'lophocphans')->first();
         if (!empty($sv))
             return response()->json(['status' => 'success', 'data' => $sv], 200);
     }
@@ -92,9 +94,7 @@ class GiangVienController extends Controller
             'sdt' => $request->sdt,
             'cccd' => $request->cccd,
             'mabm' => $request->bomon,
-            'province_id' => $request->tinh,
-            'district_id' => $request->huyen,
-            'ward_id' => $request->xa,
+            'diachi' => $request->diachi,
 
         ]);
         if (!empty($gv)) {
@@ -124,8 +124,8 @@ class GiangVienController extends Controller
         $gv->trangthai = 2;
         $gv->save();
         // $lst_gv = GiangVien::where('trangthai', 1)->get();
-        $lst_giangvien = GiangVien::where('trangthai','<>',0)->with('bomon')->orderBy('id','DESC')->paginate(10);
-        return response()->json(['status' => 'success', 'message' => "Đã khóa", 'data'=>$lst_giangvien], 200);
+        $lst_giangvien = GiangVien::where('trangthai', '<>', 0)->with('bomon')->orderBy('id', 'DESC')->paginate(10);
+        return response()->json(['status' => 'success', 'message' => "Đã khóa", 'data' => $lst_giangvien], 200);
     }
     public function unlock(Request $request)
     {
@@ -133,21 +133,52 @@ class GiangVienController extends Controller
         $gv->trangthai = 1;
         $gv->save();
         // $lst_gv = GiangVien::where('trangthai', 2)->get();
-        $lst_giangvien = GiangVien::where('trangthai','<>',0)->with('bomon')->orderBy('id','DESC')->paginate(10);
-        return response()->json(['status' => 'success', 'message' => "Đã mở khóa", 'data'=>$lst_giangvien], 200);
+        $lst_giangvien = GiangVien::where('trangthai', '<>', 0)->with('bomon')->orderBy('id', 'DESC')->paginate(10);
+        return response()->json(['status' => 'success', 'message' => "Đã mở khóa", 'data' => $lst_giangvien], 200);
     }
-    public function timkiemGV(Request $request){
-        if($request->key_word == null){
-            $lst_gv = GiangVien::where('trangthai', '<>', 0)->with('bomon')->orderBy('id','DESC')->paginate(10);
+    public function timkiemGV(Request $request)
+    {
+        if ($request->key_word == null) {
+            $lst_gv = GiangVien::where('trangthai', '<>', 0)->with('bomon')->orderBy('id', 'DESC')->paginate(10);
             if (!empty($lst_gv))
                 return response()->json(['status' => 'success', 'data' => $lst_gv], 200);
-        }
-        else{
-            $lst_gv = GiangVien::where('hogv','like','%'.$request->key_word.'%')
-            ->orWhere('tengv','like','%'.$request->key_word.'%');
+        } else {
+            $lst_gv = GiangVien::where('hogv', 'like', '%' . $request->key_word . '%')
+                ->orWhere('tengv', 'like', '%' . $request->key_word . '%');
             if (!empty($lst_gv))
-                return response()->json(['status' => 'success', 'data' => $lst_gv->where('trangthai','<>',0)->with('bomon')->orderBy('id','DESC')->paginate(10)], 200);
+                return response()->json(['status' => 'success', 'data' => $lst_gv->where('trangthai', '<>', 0)->with('bomon')->orderBy('id', 'DESC')->paginate(10)], 200);
         }
     }
-    
+
+    public function importGiangVien(Request $request)
+    {
+        $user = User::create([
+            'email' => $request->msgv . '@caothang.edu.vn',
+            'trangthai' => 1,
+            'password'  => Hash::make($request->cmnd),
+            'role'      => 1
+        ]);
+
+        if (!empty($user)) {
+
+            $gv = GiangVien::create([
+                'msgv'  => $request->msgv,
+                'hogv' => $request->hogv,
+                'tengv' => $request->tengv,
+                'ngaysinh' => $request->ngaysinh,
+                'gioitinh' => $request->gioitinh,
+                'sdt' => $request->sdt,
+                'cccd' => $request->cmnd,
+                'matk' => $user->id,
+                'mabm' => $request->mabm,
+                'diachi' => $request->diachi,
+                'trangthai' => 1,
+
+            ]);
+            if (!empty($gv)) {
+                return response()->json(['status' => 'success', 'message' => 'Thêm thành công'], 200);
+            }
+            return response()->json(['status' => 'error', 'message' => 'Thêm thất bại'], 403);
+        }
+    }
 }

@@ -105,4 +105,30 @@ class BinhLuanController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Không tìm thấy bình luận'], 404);
         }
     }
+    public function addBinhLuanBangTin(Request $request)
+    {
+        $v = Validator::make($request->all(), [
+            'noidung' => 'required',
+        ], [
+            'noidung.required'  => 'Nội dung không được bỏ trống',
+        ]);
+        if ($v->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 422,
+                'message' => $v->errors()->first(),
+            ], 422);
+        }
+        $binhluan = BinhLuan::create([
+            'noidung' => $request->noidung,
+            'ngaytao' => Carbon::now('Asia/Ho_Chi_Minh'),
+            'mabt'    =>  $request->mabt,
+            'matk'    => $request->matk,
+        ]);
+        if (!empty($binhluan)) {
+            return response()->json(['status' => 'success', 'message' => 'Bình luận thành công'], 200);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Bình luận không thành công'], 404);
+        }
+    }
 }

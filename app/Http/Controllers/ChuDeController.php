@@ -36,7 +36,7 @@ class ChuDeController extends Controller
             ['trangthai', 1],
             ['malhp', $malhp]
         ])
-            ->orderBy('thutu', 'ASC')->get();
+            ->orderBy('id', 'DESC')->get();
 
         return response()->json(['status' => 'Success', 'data' => $lst_chude], 200);
     }

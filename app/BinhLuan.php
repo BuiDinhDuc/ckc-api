@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BinhLuan extends Model
 {
-    protected $fillable = ['noidung', 'ngaytao', 'mabv', 'matk', 'trangthai'];
+    protected $fillable = ['noidung', 'ngaytao', 'mabv', 'matk', 'trangthai', 'mabt'];
 
     public function baiviet()
     {

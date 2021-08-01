@@ -24,4 +24,8 @@ class BangTin extends Model
     {
         return $this->hasMany('App\FileBangTin', 'mabangtin', 'id')->with('file');
     }
+    public function binhluans()
+    {
+        return $this->hasMany('App\BinhLuan', 'mabt', 'id')->where('trangthai', 1)->with('taikhoan')->orderBy('id', 'DESC');
+    }
 }

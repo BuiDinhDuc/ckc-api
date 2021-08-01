@@ -309,6 +309,7 @@ class BaiVietController extends Controller
                 return response()->json(['status' => 'error', 'message' => 'Thêm thất bại']);
             }
         } else if ($request->loaibv == 4) {
+
             $baiviet =  BaiViet::create([
                 'noidung'        => $request->noidung,
                 'ngaytao'        => Carbon::now('Asia/Ho_Chi_Minh'),
@@ -328,6 +329,29 @@ class BaiVietController extends Controller
                         ]);
                     }
                 }
+                if (!empty($request->dsFileUpload)) {
+                    $id_account = $request->matk;
+                    return response()->json(['status' => 'success', 'data' => $request->dsFileUpload[0]->getSize()]);
+
+                    $file = $request->dsFileUpload[0];
+                    $name_file   = $file->getClientOriginalName();
+
+                    $size        = $file->getSize();
+                    $path        = public_path('document/' . $id_account);
+                    $file->move($path, $name_file);
+
+                    $child = File::create([
+                        'tenfile'       => $name_file,
+                        'path'          => 'document/' . $id_account . '/' . $name_file,
+                        'dungluong'     => $size,
+                        'duoifile'      => '.' . $file->getClientOriginalExtension(),
+                        'trangthai'     => 1,
+                        'matk'          => $id_account,
+                        'ngaytao'       => Carbon::now()->toDateTimeString(),
+
+                    ]);
+                }
+
                 return response()->json(['status' => 'success', 'message' => 'Thêm thành công']);
             } else {
                 return response()->json(['status' => 'error', 'message' => 'Thêm thất bại']);
@@ -415,7 +439,7 @@ class BaiVietController extends Controller
                 'loaibangtin'   => 2,
                 'ngaytao'       => Carbon::now('Asia/Ho_Chi_Minh'),
                 'trangthai'     => 1,
-                
+
                 'mabv'          => $baiviet->id
             ]);
         } elseif ($baiviet->loaibv == 3) {
@@ -430,7 +454,7 @@ class BaiVietController extends Controller
                 'loaibangtin'   => 3,
                 'ngaytao'       => Carbon::now('Asia/Ho_Chi_Minh'),
                 'trangthai'     => 1,
-               
+
                 'mabv'          => $baiviet->id
             ]);
         }
@@ -767,5 +791,58 @@ class BaiVietController extends Controller
             return response()->json(['status' => 'success', 'message' => 'Thành công']);
         } else
             return response()->json(['status' => 'error', 'message' => 'Thất bại']);
+    }
+
+    public function getDienDan($id)
+    {
+        $baiviet = BaiViet::where('id', $id)->where('trangthai', 1)->with('filebaiviets')->first();
+        return response()->json(['status' => 'success', 'data' => $baiviet]);
+    }
+
+    public function updateDienDan(Request $request, $id)
+    {
+        $baiviet = BaiViet::where('id', $id)->first();
+        if (!empty($baiviet)) {
+            $baiviet->update([
+                'noidung'       => $request->noidung,
+            ]);
+            if (!empty($request->dsFile)) {
+                $dsFile = explode(',', $request->dsFile);
+                foreach ($dsFile as $file) {
+                    FileBaiViet::create([
+                        'mafile'    => $file,
+                        'mabv' => $baiviet->id,
+                        'trangthai' => 1
+                    ]);
+                }
+            }
+            return response()->json(['status' => 'success', 'message' => "Sửa thành công"], 200);
+        } else {
+            return response()->json(['status' => 'error', 'message' => "Không tìm thấy"], 404);
+        }
+    }
+
+    public function deleteFileBaiViet($id)
+    {
+        $filebaiviets = FileBaiViet::where('id', $id)->first();
+        if (!empty($filebaiviets)) {
+            $filebaiviets->trangthai = 0;
+            $filebaiviets->save();
+            return response()->json(['status' => 'success', 'message' => "Xóa thành công"], 200);
+        } else {
+            return response()->json(['status' => 'error', 'message' => "Không tìm thấy"], 404);
+        }
+    }
+
+    public function getListFileDienDan($id)
+    {
+        $filebaiviets = FileBaiViet::where('id', $id)->first();
+        if (!empty($filebaiviets)) {
+            $filebaiviets->trangthai = 0;
+            $filebaiviets->save();
+            return response()->json(['status' => 'success', 'message' => "Xóa thành công"], 200);
+        } else {
+            return response()->json(['status' => 'error', 'message' => "Không tìm thấy"], 404);
+        }
     }
 }

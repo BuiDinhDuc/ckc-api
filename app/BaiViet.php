@@ -35,7 +35,7 @@ class BaiViet extends Model
     }
     public function filebaiviets()
     {
-        return $this->hasMany('App\FileBaiViet', 'mabv', 'id')->with('file');
+        return $this->hasMany('App\FileBaiViet', 'mabv', 'id')->where('trangthai', 1)->with('file');
     }
 
     public function giaobai()

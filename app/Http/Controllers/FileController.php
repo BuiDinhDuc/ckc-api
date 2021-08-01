@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\File;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 
 class FileController extends Controller
 {
@@ -118,5 +119,35 @@ class FileController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function uploadFileTaoDienDan(Request $request)
+    {
+
+        $lst_file_upload = array();
+        $id_account = $request->matk;
+        if ($request->hasFile('file')) {
+
+            $file        = $request->file;
+            $name_file   = $file->getClientOriginalName();
+            $tenfile     = Carbon::now('Asia/Ho_Chi_Minh')->format('Y_m_d_H_i_s_u') . '.' . $file->getClientOriginalExtension();
+            $size        = $file->getSize();
+            $path        = public_path('document/' . $id_account);
+            $file->move($path, $tenfile);
+
+            $child = File::create([
+                'tenfile'       => $name_file,
+                'path'          => 'document/' . $id_account . '/' . $tenfile,
+                'dungluong'     => $size,
+                'duoifile'      => '.' . $file->getClientOriginalExtension(),
+                'trangthai'     => 1,
+                'matk'          => $id_account,
+                'ngaytao'       => Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString(),
+                'file_name'     => $tenfile
+            ]);
+
+
+            return response()->json(['status' => 'success', 'message' => 'Upload thành công', 'data' => $child->id]);
+        }
     }
 }

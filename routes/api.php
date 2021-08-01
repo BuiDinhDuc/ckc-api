@@ -28,6 +28,7 @@ Route::prefix('giangvien')->group(function () {
     Route::get('getListGVByBoMon/{id}', 'GiangVienController@getListGVByBoMon');
     Route::get('index', 'GiangVienController@getAll');
     Route::post('search', 'GiangVienController@timkiemGV');
+    Route::post('importGiangVien', 'GiangVienController@importGiangVien');
 });
 
 Route::prefix('sinhvien')->group(function () {
@@ -41,6 +42,8 @@ Route::prefix('sinhvien')->group(function () {
     Route::get('index', 'SinhVienController@getAll');
     Route::post('search', 'SinhVienController@timkiemSV');
     Route::get('getThongTin/{id}', 'SinhVienController@getThongTin');
+
+    Route::post('importSinhVien', 'SinhVienController@importSinhVien');
 });
 
 Route::prefix('khoa')->group(function () {
@@ -113,6 +116,7 @@ Route::prefix('lophocphan')->group(function () {
     Route::post('luutru/{id}', 'LopHocPhanController@luuTru');
     Route::post('khoiphuc/{id}', 'LopHocPhanController@khoiPhuc');
     Route::post('thayDoiChinhSach/{id}', 'LopHocPhanController@thayDoiChinhSach');
+    Route::get('getChinhSachLopHocPhan/{id}', 'LopHocPhanController@getChinhSachLopHocPhan');
 });
 
 Route::prefix('baiviet')->group(function () {
@@ -139,12 +143,17 @@ Route::prefix('baiviet')->group(function () {
     Route::post('getBaiLam/{id}', 'BaiVietController@getBaiLam');
     Route::get('getListDienDan/{id}', 'BaiVietController@getListDienDan');
     Route::post('xoadiendan/{id}', 'BaiVietController@xoaDienDan');
+
+    Route::get('getDienDan/{id}', 'BaiVietController@getDienDan');
+    Route::post('updateDienDan/{id}', 'BaiVietController@updateDienDan');
+    Route::post('deleteFileBaiViet/{id}', 'BaiVietController@deleteFileBaiViet');
 });
 
 Route::prefix('file')->group(function () {
     Route::get('/{id}', 'FileController@index');
     Route::post('uploadFile', 'FileController@store');
     Route::post('uploadFileBaiLam', 'FileController@uploadFileBaiLam');
+    Route::post('uploadFileTaoDienDan', 'FileController@uploadFileTaoDienDan');
 });
 
 Route::prefix('chude')->group(function () {
@@ -161,6 +170,7 @@ Route::prefix('binhluan')->group(function () {
     Route::post('update/{id}', 'BinhLuanController@update');
     Route::get('detail/{id}', 'BinhLuanController@show');
     Route::post('delete/{id}', 'BinhLuanController@destroy');
+    Route::post('addBinhLuanBangTin', 'BinhLuanController@addBinhLuanBangTin');
 });
 Route::prefix('baiviet')->group(function () {
 });
@@ -170,8 +180,6 @@ Route::prefix('bangtin')->group(function () {
     Route::post('update/{id}', 'BangTinController@update');
     Route::get('detail/{id}', 'BangTinController@show');
     Route::post('delete/{id}', 'BangTinController@destroy');
-    
-    
 });
 // });
 // Route::get('/home', 'HomeController@index');
@@ -183,6 +191,3 @@ Route::get('/getUser/{id}', 'AuthController@getUser');
 Route::get('/province', 'ProvinceController@getProvince');
 Route::get('/district', 'ProvinceController@getDistrict');
 Route::get('/ward', 'ProvinceController@getWard');
-
-
-

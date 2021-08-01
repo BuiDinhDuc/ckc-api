@@ -17,7 +17,7 @@ class BangTinController extends Controller
      */
     public function index($malhp)
     {
-        $lst_bangtin = BangTin::where('malhp', $malhp)->where('trangthai', 1)->with('giangvien', 'lophocphan', 'file_bang_tin')->orderBy('id', 'DESC')->get();
+        $lst_bangtin = BangTin::where('malhp', $malhp)->where('trangthai', 1)->with('giangvien', 'lophocphan', 'file_bang_tin', 'binhluans')->withCount('binhluans')->orderBy('id', 'DESC')->get();
         return response()->json(['status' => 'success', 'data' => $lst_bangtin]);
     }
 
@@ -76,9 +76,9 @@ class BangTinController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+
         $bangtin = BangTin::where('id', $id)->first();
-        if(!empty($bangtin)){
+        if (!empty($bangtin)) {
             $bangtin->update([
                 'noidung'       => $request->noidung,
             ]);
@@ -92,13 +92,12 @@ class BangTinController extends Controller
                     ]);
                 }
             }
-            return response()->json(['status' => 'success','message' =>"Sửa thành công"],200);
-        }    
-        else{
-            return response()->json(['status' => 'error','message' =>"Không tìm thấy"],404);
+            return response()->json(['status' => 'success', 'message' => "Sửa thành công"], 200);
+        } else {
+            return response()->json(['status' => 'error', 'message' => "Không tìm thấy"], 404);
         }
     }
-    
+
 
     /**
      * Remove the specified resource from storage.
@@ -108,13 +107,12 @@ class BangTinController extends Controller
      */
     public function destroy($id)
     {
-        $bangtin = BangTin::where('id',$id)->first();
+        $bangtin = BangTin::where('id', $id)->first();
         if (!empty($bangtin)) {
-        $bangtin->trangthai = 0;
-        $bangtin->save();
-        return response()->json(['status' => 'success', 'message' =>"Xóa thành công"], 200);
-        }
-        else
-        return response()->json(['status' => 'error', 'message' =>"Không tìm thấy"], 404);
+            $bangtin->trangthai = 0;
+            $bangtin->save();
+            return response()->json(['status' => 'success', 'message' => "Xóa thành công"], 200);
+        } else
+            return response()->json(['status' => 'error', 'message' => "Không tìm thấy"], 404);
     }
 }
