@@ -80,7 +80,7 @@ class SinhVienController extends Controller
             'gioitinh' => $request->gioitinh,
             'sdt' => $request->sdt,
             'cccd' => $request->cccd,
-            'malh' => $request->lop,
+            'malh' => $request->malop,
             'diachi' => $request->diachi,
         ]);
         if (!empty($sv)) {
