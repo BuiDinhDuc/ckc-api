@@ -10,6 +10,7 @@ use App\Jobs\SendActivateEmail;
 use App\ActivateAccountMember;
 use App\AccountMember;
 use App\Documents;
+use App\GiangVien;
 use App\MemberGroup;
 use App\PasswordReset;
 use Carbon\Carbon;
@@ -137,7 +138,7 @@ class AuthController extends Controller
     }
     public function getUser($matk)
     {
-        $user = User::where('id', $matk)->with('giangvien','sinhvien')->first();
+        $user = User::where('id', $matk)->with('giangvien', 'sinhvien')->first();
         return response()->json(['status' => 'success', 'data' => $user], 200);
     }
 
@@ -157,4 +158,15 @@ class AuthController extends Controller
     //     } else
     //         return response()->json(['status' => 'error', 'message' => 'Email không tồn tại']);
     // }
+
+
+    public function demSL()
+    {
+        $giangvien = GiangVien::where('trangthai', 1)->count();
+        $data['giangvien'] = $giangvien;
+
+
+
+        return response()->json(['status' => 'success', 'data' => $data], 200);
+    }
 }

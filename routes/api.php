@@ -191,3 +191,4 @@ Route::get('/getUser/{id}', 'AuthController@getUser');
 Route::get('/province', 'ProvinceController@getProvince');
 Route::get('/district', 'ProvinceController@getDistrict');
 Route::get('/ward', 'ProvinceController@getWard');
+Route::get('/demSL', 'AuthController@demSL');

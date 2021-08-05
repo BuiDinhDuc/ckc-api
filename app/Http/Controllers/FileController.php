@@ -147,7 +147,7 @@ class FileController extends Controller
             ]);
 
 
-            return response()->json(['status' => 'success', 'message' => 'Upload thành công', 'data' => $child->id]);
+            return response()->json(['status' => 'success', 'message' => 'Upload thành công', 'data' => $child]);
         }
     }
 }
