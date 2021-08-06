@@ -11,6 +11,12 @@ use App\ActivateAccountMember;
 use App\AccountMember;
 use App\Documents;
 use App\GiangVien;
+use App\SinhVien;
+use App\LopHoc;
+use App\LopHocPhan;
+use App\MonHoc;
+use App\Khoa;
+use App\BoMon;
 use App\MemberGroup;
 use App\PasswordReset;
 use Carbon\Carbon;
@@ -164,9 +170,18 @@ class AuthController extends Controller
     {
         $giangvien = GiangVien::where('trangthai', 1)->count();
         $data['giangvien'] = $giangvien;
-
-
-
+        $sinhvien = SinhVien::where('trangthai', 1)->count();
+        $data['sinhvien'] = $sinhvien;
+        $khoa =Khoa::where('trangthai', 1)->count();
+        $data['khoa'] = $khoa;
+        $bomon = BoMon::where('trangthai', 1)->count();
+        $data['bomon'] = $bomon;
+        $lophoc = LopHoc::where('trangthai', 1)->count();
+        $data['lophoc'] = $lophoc;
+        $monhoc = MonHoc::where('trangthai', 1)->count();
+        $data['monhoc'] = $monhoc;
+        $lophocphan = LopHoc::where('trangthai', 1)->count();
+        $data['lophocphan'] = $lophocphan;
         return response()->json(['status' => 'success', 'data' => $data], 200);
     }
 }
