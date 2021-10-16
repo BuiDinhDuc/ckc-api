@@ -143,7 +143,7 @@ class LopHocPhanController extends Controller
 
         $sv_id = SinhVienLopHocPhan::where('malhp', $id)->get()->pluck('masv');
 
-        $lst_sv = SinhVien::whereIn('id', $sv_id)->with('sinhvienlophocphans')
+        $lst_sv = SinhVien::whereIn('id', $sv_id)->with('sinhvienlophocphans',"lophoc")
             // )->with('sinhvienlophocphans')
             ->where('trangthai', 1)->get();
         $data['lst_sv'] = $lst_sv;
@@ -254,6 +254,10 @@ class LopHocPhanController extends Controller
     public function themSV(Request $request, $id)
     {
         //id là id lhp 
+
+        $sv_lhp = SinhVienLopHocPhan::where('masv',$request->sv_id)->where('malhp',$id)->first();
+        if($sv_lhp) return response()->json(['status' => 'error', 'message'=>"Sinh viên đã có trong lớp học phần"]);
+
         SinhVienLopHocPhan::create([
             'masv' => $request->sv_id,
             'malhp' => $id,

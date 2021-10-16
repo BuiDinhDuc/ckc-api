@@ -94,7 +94,6 @@ Route::prefix('monhoc')->group(function () {
     Route::post('search', 'MonHocController@timkiemMH');
 });
 
-
 Route::prefix('lophocphan')->group(function () {
     Route::get('/', 'LopHocPhanController@index');
     Route::get('detail/{id}', 'LopHocPhanController@show');
@@ -175,8 +174,7 @@ Route::prefix('binhluan')->group(function () {
     Route::post('delete/{id}', 'BinhLuanController@destroy');
     Route::post('addBinhLuanBangTin', 'BinhLuanController@addBinhLuanBangTin');
 });
-Route::prefix('baiviet')->group(function () {
-});
+
 Route::prefix('bangtin')->group(function () {
     Route::post('store', 'BangTinController@store');
     Route::get('index/{id}', 'BangTinController@index');
