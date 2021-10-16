@@ -170,10 +170,10 @@ class LopHocPhanController extends Controller
         $id_monhoc = $request->mamh;
         $id_giangvien = $request->magv;
 
-        $check_lhp = LopHocPhan::where([['malh', '=', $id_lophoc], ['mamh', '=', $id_monhoc]])->first();
-        if (!empty($check_lhp)) {
-            return response()->json(['status' => 'error', 'message' => 'Lớp học phần đã tồn tại'], 422);
-        }
+        // $check_lhp = LopHocPhan::where([['malh', '=', $id_lophoc], ['mamh', '=', $id_monhoc]])->first();
+        // if (!empty($check_lhp)) {
+        //     return response()->json(['status' => 'error', 'message' => 'Lớp học phần đã tồn tại'], 422);
+        // }
 
         $lophoc = LopHoc::find($id_lophoc);
         $monhoc = MonHoc::find($id_monhoc);
@@ -182,7 +182,6 @@ class LopHocPhanController extends Controller
         if ($lhp) {
             $lhp->tenlhp    = $monhoc->tenmh . ' ' . $lophoc->tenlop;
             $lhp->hocky    = $request->hocky;
-            $lhp->chinhsach = $request->chinhsach;
             $lhp->namhoc    = $request->namhoc;
             $lhp->magv     = $id_giangvien;
             $lhp->malh      = $id_lophoc;
