@@ -56,6 +56,11 @@ class LopHocPhanController extends Controller
             })->with('giangvien', 'lophoc', 'monhoc')->withCount('sinhvienlophocphans')->get();
         return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
     }
+    
+    public function lstLopHocPhanTheoAdmin(){
+        $lst_lhp = LopHocPhan::where([['trangthai', '=', 1],['luutru', '=', 0]])->with('giangvien', 'lophoc', 'monhoc')->withCount('sinhvienlophocphans')->get();
+        return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
+    }
 
     public function lstLopHocPhanLuuTruTheoGV($matk)
     {
@@ -70,6 +75,12 @@ class LopHocPhanController extends Controller
             ->whereHas('sinhvienlophocphans', function (Builder $query) use ($sv) {
                 $query->where('masv', '=', $sv->id);
             })->with('giangvien', 'lophoc', 'monhoc')->withCount('sinhvienlophocphans')->get();
+        return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
+    }
+    public function lstLopHocPhanLuuTruTheoAdmin()
+    {
+       
+        $lst_lhp = LopHocPhan::where([['trangthai', '=', 1], ['luutru', '=', 1]])->with('giangvien', 'lophoc', 'monhoc')->withCount('sinhvienlophocphans')->get();
         return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
     }
     /**

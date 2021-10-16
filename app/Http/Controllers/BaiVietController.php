@@ -641,7 +641,7 @@ class BaiVietController extends Controller
         $baitap = BaiViet::where('id', $id)->where('loaibv', 2)->with('chude', 'filebaiviets')->withCount('giaobai')->first();
 
         $sv_danop = SinhVienBaiTap::where([['mabv', $id], ['trangthai', 1]])->with('sinhvien')->get();
-        $sv_chuanop = SinhVienBaiTap::where('mabv', $id)->where('trangthai', 0)->get();
+        $sv_chuanop = SinhVienBaiTap::where('mabv', $id)->where('trangthai', 0)->with('sinhvien')->get();
         $data['baitap'] = $baitap;
         $data['sv_danop'] = $sv_danop;
         $data['sv_chuanop'] = $sv_chuanop;
@@ -769,8 +769,10 @@ class BaiVietController extends Controller
         $lst_link = BaiLamSinhVien::where('mssv', $request->mssv)->where('mabv', $id)->where('trangthai', '=', 1)->whereNotNull('link')->get();
 
         $lst_file = BaiLamSinhVien::where('mssv',  $request->mssv)->where('mabv', $id)->where('trangthai', '=', 1)->whereNotNull('mafile')->with('file')->get();
+        $lst_vanban = BaiLamSinhVien::where('mssv',  $request->mssv)->where('mabv', $id)->where('trangthai', '=', 1)->whereNotNull('van_ban')->get();
         $data['lst_link'] = $lst_link;
         $data['lst_file'] = $lst_file;
+        $data['lst_vanban'] = $lst_vanban;
 
         return response()->json(['status' => 'success', 'data' => $data]);
     }
@@ -844,5 +846,19 @@ class BaiVietController extends Controller
         } else {
             return response()->json(['status' => 'error', 'message' => "Không tìm thấy"], 404);
         }
+    }
+
+    public function nopvanban(Request $request,$id){
+        $sinhvien_id = SinhVien::where('matk', $request->matk)->first()->id;
+        $vanban = BaiLamSinhVien::create([
+            'van_ban'    => $request->vanban,
+            'mabv'       => $id,
+            'mssv'       => $sinhvien_id,
+            'trangthai'  => 2
+        ]);
+        if (!empty($vanban))
+            return response()->json(['status' => 'success', 'message' => 'Thêm link thành công']);
+        else
+            return response()->json(['status' => 'error', 'message' => 'Thêm link thất bại']);
     }
 }
