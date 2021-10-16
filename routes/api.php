@@ -106,8 +106,10 @@ Route::prefix('lophocphan')->group(function () {
     Route::post('search', 'LopHocPhanController@timkiemLHP');
     Route::get('/getLHPSV/{id}', 'LopHocPhanController@lstLopHocPhanTheoSV');
     Route::get('/getLHPGV/{id}', 'LopHocPhanController@lstLopHocPhanTheoGV');
+    Route::get('/getLHPAdmin', 'LopHocPhanController@lstLopHocPhanTheoAdmin');
     Route::get('/getLHPLuuTruSV/{id}', 'LopHocPhanController@lstLopHocPhanLuuTruTheoSV');
     Route::get('/getLHPLuuTruGV/{id}', 'LopHocPhanController@lstLopHocPhanLuuTruTheoGV');
+    Route::get('/getLHPLuuTruAdmin', 'LopHocPhanController@lstLopHocPhanLuuTruTheoAdmin');
     Route::post('themSV/{id}', 'LopHocPhanController@themSV');
     Route::post('khoaSV/{id}', 'LopHocPhanController@khoaSV');
     Route::post('moSV/{id}', 'LopHocPhanController@moSV');
@@ -142,6 +144,7 @@ Route::prefix('baiviet')->group(function () {
     Route::post('getBaiLam/{id}', 'BaiVietController@getBaiLam');
     Route::get('getListDienDan/{id}', 'BaiVietController@getListDienDan');
     Route::post('xoadiendan/{id}', 'BaiVietController@xoaDienDan');
+    Route::post('nopvanban/{id}', 'BaiVietController@nopvanban');
 
     Route::get('getDienDan/{id}', 'BaiVietController@getDienDan');
     Route::post('updateDienDan/{id}', 'BaiVietController@updateDienDan');
