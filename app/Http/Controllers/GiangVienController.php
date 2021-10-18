@@ -10,7 +10,7 @@ use App\User;
 use App\Ward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Validator;
 
 class GiangVienController extends Controller
 {
@@ -46,6 +46,20 @@ class GiangVienController extends Controller
 
     public function store(Request $request)
     {
+
+        $v = Validator::make($request->all(), [
+            'msgv'          => 'required|unique:App\GiangVien,msgv',
+
+        ], [
+            'msgv.unique'             => 'Mã giáo viên bị trùng',
+        ]);
+        if ($v->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 422,
+                'message' => $v->errors()->first(),
+            ], 422);
+        }
         $user = User::create([
             'email' => $request->msgv . '@caothang.edu.vn',
             'trangthai' => 1,
