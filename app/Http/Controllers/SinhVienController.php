@@ -15,6 +15,7 @@ use App\User;
 use App\Ward;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class SinhVienController extends Controller
 {
@@ -46,7 +47,16 @@ class SinhVienController extends Controller
     public function store(Request $request)
     {
 
-        
+        $v = Validator::make($request->all(), [
+            'mssv'          => 'required|unique:App\SinhVien,mssv',
+
+        ], [
+            'mssv.unique'             => 'Mã sinh viên bị trùng',
+        ]);
+
+        if ($v->fails()) {
+            return response()->json(['status' => 'error', 'message' => $v->errors()->first()], 422);
+        }
 
         $user = User::create([
             'email' => $request->mssv . '@caothang.edu.vn',
@@ -152,12 +162,11 @@ class SinhVienController extends Controller
     }
     public function timkiemSV(Request $request)
     {
-       
+
         if (is_null($request->key_word)) {
             $lst_sv = SinhVien::where('trangthai', '<>', 0)->orderBy('id', 'DESC')->paginate(10);
             if (!empty($lst_sv))
                 return response()->json(['status' => 'success', 'data' => $lst_sv->with('lophoc')], 200);
-               
         } else {
             $lst_sv = SinhVien::where('hosv', 'like', '%' . $request->key_word . '%')
                 ->orWhere('tensv', 'like', '%' . $request->key_word . '%');
