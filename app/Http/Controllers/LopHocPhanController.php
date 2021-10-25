@@ -56,9 +56,10 @@ class LopHocPhanController extends Controller
             })->with('giangvien', 'lophoc', 'monhoc')->withCount('sinhvienlophocphans')->get();
         return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
     }
-    
-    public function lstLopHocPhanTheoAdmin(){
-        $lst_lhp = LopHocPhan::where([['trangthai', '=', 1],['luutru', '=', 0]])->with('giangvien', 'lophoc', 'monhoc')->withCount('sinhvienlophocphans')->get();
+
+    public function lstLopHocPhanTheoAdmin()
+    {
+        $lst_lhp = LopHocPhan::where([['trangthai', '=', 1], ['luutru', '=', 0]])->with('giangvien', 'lophoc', 'monhoc')->withCount('sinhvienlophocphans')->get();
         return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
     }
 
@@ -79,7 +80,7 @@ class LopHocPhanController extends Controller
     }
     public function lstLopHocPhanLuuTruTheoAdmin()
     {
-       
+
         $lst_lhp = LopHocPhan::where([['trangthai', '=', 1], ['luutru', '=', 1]])->with('giangvien', 'lophoc', 'monhoc')->withCount('sinhvienlophocphans')->get();
         return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
     }
@@ -91,6 +92,7 @@ class LopHocPhanController extends Controller
      */
     public function store(Request $request)
     {
+
         $id_lophoc = $request->malh;
         $id_monhoc = $request->mamh;
         $id_giangvien = $request->magv;
@@ -102,6 +104,20 @@ class LopHocPhanController extends Controller
 
         $lophoc = LopHoc::find($id_lophoc);
         $monhoc = MonHoc::find($id_monhoc);
+
+        $v = Validator::make($request->all(), [
+            'check_lhp'          => 'required|unique:App\LopHoc,check_lhp',
+
+        ], [
+            'check_lhp.unique'             => 'Tên lớp học phần không được trùng',
+        ]);
+        if ($v->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 422,
+                'message' => $v->errors()->first(),
+            ], 422);
+        }
 
         $lhp = LopHocPhan::create([
             'tenlhp'    => $monhoc->tenmh . ' ' . $lophoc->tenlop,
@@ -143,7 +159,7 @@ class LopHocPhanController extends Controller
 
         $sv_id = SinhVienLopHocPhan::where('malhp', $id)->get()->pluck('masv');
 
-        $lst_sv = SinhVien::whereIn('id', $sv_id)->with('sinhvienlophocphans',"lophoc")
+        $lst_sv = SinhVien::whereIn('id', $sv_id)->with('sinhvienlophocphans', "lophoc")
             // )->with('sinhvienlophocphans')
             ->where('trangthai', 1)->get();
         $data['lst_sv'] = $lst_sv;
@@ -254,8 +270,8 @@ class LopHocPhanController extends Controller
     {
         //id là id lhp 
 
-        $sv_lhp = SinhVienLopHocPhan::where('masv',$request->sv_id)->where('malhp',$id)->first();
-        if($sv_lhp) return response()->json(['status' => 'error', 'message'=>"Sinh viên đã có trong lớp học phần"]);
+        $sv_lhp = SinhVienLopHocPhan::where('masv', $request->sv_id)->where('malhp', $id)->first();
+        if ($sv_lhp) return response()->json(['status' => 'error', 'message' => "Sinh viên đã có trong lớp học phần"]);
 
         SinhVienLopHocPhan::create([
             'masv' => $request->sv_id,

@@ -56,7 +56,7 @@ class LopHocController extends Controller
 
     public function index(Request $request)
     {
-        $lst_lophoc = LopHoc::where('trangthai', '<>', 0)->with('bomon')->withCount('sinhviens')->orderBy('id','DESC')->paginate(10);
+        $lst_lophoc = LopHoc::where('trangthai', '<>', 0)->with('bomon')->withCount('sinhviens')->orderBy('id', 'DESC')->paginate(10);
         return response()->json(['status' => 'success', 'data' => $lst_lophoc]);
     }
 
@@ -65,20 +65,19 @@ class LopHocController extends Controller
         $lst_lophoc = LopHoc::where('trangthai', '=', 1)->with('bomon')->get();
         return response()->json(['status' => 'success', 'data' => $lst_lophoc]);
     }
-    public function getLopHocByBoMonAndKhoa($bomon,Request $request)
+    public function getLopHocByBoMonAndKhoa($bomon, Request $request)
     {
-        if(empty($bomon)){
-            $lst_lophoc = LopHoc::where('trangthai', '=', 1)->where('khoa',$request->khoa)->get();
+        if (empty($bomon)) {
+            $lst_lophoc = LopHoc::where('trangthai', '=', 1)->where('khoa', $request->khoa)->get();
             return response()->json(['status' => 'success', 'data' => $lst_lophoc]);
         }
-        if(empty($request->khoa)){
-            $lst_lophoc = LopHoc::where('trangthai', '=', 1)->where('mabm',$bomon)->get();
+        if (empty($request->khoa)) {
+            $lst_lophoc = LopHoc::where('trangthai', '=', 1)->where('mabm', $bomon)->get();
             return response()->json(['status' => 'success', 'data' => $lst_lophoc]);
         }
 
-        $lst_lophoc = LopHoc::where('trangthai', '=', 1)->where('mabm',$bomon)->where('khoa',$request->khoa)->get();
+        $lst_lophoc = LopHoc::where('trangthai', '=', 1)->where('mabm', $bomon)->where('khoa', $request->khoa)->get();
         return response()->json(['status' => 'success', 'data' => $lst_lophoc]);
-        
     }
 
     /**
@@ -89,19 +88,19 @@ class LopHocController extends Controller
      */
     public function store(Request $request)
     {
-        // $v = Validator::make($request->all(), [
-        //     'tenlop'             => 'required',
-        // ], [
-        //     'tenlop.required'             => 'Tên lớp không được bỏ trống',
-        // ]);
-        // if ($v->fails()) {
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'code'   => 422,
-        //         'message' => $v->errors()->first(),
-        //     ], 422);
-        // }
+        $v = Validator::make($request->all(), [
+            'tenlop'          => 'required|unique:App\LopHoc,tenlop',
 
+        ], [
+            'tenlop.unique'             => 'Tên lớp không được trùng',
+        ]);
+        if ($v->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 422,
+                'message' => $v->errors()->first(),
+            ], 422);
+        }
         $lophoc = LopHoc::create([
             'tenlop'    => $request->tenlop,
             'ngaytao'   => Carbon::now()->toDateString(),
@@ -110,7 +109,7 @@ class LopHocController extends Controller
             'khoa'      => $request->khoa
         ]);
         if ($lophoc)
-            return response()->json(['status' => 'success', 'message' => 'Tạo lớp học thành công','data'=> $lophoc->id], 200);
+            return response()->json(['status' => 'success', 'message' => 'Tạo lớp học thành công', 'data' => $lophoc->id], 200);
         else
             return response()->json(['status' => 'error', 'message' => 'Tạo lớp học không thành công'], 404);
     }
@@ -188,8 +187,8 @@ class LopHocController extends Controller
         $lop->trangthai = 2;
         $lop->save();
         // $lst_lophoc = LopHoc::where('trangthai', 1)->get();
-        $lst_lophoc = LopHoc::where('trangthai', '<>', 0)->with('bomon')->withCount('sinhviens')->orderBy('id','DESC')->paginate(10);
-        return response()->json(['status' => 'success', 'message' => "Đã khóa",'data'=>$lst_lophoc], 200);
+        $lst_lophoc = LopHoc::where('trangthai', '<>', 0)->with('bomon')->withCount('sinhviens')->orderBy('id', 'DESC')->paginate(10);
+        return response()->json(['status' => 'success', 'message' => "Đã khóa", 'data' => $lst_lophoc], 200);
     }
     public function unlock(Request $request)
     {
@@ -197,20 +196,19 @@ class LopHocController extends Controller
         $lop->trangthai = 1;
         $lop->save();
         // $lst_lophoc = LopHoc::where('trangthai', 2)->get();
-        $lst_lophoc = LopHoc::where('trangthai', '<>', 0)->with('bomon')->withCount('sinhviens')->orderBy('id','DESC')->paginate(10);
-        return response()->json(['status' => 'success', 'message' => "Đã mở khóa",'data'=>$lst_lophoc], 200);
+        $lst_lophoc = LopHoc::where('trangthai', '<>', 0)->with('bomon')->withCount('sinhviens')->orderBy('id', 'DESC')->paginate(10);
+        return response()->json(['status' => 'success', 'message' => "Đã mở khóa", 'data' => $lst_lophoc], 200);
     }
-    public function timkiemLH(Request $request){
-        if($request->key_word == null){
-            $lst_lh = LopHoc::where('trangthai', '<>', 0)->with('bomon')->withCount('sinhviens')->orderBy('id','DESC')->paginate(10);
+    public function timkiemLH(Request $request)
+    {
+        if ($request->key_word == null) {
+            $lst_lh = LopHoc::where('trangthai', '<>', 0)->with('bomon')->withCount('sinhviens')->orderBy('id', 'DESC')->paginate(10);
+            if (!empty($lst_lh))
+                return response()->json(['status' => 'success', 'data' => $lst_lh], 200);
+        } else {
+            $lst_lh = LopHoc::where([['tenlop', 'like', '%' . $request->key_word . '%'], ['trangthai', '<>', 0]])->with('bomon')->withCount('sinhviens')->orderBy('id', 'DESC')->paginate(10);
             if (!empty($lst_lh))
                 return response()->json(['status' => 'success', 'data' => $lst_lh], 200);
         }
-        else{
-            $lst_lh = LopHoc::where([['tenlop','like','%'.$request->key_word.'%'],['trangthai','<>',0]])->with('bomon')->withCount('sinhviens')->orderBy('id','DESC')->paginate(10);
-            if (!empty($lst_lh))
-                return response()->json(['status' => 'success', 'data' => $lst_lh], 200);
-        }
     }
-   
 }

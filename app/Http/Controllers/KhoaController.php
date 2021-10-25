@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Validator;
 use App\Khoa;
 use Illuminate\Http\Request;
 use App\BoMon;
@@ -16,7 +17,7 @@ class KhoaController extends Controller
 
     public function index()
     {
-        $lst_khoa = Khoa::where('trangthai','<>',0)->withCount('bomons')->orderBy('id','DESC')->paginate(10);
+        $lst_khoa = Khoa::where('trangthai', '<>', 0)->withCount('bomons')->orderBy('id', 'DESC')->paginate(10);
         if (!empty($lst_khoa))
             return response()->json(['status' => 'success', 'data' => $lst_khoa], 200);
         else
@@ -42,13 +43,26 @@ class KhoaController extends Controller
     }
     public function store(Request $request)
     {
+        $v = Validator::make($request->all(), [
+            'tenkhoa'          => 'required|unique:App\Khoa,tenkhoa',
+
+        ], [
+            'tenkhoa.unique'             => 'Tên khoa không được trùng',
+        ]);
+        if ($v->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 422,
+                'message' => $v->errors()->first(),
+            ], 422);
+        }
         $khoa = new Khoa();
         $khoa->tenkhoa = $request->tenkhoa;
         $khoa->trangthai  = 1;
         $khoa->save();
-        return response()->json(['status' => 'success', 'message' => 'Thêm thành công','data'=>$khoa->id], 200);
+        return response()->json(['status' => 'success', 'message' => 'Thêm thành công', 'data' => $khoa->id], 200);
     }
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
         $khoa = Khoa::find($id);
         if (!empty($khoa)) {
@@ -74,13 +88,13 @@ class KhoaController extends Controller
     }
     public function lock(Request $request)
     {
-        
+
         $khoa = Khoa::find($request->id);
         $khoa->trangthai = 2;
         $khoa->save();
         // $lst_bomon = BoMon::where('trangthai', 1)->get();
-        $lst_khoa = Khoa::where('trangthai','<>',0)->withCount('bomons')->orderBy('id','DESC')->paginate(10);
-        return response()->json(['status' => 'success', 'message' => "Đã khóa",'data' => $lst_khoa], 200);
+        $lst_khoa = Khoa::where('trangthai', '<>', 0)->withCount('bomons')->orderBy('id', 'DESC')->paginate(10);
+        return response()->json(['status' => 'success', 'message' => "Đã khóa", 'data' => $lst_khoa], 200);
     }
     public function unlock(Request $request)
     {
@@ -88,20 +102,19 @@ class KhoaController extends Controller
         $khoa->trangthai = 1;
         $khoa->save();
         // $lst_bomon = BoMon::where('trangthai', 2)->get();
-        $lst_khoa = Khoa::where('trangthai','<>',0)->withCount('bomons')->orderBy('id','DESC')->paginate(10);
-        return response()->json(['status' => 'success', 'message' => "Đã mở khóa", 'data'=>$lst_khoa], 200);
+        $lst_khoa = Khoa::where('trangthai', '<>', 0)->withCount('bomons')->orderBy('id', 'DESC')->paginate(10);
+        return response()->json(['status' => 'success', 'message' => "Đã mở khóa", 'data' => $lst_khoa], 200);
     }
-    public function timkiemKhoa(Request $request){
-        if($request->key_word == null){
-            $lst_khoa = Khoa::where('trangthai', '<>', 0)->withCount('bomons')->orderBy('id','DESC')->paginate(10);
+    public function timkiemKhoa(Request $request)
+    {
+        if ($request->key_word == null) {
+            $lst_khoa = Khoa::where('trangthai', '<>', 0)->withCount('bomons')->orderBy('id', 'DESC')->paginate(10);
+            if (!empty($lst_khoa))
+                return response()->json(['status' => 'success', 'data' => $lst_khoa], 200);
+        } else {
+            $lst_khoa = Khoa::where([['tenkhoa', 'like', '%' . $request->key_word . '%'], ['trangthai', '<>', 0]])->withCount('bomons')->orderBy('id', 'DESC')->paginate(10);
             if (!empty($lst_khoa))
                 return response()->json(['status' => 'success', 'data' => $lst_khoa], 200);
         }
-        else{
-            $lst_khoa = Khoa::where([['tenkhoa','like','%'.$request->key_word.'%'],['trangthai','<>',0]])->withCount('bomons')->orderBy('id','DESC')->paginate(10);
-            if (!empty($lst_khoa))
-                return response()->json(['status' => 'success', 'data' => $lst_khoa], 200);
-        }
     }
-
 }
