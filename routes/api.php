@@ -44,6 +44,7 @@ Route::prefix('sinhvien')->group(function () {
     Route::get('getThongTin/{id}', 'SinhVienController@getThongTin');
 
     Route::post('importSinhVien', 'SinhVienController@importSinhVien');
+    Route::get('countSinhVienByKhoa','SinhVienController@countSinhVienByKhoa');
 });
 
 Route::prefix('khoa')->group(function () {

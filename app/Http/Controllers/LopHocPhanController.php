@@ -105,20 +105,6 @@ class LopHocPhanController extends Controller
         $lophoc = LopHoc::find($id_lophoc);
         $monhoc = MonHoc::find($id_monhoc);
 
-        $v = Validator::make($request->all(), [
-            'check_lhp'          => 'required|unique:App\LopHoc,check_lhp',
-
-        ], [
-            'check_lhp.unique'             => 'Tên lớp học phần không được trùng',
-        ]);
-        if ($v->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'code'   => 422,
-                'message' => $v->errors()->first(),
-            ], 422);
-        }
-
         $lhp = LopHocPhan::create([
             'tenlhp'    => $monhoc->tenmh . ' ' . $lophoc->tenlop,
             'ngaytao'   => Carbon::now()->toDateString(),
@@ -309,6 +295,10 @@ class LopHocPhanController extends Controller
 
     public function getLHPTheoDSLop(Request $request)
     {
+        if ($request->malh == 0 && $request->hocky == 0){
+            $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->with('lophoc')->orderBy('id', 'DESC')->paginate(10);
+            return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
+        }
 
         if ($request->malh != 0 && $request->hocky != 0)
             $lst_lhp = LopHocPhan::where('trangthai', 1)->where('malh', $request->malh)->where('hocky', $request->hocky)->with('lophoc')->orderBy('id', 'DESC')->paginate(10);

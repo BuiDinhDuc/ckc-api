@@ -14,6 +14,7 @@ use App\SinhVienLopHocPhan;
 use App\User;
 use App\Ward;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -236,5 +237,28 @@ class SinhVienController extends Controller
             }
             return response()->json(['status' => 'error', 'message' => 'Thêm thất bại'], 403);
         }
+        return response()->json(['status' => 'error', 'message' => 'Thêm thất bại'], 403);
     }
+
+    public function countSinhVienByKhoa()
+    {
+        $data= [];
+        $y = date('Y');
+        $m = date('m');
+        if($m< 8) $y--;
+        $dem = 0;
+        do{
+            $sv_khoa = DB::table('lop_hocs')
+            ->join("sinh_viens","sinh_viens.malh",'=','lop_hocs.id')
+            ->where('lop_hocs.khoa','=',$y)
+            ->selectRaw('lop_hocs.khoa,count(sinh_viens.id) as number_of_sinhvien')
+            ->groupBy('lop_hocs.khoa')
+            ->get();
+            array_push($data,$sv_khoa);
+            $y--;
+            $dem++;
+        }while($dem < 3);
+        return response()->json(['status' => 'success', 'data'=>$data ]);
+    }
+
 }
