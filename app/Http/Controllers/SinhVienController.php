@@ -163,17 +163,18 @@ class SinhVienController extends Controller
     }
     public function timkiemSV(Request $request)
     {
-
-        if (is_null($request->key_word)) {
-            $lst_sv = SinhVien::where('trangthai', '<>', 0)->orderBy('id', 'DESC')->paginate(10);
-            if (!empty($lst_sv))
-                return response()->json(['status' => 'success', 'data' => $lst_sv->with('lophoc')], 200);
-        } else {
-            $lst_sv = SinhVien::where('hosv', 'like', '%' . $request->key_word . '%')
-                ->orWhere('tensv', 'like', '%' . $request->key_word . '%');
-            if (!empty($lst_sv))
-                return response()->json(['status' => 'success', 'data' => $lst_sv->with('lophoc')->where('trangthai', '<>', 0)->paginate(10)], 200);
+        $lst_sv = SinhVien::where('trangthai', '<>', 0)->with('lophoc');
+        if($request->lop_hoc != 0){
+            $lst_sv = $lst_sv->where('malh','=',$request->lop_hoc);
         }
+        if (!is_null($request->key_word)) {
+            $lst_sv = $lst_sv->where('hosv', 'like', '%' . $request->key_word . '%')
+                ->orWhere('tensv', 'like', '%' . $request->key_word . '%'); 
+        }
+       
+        return response()->json(['status' => 'success', 'data' => $lst_sv->orderBy('id', 'DESC')->paginate(10)]);
+        // return response()->json(['status' => 'success', 'data' =>is_null($request->key_word)]);
+
     }
     public function getThongTin($id)
     {
