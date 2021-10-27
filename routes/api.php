@@ -119,6 +119,7 @@ Route::prefix('lophocphan')->group(function () {
     Route::post('khoiphuc/{id}', 'LopHocPhanController@khoiPhuc');
     Route::post('thayDoiChinhSach/{id}', 'LopHocPhanController@thayDoiChinhSach');
     Route::get('getChinhSachLopHocPhan/{id}', 'LopHocPhanController@getChinhSachLopHocPhan');
+    Route::post('locSVTheoLopHocPhan/{id}', 'LopHocPhanController@locSVTheoLopHocPhan');
 });
 
 Route::prefix('baiviet')->group(function () {

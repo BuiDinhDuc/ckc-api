@@ -341,4 +341,44 @@ class LopHocPhanController extends Controller
         } else
             return response()->json(['status' => 'error', 'message' => "Không tìm thấy lớp học phần"], 404);
     }
+    public function locSVTheoLopHocPhan(Request $request,$id){
+        $lhp = LopHocPhan::where('id', $id)->with('giangvien', 'lophoc', 'monhoc')->get();
+
+
+        $data['lhp'] = $lhp[0];
+
+        $sv_id = SinhVienLopHocPhan::where('malhp', $id)->get()->pluck('masv');
+
+        $malh_id = LopHocPhan::where('id', $id)->first()->malh;
+        $lst_sv = SinhVien::whereIn('id', $sv_id)->with('sinhvienlophocphans', "lophoc");
+            
+        if($request->hocghep == 1){
+            $sv_lhp = SinhVienLopHocPhan::where('malhp', $id)->whereHas('sinhviens',function(Builder $builder)use($malh_id){
+                $builder->where("malh",'=',$malh_id);
+            })->with('sinhviens')->get();
+        }
+        if($request->hocghep == 2) {
+            $sv_lhp = SinhVienLopHocPhan::where('malhp', $id)->whereHas('sinhviens',function(Builder $builder)use($malh_id){
+                $builder->where("malh",'<>',$malh_id);
+            })->with('sinhviens')->get();
+        }
+      
+        $data['sv_lhp'] = $sv_lhp;
+        if (!empty($lhp)) {
+            return response()->json(
+                [
+                    'status' => 'success',
+                    'data' => $data
+                ],
+                200
+            );
+        }
+        return response()->json(
+            [
+                'status' => 'error',
+                'message' => 'Lớp học phần không tồn tại'
+            ],
+            404
+        );
+    }
 }
