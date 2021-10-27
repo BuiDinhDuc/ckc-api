@@ -260,5 +260,12 @@ class SinhVienController extends Controller
         }while($dem < 3);
         return response()->json(['status' => 'success', 'data'=>$data ]);
     }
+    public function locSVTheoLop(Request $request){
+        $lst_sv = SinhVien::where('trangthai', '<>', 0)->with('lophoc');
+        if($request->lop_hoc != 0){
+            $lst_sv = $lst_sv->where('malh','=',$request->lop_hoc);
+        }
+        return response()->json(['status' => 'success', 'data' => $lst_sv->orderBy('id', 'DESC')->paginate(10)]);
+    }
 
 }
