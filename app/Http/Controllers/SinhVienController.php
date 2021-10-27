@@ -163,17 +163,16 @@ class SinhVienController extends Controller
     }
     public function timkiemSV(Request $request)
     {
-        $lst_sv = SinhVien::where('trangthai', '<>', 0)->with('lophoc');
-        if($request->lop_hoc != 0){
-            $lst_sv = $lst_sv->where('malh','=',$request->lop_hoc);
-        }
+        $lst_sv = SinhVien::where('trangthai', '<>', 0);
         if (!is_null($request->key_word)) {
-            $lst_sv = $lst_sv->where('hosv', 'like', '%' . $request->key_word . '%')
-                ->orWhere('tensv', 'like', '%' . $request->key_word . '%'); 
+            $lst_sv = $lst_sv->where('tensv', 'like', '%' . $request->key_word . '%'); 
         }
+        if($request->lop_hoc != 0){
+           
+            $lst_sv = $lst_sv->where('malh',$request->lop_hoc);
+        }
+        return response()->json(['status' => 'success', 'data' => $lst_sv->with('lophoc')->orderBy('id', 'DESC')->paginate(10)]);
        
-        return response()->json(['status' => 'success', 'data' => $lst_sv->orderBy('id', 'DESC')->paginate(10)]);
-        // return response()->json(['status' => 'success', 'data' =>is_null($request->key_word)]);
 
     }
     public function getThongTin($id)
