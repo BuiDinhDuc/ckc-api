@@ -143,6 +143,7 @@ Route::prefix('baiviet')->group(function () {
     Route::post('saveFileBaiTap/{id}', 'BaiVietController@saveFileBaiTap');
     Route::post('deleteBaiLam/{id}', 'BaiVietController@deleteBaiLam');
     Route::post('nopbai/{id}', 'BaiVietController@nopbai');
+    Route::post('huynopbai/{id}', 'BaiVietController@huynopbai');
     Route::post('getBaiLam/{id}', 'BaiVietController@getBaiLam');
     Route::get('getListDienDan/{id}', 'BaiVietController@getListDienDan');
     Route::post('xoadiendan/{id}', 'BaiVietController@xoaDienDan');

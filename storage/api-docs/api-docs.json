@@ -52,7 +52,7 @@
                 ],
                 "summary": "Danh sách bài viết thảo luận",
                 "description": "Danh sách bài viết thảo luận",
-                "operationId": "App\\Http\\Controllers\\BaiVietController::getDiscussionPostList",
+                "operationId": "70c6b0d6e6a4bd1e48662f08174bf1a8",
                 "parameters": [
                     {
                         "name": "id",
@@ -88,7 +88,7 @@
                 ],
                 "summary": "Danh sách bài viết giáo viên",
                 "description": "Danh sách bài viết giáo viên",
-                "operationId": "App\\Http\\Controllers\\BaiVietController::getTeacherPostList",
+                "operationId": "1c44ada396414847ff4b7cd1f95af78a",
                 "parameters": [
                     {
                         "name": "id",
@@ -124,7 +124,7 @@
                 ],
                 "summary": "Tạo bài viết",
                 "description": "Tạo bài viết",
-                "operationId": "App\\Http\\Controllers\\BaiVietController::store",
+                "operationId": "5e03ae6b30cbee98b0a4186e569cf2e8",
                 "parameters": [
                     {
                         "name": "noidung",
@@ -192,7 +192,7 @@
                 ],
                 "summary": "Danh sách bộ môn",
                 "description": "Danh sách bộ môn",
-                "operationId": "App\\Http\\Controllers\\BoMonController::getAllBoMon",
+                "operationId": "f442bd5182d5aa3c5f55df09dee9dbfc",
                 "responses": {
                     "200": {
                         "description": "successful operation"
@@ -218,7 +218,7 @@
                 ],
                 "summary": "Chi tiết bộ môn",
                 "description": "Chi tiết bộ môn",
-                "operationId": "App\\Http\\Controllers\\BoMonController::detailBomon",
+                "operationId": "95fe553accd7f8b62f8751061eda084e",
                 "parameters": [
                     {
                         "name": "id",
@@ -254,7 +254,7 @@
                 ],
                 "summary": "Thêm bộ môn",
                 "description": "Thêm bộ môn",
-                "operationId": "App\\Http\\Controllers\\BoMonController::createNewBoMon",
+                "operationId": "4c2e28df6d67c773ea9dba31f143f778",
                 "parameters": [
                     {
                         "name": "tenbm",
@@ -298,7 +298,7 @@
                 ],
                 "summary": "Chỉnh sửa bộ môn",
                 "description": "Chỉnh sửa bộ môn",
-                "operationId": "App\\Http\\Controllers\\BoMonController::updateBoMon",
+                "operationId": "ca8f3a61d99d28da65183ad082c14ac0",
                 "parameters": [
                     {
                         "name": "id",
@@ -350,7 +350,7 @@
                 ],
                 "summary": "Xóa bộ môn",
                 "description": "Xóa bộ môn",
-                "operationId": "App\\Http\\Controllers\\BoMonController::deleteBoMon",
+                "operationId": "e45d9b8106171398379869a811cf8836",
                 "parameters": [
                     {
                         "name": "id",
@@ -386,7 +386,7 @@
                 ],
                 "summary": "Danh sách lớp học",
                 "description": "Danh sách lớp học",
-                "operationId": "App\\Http\\Controllers\\LopHocController::index",
+                "operationId": "2a7b77adf4d417b6960f454e6f0b6a08",
                 "parameters": [
                     {
                         "name": "id",

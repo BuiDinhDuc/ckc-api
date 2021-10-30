@@ -758,7 +758,7 @@ class BaiVietController extends Controller
             $sv_bt->trangthai = 1;
             $sv_bt->save();
 
-            return response()->json(['status' => 'success', 'message' => 'Nộp thành công']);
+            return response()->json(['status' => 'success', 'message' => 'Nộp thành công','data' => $sv_bt->trangthai]);
         } else
             return response()->json(['status' => 'error', 'message' => 'Nộp thất bại']);
     }
@@ -861,4 +861,24 @@ class BaiVietController extends Controller
         else
             return response()->json(['status' => 'error', 'message' => 'Thêm link thất bại']);
     }
+    public function huynopbai(Request $request, $id)
+    {
+        $sinhvien_id = SinhVien::where('matk', $request->matk)->first()->id;
+        $lst_bailam = BaiLamSinhVien::where('mabv', $id)->where('mssv', $sinhvien_id)->where('trangthai', 1)->get();
+
+        if (!empty($lst_bailam)) {
+            foreach ($lst_bailam as $bailam) {
+                $bailam->trangthai = 2;
+                $bailam->save();
+            }
+
+            $sv_bt = SinhVienBaiTap::where('mabv', $id)->where('mssv', $sinhvien_id)->first();
+            $sv_bt->trangthai = 0;
+            $sv_bt->save();
+
+            return response()->json(['status' => 'success', 'message' => 'Nộp thành công','data' => $sv_bt->trangthai]);
+        } else
+            return response()->json(['status' => 'error', 'message' => 'Nộp thất bại']);
+    }
+
 }
