@@ -14,7 +14,7 @@ class AddDiemColumnToSinhVienBaiTapTable extends Migration
     public function up()
     {
         Schema::table('sinh_vien_bai_taps', function (Blueprint $table) {
-           $table->float('diem')->default(0)->nullable();
+            $table->string('diem')->default(0)->nullable();
         });
     }
 

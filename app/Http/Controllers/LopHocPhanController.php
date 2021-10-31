@@ -297,7 +297,7 @@ class LopHocPhanController extends Controller
 
     public function getLHPTheoDSLop(Request $request)
     {
-        if ($request->malh == 0 && $request->hocky == 0){
+        if ($request->malh == 0 && $request->hocky == 0) {
             $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->with('lophoc')->orderBy('id', 'DESC')->paginate(10);
             return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
         }
@@ -343,7 +343,8 @@ class LopHocPhanController extends Controller
         } else
             return response()->json(['status' => 'error', 'message' => "Không tìm thấy lớp học phần"], 404);
     }
-    public function locSVTheoLopHocPhan(Request $request,$id){
+    public function locSVTheoLopHocPhan(Request $request, $id)
+    {
         $lhp = LopHocPhan::where('id', $id)->with('giangvien', 'lophoc', 'monhoc')->get();
 
 
@@ -353,18 +354,18 @@ class LopHocPhanController extends Controller
 
         $malh_id = LopHocPhan::where('id', $id)->first()->malh;
         $lst_sv = SinhVien::whereIn('id', $sv_id)->with('sinhvienlophocphans', "lophoc");
-            
-        if($request->hocghep == 1){
-            $sv_lhp = SinhVienLopHocPhan::where('malhp', $id)->whereHas('sinhviens',function(Builder $builder)use($malh_id){
-                $builder->where("malh",'=',$malh_id);
+
+        if ($request->hocghep == 1) {
+            $sv_lhp = SinhVienLopHocPhan::where('malhp', $id)->whereHas('sinhviens', function (Builder $builder) use ($malh_id) {
+                $builder->where("malh", '=', $malh_id);
             })->with('sinhviens')->get();
         }
-        if($request->hocghep == 2) {
-            $sv_lhp = SinhVienLopHocPhan::where('malhp', $id)->whereHas('sinhviens',function(Builder $builder)use($malh_id){
-                $builder->where("malh",'<>',$malh_id);
+        if ($request->hocghep == 2) {
+            $sv_lhp = SinhVienLopHocPhan::where('malhp', $id)->whereHas('sinhviens', function (Builder $builder) use ($malh_id) {
+                $builder->where("malh", '<>', $malh_id);
             })->with('sinhviens')->get();
         }
-      
+
         $data['sv_lhp'] = $sv_lhp;
         if (!empty($lhp)) {
             return response()->json(
@@ -386,10 +387,10 @@ class LopHocPhanController extends Controller
 
     public function exportSV($id)
     {
-        
-        $sinhviens = SinhVien::whereHas('sinhvienlophocphans',function($query) use($id){
-                $query->where('malhp','=',$id);
-            })->select('id')->get()->toArray();
+
+        $sinhviens = SinhVien::whereHas('sinhvienlophocphans', function ($query) use ($id) {
+            $query->where('malhp', '=', $id);
+        })->where('trangthai', 1)->select('id')->get()->toArray();
 
         return (new StudentExport($sinhviens))->download('students.xlsx');
     }
