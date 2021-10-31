@@ -439,10 +439,10 @@ class BaiVietController extends Controller
                 'loaibangtin'   => 2,
                 'ngaytao'       => Carbon::now('Asia/Ho_Chi_Minh'),
                 'trangthai'     => 1,
-
                 'mabv'          => $baiviet->id
             ]);
-        } elseif ($baiviet->loaibv == 3) {
+        } 
+        elseif ($baiviet->loaibv == 3) {
             $baiviet->update([
                 'tieude'         => $request->tieude,
                 'noidung'        => $request->noidung,
@@ -462,45 +462,15 @@ class BaiVietController extends Controller
         if (!empty($baiviet)) {
             if (!empty($request->dsFile)) {
                 $dsFile = explode(',', $request->dsFile);
-
-
-                $dsFile_BaiViet = FileBaiViet::where('mabv', $id)->pluck('mafile');
-
-                // return response()->json(['status' => 'success', 'data1' => $dsFile, 'data2' => $dsFile_BaiViet]);
-
-                if (count($dsFile_BaiViet) > 0) {
-                    return response()->json(['status' => 'success', 'data' => $dsFile_BaiViet]);
-
-                    $dsFileMoi = array_diff($dsFile, $dsFile_BaiViet);
-                    $dsFileCu = array_diff($dsFile_BaiViet, $dsFile);
-                } else {
-                    $dsFileMoi = $dsFile;
-                    $dsFileCu = [];
-                }
-                foreach ($dsFileMoi as $file_id) {
+                foreach ($dsFile as $file_id) {
                     FileBaiViet::create([
                         'mafile'    => $file_id,
                         'mabv'      => $baiviet->id,
                         'trangthai' => 1
                     ]);
                 }
-                foreach ($dsFileCu as $file_id) {
-                    $file = FileBaiViet::where([
-                        'mafile'    => $file_id,
-                        'mabv'      => $baiviet->id,
-                        'trangthai' => 1
-                    ]);
-                    $file->trangthai = 0;
-                    $file->save();
-                }
-            } else {
-                $dsFileCu = FileBaiViet::where('mabv', $id)->get();
-                foreach ($dsFileCu as $file) {
-                    $file->trangthai = 0;
-                    $file->save();
-                }
+                
             }
-
             return response()->json(['status' => 'success', 'message' => 'Sửa thành công']);
         } else {
             return response()->json(['status' => 'error', 'message' => 'Sửa thất bại']);
@@ -531,40 +501,14 @@ class BaiVietController extends Controller
         if (!empty($baiviet)) {
             if (!empty($request->dsFile)) {
                 $dsFile = explode(',', $request->dsFile);
-                $dsFile_BaiViet = FileBaiViet::where('mabv', $id)->pluck('mafile');
-                if (count($dsFile_BaiViet) > 0) {
-                    return response()->json(['status' => 'success', 'data' => $dsFile_BaiViet]);
-
-                    $dsFileMoi = array_diff($dsFile, $dsFile_BaiViet);
-                    $dsFileCu = array_diff($dsFile_BaiViet, $dsFile);
-                } else {
-                    $dsFileMoi = $dsFile;
-                    $dsFileCu = [];
-                }
-                foreach ($dsFileMoi as $file_id) {
+                foreach ($dsFile as $file_id) {
                     FileBaiViet::create([
                         'mafile'    => $file_id,
                         'mabv'      => $baiviet->id,
                         'trangthai' => 1
                     ]);
                 }
-                foreach ($dsFileCu as $file_id) {
-                    $file = FileBaiViet::where([
-                        'mafile'    => $file_id,
-                        'mabv'      => $baiviet->id,
-                        'trangthai' => 1
-                    ]);
-                    $file->trangthai = 0;
-                    $file->save();
-                }
-            } else {
-                $dsFileCu = FileBaiViet::where('mabv', $id)->get();
-                foreach ($dsFileCu as $file) {
-                    $file->trangthai = 0;
-                    $file->save();
-                }
-            }
-
+            } 
             return response()->json(['status' => 'success', 'message' => 'Sửa thành công']);
         } else {
             return response()->json(['status' => 'error', 'message' => 'Sửa thất bại']);
@@ -652,7 +596,7 @@ class BaiVietController extends Controller
         $baitap = BaiViet::where('id', $id)->with('chude', 'filebaiviets')->withCount('binhluans')->first();
         // $tk = User::where('id', $baitap->matk)->first();
         $giangvien = GiangVien::where('matk', $baitap->matk)->first();
-        $file_id = FileBaiViet::where('mabv', $id)->pluck('mafile');
+        $file_id = FileBaiViet::where('mabv', $id)->where('trangthai',1)->pluck('mafile');
         $dsFile = File::whereIn('id', $file_id)->get();
         // $binhluan = BinhLuan::where('mabv', $id)->where('trangthai', '<>', 0)->with('taikhoan')->get();
         $data['baitap'] = $baitap;
@@ -908,5 +852,11 @@ class BaiVietController extends Controller
         $sinhvien_id = SinhVien::where('matk', $request->matk)->first()->id;
         $sv_bt = SinhVienBaiTap::where('mssv', $sinhvien_id)->where('mabv', $request->mabv)->first();
         return response()->json(['status' => 'success', 'data' => $sv_bt->diem]);
+    }
+    public function deleteFileDinhKem($id){
+       $bv_file = FileBaiViet::where('id', $id)->first();
+       $bv_file->trangthai = 0;
+       $bv_file->save();
+        return response()->json(['status' => 'success', 'message' => "success"]);
     }
 }

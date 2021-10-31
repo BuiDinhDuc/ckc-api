@@ -156,6 +156,8 @@ Route::prefix('baiviet')->group(function () {
     Route::post('deleteFileBaiViet/{id}', 'BaiVietController@deleteFileBaiViet');
     Route::post('chamDiem', 'BaiVietController@chamDiem');
     Route::post('getDiem', 'BaiVietController@getDiem');
+    Route::get('deleteFileDinhKem/{id}', 'BaiVietController@deleteFileDinhKem');
+
 
 });
 
