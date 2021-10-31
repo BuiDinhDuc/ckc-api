@@ -708,11 +708,26 @@ class BaiVietController extends Controller
     public function getListFileChuaNop(Request $request, $id)
     {
         $sinhvien_id = SinhVien::where('matk', $request->matk)->first()->id;
-        $lst_link = BaiLamSinhVien::where('mssv', $sinhvien_id)->where('mabv', $id)->where('trangthai', '<>', 0)->whereNotNull('link')->get();
+        $lst_link = BaiLamSinhVien::where('mssv', $sinhvien_id)->where('mabv', $id)->where('trangthai', '=', 2)->whereNotNull('link')->get();
+        $lst_file = BaiLamSinhVien::where('mssv', $sinhvien_id)->where('mabv', $id)->where('trangthai', '=', 2)->whereNotNull('mafile')->with('file')->get();
+        $lst_van_ban = BaiLamSinhVien::where('mssv', $sinhvien_id)->where('mabv', $id)->where('trangthai', '=', 2)->whereNotNull('van_ban')->get();
 
-        $lst_file = BaiLamSinhVien::where('mssv', $sinhvien_id)->where('mabv', $id)->where('trangthai', '<>', 0)->whereNotNull('mafile')->with('file')->get();
         $data['lst_link'] = $lst_link;
         $data['lst_file'] = $lst_file;
+        $data['lst_van_ban'] = $lst_van_ban;
+
+        return response()->json(['status' => 'success', 'data' => $data]);
+    }
+    public function getListFileDaNop(Request $request, $id)
+    {
+        $sinhvien_id = SinhVien::where('matk', $request->matk)->first()->id;
+        $lst_link = BaiLamSinhVien::where('mssv', $sinhvien_id)->where('mabv', $id)->where('trangthai', '=', 1)->whereNotNull('link')->get();
+        $lst_file = BaiLamSinhVien::where('mssv', $sinhvien_id)->where('mabv', $id)->where('trangthai', '=', 1)->whereNotNull('mafile')->with('file')->get();
+        $lst_van_ban = BaiLamSinhVien::where('mssv', $sinhvien_id)->where('mabv', $id)->where('trangthai', '=', 1)->whereNotNull('van_ban')->get();
+
+        $data['lst_link'] = $lst_link;
+        $data['lst_file'] = $lst_file;
+        $data['lst_van_ban'] = $lst_van_ban;
 
         return response()->json(['status' => 'success', 'data' => $data]);
     }
@@ -770,10 +785,12 @@ class BaiVietController extends Controller
 
         $lst_file = BaiLamSinhVien::where('mssv',  $request->mssv)->where('mabv', $id)->where('trangthai', '=', 1)->whereNotNull('mafile')->with('file')->get();
         $lst_vanban = BaiLamSinhVien::where('mssv',  $request->mssv)->where('mabv', $id)->where('trangthai', '=', 1)->whereNotNull('van_ban')->get();
+       
+        $sv_baitap = SinhVienBaiTap::where('mssv', $request->mssv)->where('mabv',$id)->first();
         $data['lst_link'] = $lst_link;
         $data['lst_file'] = $lst_file;
         $data['lst_vanban'] = $lst_vanban;
-
+        $data['diem'] = $sv_baitap->diem;
         return response()->json(['status' => 'success', 'data' => $data]);
     }
 
@@ -857,9 +874,9 @@ class BaiVietController extends Controller
             'trangthai'  => 2
         ]);
         if (!empty($vanban))
-            return response()->json(['status' => 'success', 'message' => 'Thêm link thành công']);
+            return response()->json(['status' => 'success', 'message' => 'Thành công']);
         else
-            return response()->json(['status' => 'error', 'message' => 'Thêm link thất bại']);
+            return response()->json(['status' => 'error', 'message' => 'Thất bại']);
     }
     public function huynopbai(Request $request, $id)
     {
@@ -881,4 +898,15 @@ class BaiVietController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Nộp thất bại']);
     }
 
+    public function chamDiem(Request $request){
+        $sv_bt = SinhVienBaiTap::where('mssv', $request->mssv)->where('mabv', $request->mabv)->first();
+        $sv_bt->diem = $request->diem;
+        $sv_bt->save();
+        return response()->json(['status' => 'success', 'message' => 'success']);
+    }
+    public function getDiem(Request $request){
+        $sinhvien_id = SinhVien::where('matk', $request->matk)->first()->id;
+        $sv_bt = SinhVienBaiTap::where('mssv', $sinhvien_id)->where('mabv', $request->mabv)->first();
+        return response()->json(['status' => 'success', 'data' => $sv_bt->diem]);
+    }
 }

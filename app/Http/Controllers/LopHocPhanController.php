@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\BaiViet;
+use App\Exports\StudentExport;
 use App\GiangVien;
 use App\LopHoc;
 use App\LopHocPhan;
@@ -14,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\SinhVien;
 use App\SinhVienBaiTap;
+use Illuminate\Support\Facades\DB;
 
 class LopHocPhanController extends Controller
 {
@@ -380,5 +382,15 @@ class LopHocPhanController extends Controller
             ],
             404
         );
+    }
+
+    public function exportSV($id)
+    {
+        
+        $sinhviens = SinhVien::whereHas('sinhvienlophocphans',function($query) use($id){
+                $query->where('malhp','=',$id);
+            })->select('id')->get()->toArray();
+
+        return (new StudentExport($sinhviens))->download('students.xlsx');
     }
 }

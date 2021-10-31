@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.2.5",
+        "aws/aws-sdk-php": "~3.0",
         "darkaonline/l5-swagger": "^8.0",
         "doctrine/dbal": "^3.1",
         "fideloper/proxy": "^4.2",
@@ -18,10 +19,10 @@
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "2.4",
+        "maatwebsite/excel": "^3.1",
         "tymon/jwt-auth": "dev-develop",
         "wildbit/swiftmailer-postmark": "^3.3",
-        "zircote/swagger-php": "3.*",
-        "aws/aws-sdk-php": "~3.0"
+        "zircote/swagger-php": "3.*"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

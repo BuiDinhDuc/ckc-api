@@ -10,6 +10,6 @@ class BaiLamSinhVien extends Model
 
     public function file()
     {
-        return $this->hasOne('App\File', 'id', 'mafile');
+        return $this->belongsTo('App\File', 'mafile', 'id');
     }
 }

@@ -120,6 +120,8 @@ Route::prefix('lophocphan')->group(function () {
     Route::post('thayDoiChinhSach/{id}', 'LopHocPhanController@thayDoiChinhSach');
     Route::get('getChinhSachLopHocPhan/{id}', 'LopHocPhanController@getChinhSachLopHocPhan');
     Route::post('locSVTheoLopHocPhan/{id}', 'LopHocPhanController@locSVTheoLopHocPhan');
+    Route::get('exportSV/{id}', 'LopHocPhanController@exportSV');
+
 });
 
 Route::prefix('baiviet')->group(function () {
@@ -140,6 +142,7 @@ Route::prefix('baiviet')->group(function () {
     Route::get('getBinhLuan/{id}', 'BaiVietController@getDSBinhLuan');
     Route::post('saveShareLink/{id}', 'BaiVietController@luuLinkShare');
     Route::post('getListFileChuaNop/{id}', 'BaiVietController@getListFileChuaNop');
+    Route::post('getListFileDaNop/{id}', 'BaiVietController@getListFileDaNop');
     Route::post('saveFileBaiTap/{id}', 'BaiVietController@saveFileBaiTap');
     Route::post('deleteBaiLam/{id}', 'BaiVietController@deleteBaiLam');
     Route::post('nopbai/{id}', 'BaiVietController@nopbai');
@@ -148,10 +151,12 @@ Route::prefix('baiviet')->group(function () {
     Route::get('getListDienDan/{id}', 'BaiVietController@getListDienDan');
     Route::post('xoadiendan/{id}', 'BaiVietController@xoaDienDan');
     Route::post('nopvanban/{id}', 'BaiVietController@nopvanban');
-
     Route::get('getDienDan/{id}', 'BaiVietController@getDienDan');
     Route::post('updateDienDan/{id}', 'BaiVietController@updateDienDan');
     Route::post('deleteFileBaiViet/{id}', 'BaiVietController@deleteFileBaiViet');
+    Route::post('chamDiem', 'BaiVietController@chamDiem');
+    Route::post('getDiem', 'BaiVietController@getDiem');
+
 });
 
 Route::prefix('file')->group(function () {

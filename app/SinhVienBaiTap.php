@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SinhVienBaiTap extends Model
 {
-    protected $fillable = ['mssv', 'mabv', 'trangthai'];
+    protected $fillable = ['mssv', 'mabv', 'trangthai','diem'];
 
     public function sinhvien()
     {
