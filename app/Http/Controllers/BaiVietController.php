@@ -441,8 +441,7 @@ class BaiVietController extends Controller
                 'trangthai'     => 1,
                 'mabv'          => $baiviet->id
             ]);
-        } 
-        elseif ($baiviet->loaibv == 3) {
+        } elseif ($baiviet->loaibv == 3) {
             $baiviet->update([
                 'tieude'         => $request->tieude,
                 'noidung'        => $request->noidung,
@@ -469,7 +468,6 @@ class BaiVietController extends Controller
                         'trangthai' => 1
                     ]);
                 }
-                
             }
             return response()->json(['status' => 'success', 'message' => 'Sửa thành công']);
         } else {
@@ -508,7 +506,7 @@ class BaiVietController extends Controller
                         'trangthai' => 1
                     ]);
                 }
-            } 
+            }
             return response()->json(['status' => 'success', 'message' => 'Sửa thành công']);
         } else {
             return response()->json(['status' => 'error', 'message' => 'Sửa thất bại']);
@@ -596,7 +594,7 @@ class BaiVietController extends Controller
         $baitap = BaiViet::where('id', $id)->with('chude', 'filebaiviets')->withCount('binhluans')->first();
         // $tk = User::where('id', $baitap->matk)->first();
         $giangvien = GiangVien::where('matk', $baitap->matk)->first();
-        $file_id = FileBaiViet::where('mabv', $id)->where('trangthai',1)->pluck('mafile');
+        $file_id = FileBaiViet::where('mabv', $id)->where('trangthai', 1)->pluck('mafile');
         $dsFile = File::whereIn('id', $file_id)->get();
         // $binhluan = BinhLuan::where('mabv', $id)->where('trangthai', '<>', 0)->with('taikhoan')->get();
         $data['baitap'] = $baitap;
@@ -717,7 +715,7 @@ class BaiVietController extends Controller
             $sv_bt->trangthai = 1;
             $sv_bt->save();
 
-            return response()->json(['status' => 'success', 'message' => 'Nộp thành công','data' => $sv_bt->trangthai]);
+            return response()->json(['status' => 'success', 'message' => 'Nộp thành công', 'data' => $sv_bt->trangthai]);
         } else
             return response()->json(['status' => 'error', 'message' => 'Nộp thất bại']);
     }
@@ -729,8 +727,8 @@ class BaiVietController extends Controller
 
         $lst_file = BaiLamSinhVien::where('mssv',  $request->mssv)->where('mabv', $id)->where('trangthai', '=', 1)->whereNotNull('mafile')->with('file')->get();
         $lst_vanban = BaiLamSinhVien::where('mssv',  $request->mssv)->where('mabv', $id)->where('trangthai', '=', 1)->whereNotNull('van_ban')->get();
-       
-        $sv_baitap = SinhVienBaiTap::where('mssv', $request->mssv)->where('mabv',$id)->first();
+
+        $sv_baitap = SinhVienBaiTap::where('mssv', $request->mssv)->where('mabv', $id)->first();
         $data['lst_link'] = $lst_link;
         $data['lst_file'] = $lst_file;
         $data['lst_vanban'] = $lst_vanban;
@@ -759,10 +757,10 @@ class BaiVietController extends Controller
     public function getDienDan($id)
     {
         $baiviet = BaiViet::where('id', $id)->where('trangthai', 1)
-        // ->whereHas('filebaiviets',function($query){
-        //     $query->where('trangthai',1);
-        // })
-        ->with('filebaiviets')->first();
+            // ->whereHas('filebaiviets',function($query){
+            //     $query->where('trangthai',1);
+            // })
+            ->with('filebaiviets')->first();
         return response()->json(['status' => 'success', 'data' => $baiviet]);
     }
 
@@ -824,7 +822,8 @@ class BaiVietController extends Controller
         }
     }
 
-    public function nopvanban(Request $request,$id){
+    public function nopvanban(Request $request, $id)
+    {
         $sinhvien_id = SinhVien::where('matk', $request->matk)->first()->id;
         $vanban = BaiLamSinhVien::create([
             'van_ban'    => $request->vanban,
@@ -852,26 +851,35 @@ class BaiVietController extends Controller
             $sv_bt->trangthai = 0;
             $sv_bt->save();
 
-            return response()->json(['status' => 'success', 'message' => 'Nộp thành công','data' => $sv_bt->trangthai]);
+            return response()->json(['status' => 'success', 'message' => 'Nộp thành công', 'data' => $sv_bt->trangthai]);
         } else
             return response()->json(['status' => 'error', 'message' => 'Nộp thất bại']);
     }
 
-    public function chamDiem(Request $request){
+    public function chamDiem(Request $request)
+    {
         $sv_bt = SinhVienBaiTap::where('mssv', $request->mssv)->where('mabv', $request->mabv)->first();
         $sv_bt->diem = $request->diem;
         $sv_bt->save();
         return response()->json(['status' => 'success', 'message' => 'success']);
     }
-    public function getDiem(Request $request){
+    public function getDiem(Request $request)
+    {
         $sinhvien_id = SinhVien::where('matk', $request->matk)->first()->id;
         $sv_bt = SinhVienBaiTap::where('mssv', $sinhvien_id)->where('mabv', $request->mabv)->first();
         return response()->json(['status' => 'success', 'data' => $sv_bt->diem]);
     }
-    public function deleteFileDinhKem($id){
-       $bv_file = FileBaiViet::where('id', $id)->first();
-       $bv_file->trangthai = 0;
-       $bv_file->save();
+    public function deleteFileDinhKem($id)
+    {
+        $bv_file = FileBaiViet::where('id', $id)->first();
+        $bv_file->trangthai = 0;
+        $bv_file->save();
         return response()->json(['status' => 'success', 'message' => "success"]);
+    }
+    public function getStatus(Request $request, $id)
+    {
+        $mssv = SinhVien::where('matk', $request->matk)->first();
+        $sv_bt = SinhVienBaiTap::where('mssv', $mssv->id)->where('mabv', $id)->first();
+        return response()->json(['status' => 'success', 'data' => $sv_bt->trangthai]);
     }
 }
