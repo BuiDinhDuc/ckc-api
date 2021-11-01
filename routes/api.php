@@ -43,7 +43,7 @@ Route::prefix('sinhvien')->group(function () {
     Route::post('search', 'SinhVienController@timkiemSV');
     Route::get('getThongTin/{id}', 'SinhVienController@getThongTin');
     Route::post('importSinhVien', 'SinhVienController@importSinhVien');
-    Route::get('countSinhVienByKhoa','SinhVienController@countSinhVienByKhoa');
+    Route::get('countSinhVienByKhoa', 'SinhVienController@countSinhVienByKhoa');
     Route::post('locSVTheoLop', 'SinhVienController@locSVTheoLop');
 });
 
@@ -121,7 +121,6 @@ Route::prefix('lophocphan')->group(function () {
     Route::get('getChinhSachLopHocPhan/{id}', 'LopHocPhanController@getChinhSachLopHocPhan');
     Route::post('locSVTheoLopHocPhan/{id}', 'LopHocPhanController@locSVTheoLopHocPhan');
     Route::get('exportSV/{id}', 'LopHocPhanController@exportSV');
-
 });
 
 Route::prefix('baiviet')->group(function () {
@@ -158,7 +157,7 @@ Route::prefix('baiviet')->group(function () {
     Route::post('getDiem', 'BaiVietController@getDiem');
     Route::get('deleteFileDinhKem/{id}', 'BaiVietController@deleteFileDinhKem');
 
-
+    Route::post('getStatus/{id}', 'BaiVietController@getStatus');
 });
 
 Route::prefix('file')->group(function () {
