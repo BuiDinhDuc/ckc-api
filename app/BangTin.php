@@ -22,7 +22,7 @@ class BangTin extends Model
     }
     public function file_bang_tin()
     {
-        return $this->hasMany('App\FileBangTin', 'mabangtin', 'id')->with('file');
+        return $this->hasMany('App\FileBangTin', 'mabangtin', 'id')->where('trangthai', 1)->with('file');
     }
     public function binhluans()
     {

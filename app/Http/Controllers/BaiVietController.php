@@ -19,7 +19,7 @@ use App\LopHocPhan;
 use App\SinhVienBaiTap;
 use App\SinhVienLopHocPhan;
 use App\BangTin;
-
+use App\FileBangTin;
 class BaiVietController extends Controller
 {
     // public function __construct()
@@ -795,6 +795,17 @@ class BaiVietController extends Controller
         if (!empty($filebaiviets)) {
             $filebaiviets->trangthai = 0;
             $filebaiviets->save();
+            return response()->json(['status' => 'success', 'message' => "Xóa thành công"], 200);
+        } else {
+            return response()->json(['status' => 'error', 'message' => "Không tìm thấy"], 404);
+        }
+    }
+    public function deleteFileBangTin($id)
+    {
+        $filebangtin = FileBangTin::where('id', $id)->first();
+        if (!empty($filebangtin)) {
+            $filebangtin->trangthai = 0;
+            $filebangtin->save();
             return response()->json(['status' => 'success', 'message' => "Xóa thành công"], 200);
         } else {
             return response()->json(['status' => 'error', 'message' => "Không tìm thấy"], 404);
