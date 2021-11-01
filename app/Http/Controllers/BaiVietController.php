@@ -758,7 +758,11 @@ class BaiVietController extends Controller
 
     public function getDienDan($id)
     {
-        $baiviet = BaiViet::where('id', $id)->where('trangthai', 1)->with('filebaiviets')->first();
+        $baiviet = BaiViet::where('id', $id)->where('trangthai', 1)
+        // ->whereHas('filebaiviets',function($query){
+        //     $query->where('trangthai',1);
+        // })
+        ->with('filebaiviets')->first();
         return response()->json(['status' => 'success', 'data' => $baiviet]);
     }
 
