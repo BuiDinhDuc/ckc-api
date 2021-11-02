@@ -20,6 +20,7 @@ use App\SinhVienBaiTap;
 use App\SinhVienLopHocPhan;
 use App\BangTin;
 use App\FileBangTin;
+use App\Exports\StudentScoreExport;
 class BaiVietController extends Controller
 {
     // public function __construct()
@@ -891,5 +892,10 @@ class BaiVietController extends Controller
         $vb->trangthai = 0;
         $vb->save();
         return response()->json(['status' => 'success', 'message' =>'Xóa thành công']);
+    }
+    public function exportDiemSV($id)
+    {
+        $sinhviens = SinhVienBaiTap::where('mabv', $id)->select('id')->get()->toArray();
+        return (new StudentScoreExport($sinhviens,$id))->download('Điểm sinh viên.xlsx');
     }
 }

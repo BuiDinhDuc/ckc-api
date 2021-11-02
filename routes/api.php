@@ -156,6 +156,7 @@ Route::prefix('baiviet')->group(function () {
     Route::post('deleteFileBangTin/{id}', 'BaiVietController@deleteFileBangTin');
     Route::get('getVanBan/{id}', 'BaiVietController@getVanBan');
     Route::get('xoaVanBan/{id}', 'BaiVietController@xoaVanBan');
+    Route::get('exportDiemSV/{id}', 'BaiVietController@exportDiemSV');
 
 
 
