@@ -392,6 +392,6 @@ class LopHocPhanController extends Controller
             $query->where('malhp', '=', $id);
         })->where('trangthai', 1)->select('id')->get()->toArray();
 
-        return (new StudentExport($sinhviens))->download('students.xlsx');
+        return (new StudentExport($sinhviens))->download('Danh sách sinh viên.xlsx');
     }
 }
