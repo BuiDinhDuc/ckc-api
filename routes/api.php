@@ -154,6 +154,10 @@ Route::prefix('baiviet')->group(function () {
     Route::post('updateDienDan/{id}', 'BaiVietController@updateDienDan');
     Route::post('deleteFileBaiViet/{id}', 'BaiVietController@deleteFileBaiViet');
     Route::post('deleteFileBangTin/{id}', 'BaiVietController@deleteFileBangTin');
+    Route::get('getVanBan/{id}', 'BaiVietController@getVanBan');
+    Route::get('xoaVanBan/{id}', 'BaiVietController@xoaVanBan');
+
+
 
     Route::post('chamDiem', 'BaiVietController@chamDiem');
     Route::post('getDiem', 'BaiVietController@getDiem');

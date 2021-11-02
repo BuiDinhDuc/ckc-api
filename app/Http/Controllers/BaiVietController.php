@@ -882,4 +882,14 @@ class BaiVietController extends Controller
         $sv_bt = SinhVienBaiTap::where('mssv', $mssv->id)->where('mabv', $id)->first();
         return response()->json(['status' => 'success', 'data' => $sv_bt->trangthai]);
     }
+    public function getVanBan($id){
+        $vb = BaiLamSinhVien::find($id);
+        return response()->json(['status' => 'success', 'data' =>$vb]);
+    }
+    public function xoaVanBan($id){
+        $vb = BaiLamSinhVien::find($id);
+        $vb->trangthai = 0;
+        $vb->save();
+        return response()->json(['status' => 'success', 'message' =>'Xóa thành công']);
+    }
 }
