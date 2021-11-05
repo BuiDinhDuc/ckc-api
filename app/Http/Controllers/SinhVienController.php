@@ -163,13 +163,14 @@ class SinhVienController extends Controller
     }
     public function timkiemSV(Request $request)
     {
+        
         $lst_sv = SinhVien::where('trangthai', '<>', 0);
-        if (!is_null($request->key_word)) {
+        if ($request->key_word!= "null") {
             $lst_sv = $lst_sv->where('tensv', 'like', '%' . $request->key_word . '%'); 
         }
-        if($request->lop_hoc != "0"){
-           
-            $lst_sv = $lst_sv->where('malh',$request->lop_hoc);
+        if(intval($request->lop_hoc) != 0){
+            
+            $lst_sv = $lst_sv->where('malh',intval($request->lop_hoc));
         }
         return response()->json(['status' => 'success', 'data' => $lst_sv->with('lophoc')->orderBy('id', 'DESC')->paginate(10)]);
        
