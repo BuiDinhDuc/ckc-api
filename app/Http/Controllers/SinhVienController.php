@@ -167,7 +167,7 @@ class SinhVienController extends Controller
         if (!is_null($request->key_word)) {
             $lst_sv = $lst_sv->where('tensv', 'like', '%' . $request->key_word . '%'); 
         }
-        if($request->lop_hoc != 0){
+        if($request->lop_hoc != "0"){
            
             $lst_sv = $lst_sv->where('malh',$request->lop_hoc);
         }
@@ -178,8 +178,11 @@ class SinhVienController extends Controller
     public function getThongTin($id)
     {
         $sv = SinhVien::where([['mssv', $id]])->with('lophoc')->first();
-
+        if($sv)
         return response()->json(['status' => 'success', 'data' => $sv], 200);
+        else 
+        return response()->json(['status' => 'error'], 404);
+
     }
 
 

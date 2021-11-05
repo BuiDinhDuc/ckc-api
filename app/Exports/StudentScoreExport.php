@@ -22,6 +22,7 @@ class StudentScoreExport implements FromQuery
         return DB::table('sinh_vien_bai_taps')
         ->join('sinh_viens','sinh_viens.id','sinh_vien_bai_taps.mssv')
         ->whereIn('sinh_vien_bai_taps.id',$this->students)
+        ->where("sinh_viens.trangthai",1)
         ->select('sinh_viens.mssv','sinh_viens.hosv','sinh_viens.tensv','diem')
         ->orderBy('sinh_viens.mssv', 'ASC');
     }
