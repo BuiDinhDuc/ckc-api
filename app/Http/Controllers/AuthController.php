@@ -21,7 +21,10 @@ use App\MemberGroup;
 use App\PasswordReset;
 use Carbon\Carbon;
 use App\Jobs\SendMailForgotPassword;
+use App\Mail\ResetPassword;
+use App\QuenMatKhau;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use JWTAuth;
 use Illuminate\Support\Facades\Session;
 
@@ -147,23 +150,44 @@ class AuthController extends Controller
         $user = User::where('id', $matk)->with('giangvien', 'sinhvien')->first();
         return response()->json(['status' => 'success', 'data' => $user], 200);
     }
-
-    // protected function kiemtraemail($email)
-    // {
-    //     $user = User::where('email', $email)->first();
-    //     if (!empty($user))
-    //         return true;
-    //     else return false;
-    // }
-
-    // public function taomaxacnhan(Request $request)
-    // {
-    //     if ($this->kiemtraemail($request->email)) {
-    //         Mail::to($request->email)->send(new OrderShipped());
-    //         return response()->json(['status' => 'success', 'message' => 'OK']);
-    //     } else
-    //         return response()->json(['status' => 'error', 'message' => 'Email không tồn tại']);
-    // }
+    public function guimailxacnhan(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        if (!empty($user)){
+            $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $str =   substr(str_shuffle($permitted_chars), 0, 6);
+            
+            $qmk = QuenMatKhau::where('matk',$user->id)->first();
+            if(empty($qmk)){
+                QuenMatKhau::create(['matk'=>$user->id,'maxacnhan'=> $str]);
+            }
+            else{
+                $qmk->maxacnhan = $str;
+                $qmk->save();
+            }
+            Mail::to($user->email)->send(new ResetPassword($str));
+            return response()->json(['status' => 'success', 'message' => 'OK']);
+        } else
+            return response()->json(['status' => 'error', 'message' => 'Email không tồn tại'],404);
+    }
+    public function resetPassword(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        if (!empty($user)){   
+            $qmk = QuenMatKhau::where('matk',$user->id)->where('maxacnhan',$request->maxacnhan)->first();
+           if(!empty($qmk)){
+            $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $str =   substr(str_shuffle($permitted_chars), 0, 10);
+            $user->password = Hash::make($str);
+            $user->save();
+            return response()->json(['status' => 'success', 'message' => 'Thành công','data'=>$str],200);
+           }    
+           else{
+            return response()->json(['status' => 'error', 'message' => 'Mã xác nhận không đúng'],422);
+           } 
+        } else
+            return response()->json(['status' => 'error', 'message' => 'Email không tồn tại'],404);
+    }
 
 
     public function demSL()

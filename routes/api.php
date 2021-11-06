@@ -3,8 +3,10 @@
 use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\SinhVienController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
+use Illuminate\Support\Facades\Route;
+use App\Mail\ResetPassword;
+use Illuminate\Support\Facades\Mail;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -203,9 +205,11 @@ Route::prefix('bangtin')->group(function () {
 Route::post('/login', 'AuthController@login');
 Route::post('/logout', 'AuthController@logout');
 Route::post('/doimatkhau/{id}', 'AuthController@doimatkhau');
-Route::post('/taomaxacnhan', 'AuthController@taomaxacnhan');
+Route::post('/guimailxacnhan', 'AuthController@guimailxacnhan');
+Route::post('/resetPassword','AuthController@resetPassword');
 Route::get('/getUser/{id}', 'AuthController@getUser');
 Route::get('/province', 'ProvinceController@getProvince');
 Route::get('/district', 'ProvinceController@getDistrict');
 Route::get('/ward', 'ProvinceController@getWard');
 Route::get('/demSL', 'AuthController@demSL');
+
