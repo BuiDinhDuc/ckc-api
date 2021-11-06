@@ -244,15 +244,18 @@ class LopHocPhanController extends Controller
 
     public function timkiemLHP(Request $request)
     {
-        if ($request->key_word == null) {
-            $lst_lhp = LopHocPhan::where('trangthai', '<>', 0)->with('lophoc')->orderBy('id', 'DESC')->paginate(10);
-            if (!empty($lst_lhp))
-                return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
-        } else {
-            $lst_lhp = LopHocPhan::where([['tenlhp', 'like', '%' . $request->key_word . '%'], ['trangthai', '<>', 0]])->orderBy('id', 'DESC')->paginate(10);
-            if (!empty($lst_lhp))
-                return response()->json(['status' => 'success', 'data' => $lst_lhp], 200);
+        $data = LopHocPhan::where('trangthai', '<>', 0);
+
+        if ($request->key_word != "null")
+            $data = $data->where('tenlhp', 'like', '%' . $request->key_word . '%');
+        if (intval($request->lophoc) != 0) {
+            $data = $data->where('malh', intval($request->lophoc));
         }
+        if (intval($request->hocky) != 0) {
+            $data = $data->where('hocky', intval($request->hocky));
+        }
+
+        return response()->json(['status' => 'success', 'data' => $data->with('lophoc')->orderBy('id', 'DESC')->paginate(10)], 200);
     }
     public function themSV(Request $request, $id)
     {
