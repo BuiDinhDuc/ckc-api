@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\BaiViet;
 use App\BangTin;
 use App\FileBangTin;
 use App\GiangVien;
@@ -114,5 +115,16 @@ class BangTinController extends Controller
             return response()->json(['status' => 'success', 'message' => "Xóa thành công"], 200);
         } else
             return response()->json(['status' => 'error', 'message' => "Không tìm thấy"], 404);
+    }
+    public function getSLBT($id)
+    {
+        $date =  Carbon::now('Asia/Ho_Chi_Minh')->toDateString();
+        $time = Carbon::now('Asia/Ho_Chi_Minh')->toTimeString();
+        $slbt_1 = BaiViet::where('ngayketthuc','>',$date)->where('trangthai', 1)->where('malhp',$id)->count();
+        $slbt_2 = BaiViet::where('ngayketthuc','=',$date)->where('gioketthuc','>',$time)->where('malhp',$id)->where('trangthai', 1)->count();
+
+        $data = $slbt_1+$slbt_2;
+        return response()->json(['status' => 'success', 'data' => $data], 200);
+
     }
 }
