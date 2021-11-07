@@ -850,6 +850,7 @@ class BaiVietController extends Controller
 
             $sv_bt = SinhVienBaiTap::where('mabv', $id)->where('mssv', $sinhvien_id)->first();
             $sv_bt->trangthai = 0;
+            $sv_bt->diem = 0;
             $sv_bt->save();
 
             return response()->json(['status' => 'success', 'message' => 'Nộp thành công', 'data' => $sv_bt->trangthai]);

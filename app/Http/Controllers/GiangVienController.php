@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\BoMon;
 use App\District;
 use App\GiangVien;
+use App\LopHoc;
+use App\MonHoc;
 use App\Province;
 use App\User;
 use App\Ward;
@@ -36,11 +38,28 @@ class GiangVienController extends Controller
 
         return response()->json(['status' => 'success', 'data' => $lst_giangvien], 200);
     }
-    public function getListGVByBoMon($mabm)
+    public function getListGVByBoMon(Request $request)
     {
-        $lst_giangvien = GiangVien::where('trangthai', 1)->where('mabm', $mabm)->with('bomon')->get();
+        // return response()->json(['status' => 'success', 'mabm' => $request->mabm,'khoa'=>$request->khoa], 200);
 
-        return response()->json(['status' => 'success', 'data' => $lst_giangvien], 200);
+        $lst_lophoc = LopHoc::where('trangthai', 1);
+        $lst_giangvien = GiangVien::where('trangthai', 1);
+        $lst_monhoc = MonHoc::where('trangthai', 1);
+
+        if (intval($request->mabm) != 0) {
+            $lst_lophoc = $lst_lophoc->where('mabm',intval($request->mabm));
+            $lst_giangvien =   $lst_giangvien->where('mabm', intval($request->mabm));
+            $lst_monhoc = $lst_monhoc->where('mabm',intval($request->mabm));
+        }
+        if (intval($request->khoa) != 0) {
+            $lst_lophoc->where('khoa', intval($request->khoa));
+        }
+
+        $data['lst_giangvien'] = $lst_giangvien->get();
+        $data['lst_monhoc'] = $lst_monhoc->get();
+        $data['lst_lophoc'] = $lst_lophoc->get();
+
+        return response()->json(['status' => 'success', 'data' => $data], 200);
     }
 
 

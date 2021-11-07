@@ -27,7 +27,7 @@ Route::prefix('giangvien')->group(function () {
     Route::post('delete/{id}', 'GiangVienController@destroy');
     Route::post('lock/{id}', 'GiangVienController@lock');
     Route::post('unlock/{id}', 'GiangVienController@unlock');
-    Route::get('getListGVByBoMon/{id}', 'GiangVienController@getListGVByBoMon');
+    Route::post('getListGVByBoMon', 'GiangVienController@getListGVByBoMon');
     Route::get('index', 'GiangVienController@getAll');
     Route::post('search', 'GiangVienController@timkiemGV');
     Route::post('importGiangVien', 'GiangVienController@importGiangVien');
