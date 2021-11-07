@@ -119,24 +119,24 @@ class SinhVienController extends Controller
     }
     public function lock($id)
     {
-        // $sinhvien = SinhVien::find($id);
-        // if (!empty($sinhvien)) {
-        //     if ($sinhvien->trangthai == 2) {
-        //         return response()->json(['status' => 'error', 'message' => 'Sinh viên đã khóa'], 403);
-        //     } else {
-        //         $lst_sv = SinhVien::where('trangthai', '<>', 0)->paginate(10);
-        //         $sinhvien->save();
-        //         return response()->json(['status' => 'success', 'message' => 'Khóa thành công','data'=>$lst_sv], 200);
-        //     }
-        // } else {
-        //     return response()->json(['status' => 'error', 'message' => 'Sinh viên không tồn tại'], 404);
-        // }
-        // return response()->json(['status' => 'success', 'message' => $id]);
+
         $sinhvien = SinhVien::where('id', $id)->first();
 
         $sinhvien->trangthai = 2;
         $sinhvien->save();
-        // $lst_gv = GiangVien::where('trangthai', 1)->get();
+
+        $sv_lhp = SinhVienLopHocPhan::where("masv", $id)->where('trangthai', 1)->pluck('id');
+        foreach ($sv_lhp as $sv) {
+            $sinhvien = SinhVienLopHocPhan::where('id', $sv)->first();
+            $sinhvien->trangthai = 2;
+            $sinhvien->save();
+        }
+
+        $user = User::whereHas('sinhvien', function ($query) use ($id) {
+            $query->where('id', $id);
+        })->first();
+        $user->trangthai = 2;
+        $user->save();
         $lst_sv = SinhVien::where('trangthai', '<>', 0)->with('lophoc')->orderBy('id', 'DESC')->paginate(10);
         return response()->json(['status' => 'success', 'message' => "Đã khóa", 'data' => $lst_sv], 200);
     }
@@ -157,33 +157,41 @@ class SinhVienController extends Controller
         $sinhvien = SinhVien::find($id);
         $sinhvien->trangthai = 1;
         $sinhvien->save();
+        $user = User::whereHas('sinhvien', function ($query) use ($id) {
+            $query->where('id', $id);
+        })->first();
+        $user->trangthai = 1;
+        $user->save();
+        // $sv_lhp = SinhVienLopHocPhan::where("masv", $id)->where('trangthai', 2)->pluck('id');
+        // foreach ($sv_lhp as $sv) {
+        //     $sinhvien = SinhVienLopHocPhan::where('id', $sv)->first();
+        //     $sinhvien->trangthai = 1;
+        //     $sinhvien->save();
+        // }
         // $lst_gv = GiangVien::where('trangthai', 2)->get();
         $lst_sv = SinhVien::where('trangthai', '<>', 0)->with('lophoc')->orderBy('id', 'DESC')->paginate(10);
         return response()->json(['status' => 'success', 'message' => "Đã mở khóa", 'data' => $lst_sv], 200);
     }
     public function timkiemSV(Request $request)
     {
-        
+
         $lst_sv = SinhVien::where('trangthai', '<>', 0);
-        if ($request->key_word!= "null") {
-            $lst_sv = $lst_sv->where('tensv', 'like', '%' . $request->key_word . '%'); 
+        if ($request->key_word != "null") {
+            $lst_sv = $lst_sv->where('tensv', 'like', '%' . $request->key_word . '%');
         }
-        if(intval($request->lop_hoc) != 0){
-            
-            $lst_sv = $lst_sv->where('malh',intval($request->lop_hoc));
+        if (intval($request->lop_hoc) != 0) {
+
+            $lst_sv = $lst_sv->where('malh', intval($request->lop_hoc));
         }
         return response()->json(['status' => 'success', 'data' => $lst_sv->with('lophoc')->orderBy('id', 'DESC')->paginate(10)]);
-       
-
     }
     public function getThongTin($id)
     {
         $sv = SinhVien::where([['mssv', $id]])->with('lophoc')->first();
-        if($sv)
-        return response()->json(['status' => 'success', 'data' => $sv], 200);
-        else 
-        return response()->json(['status' => 'error'], 404);
-
+        if ($sv)
+            return response()->json(['status' => 'success', 'data' => $sv], 200);
+        else
+            return response()->json(['status' => 'error'], 404);
     }
 
 
@@ -246,30 +254,30 @@ class SinhVienController extends Controller
 
     public function countSinhVienByKhoa()
     {
-        $data= [];
+        $data = [];
         $y = date('Y');
         $m = date('m');
-        if($m< 8) $y--;
+        if ($m < 8) $y--;
         $dem = 0;
-        do{
+        do {
             $sv_khoa = DB::table('lop_hocs')
-            ->join("sinh_viens","sinh_viens.malh",'=','lop_hocs.id')
-            ->where('lop_hocs.khoa','=',$y)
-            ->selectRaw('lop_hocs.khoa,count(sinh_viens.id) as number_of_sinhvien')
-            ->groupBy('lop_hocs.khoa')
-            ->get();
-            array_push($data,$sv_khoa);
+                ->join("sinh_viens", "sinh_viens.malh", '=', 'lop_hocs.id')
+                ->where('lop_hocs.khoa', '=', $y)
+                ->selectRaw('lop_hocs.khoa,count(sinh_viens.id) as number_of_sinhvien')
+                ->groupBy('lop_hocs.khoa')
+                ->get();
+            array_push($data, $sv_khoa);
             $y--;
             $dem++;
-        }while($dem < 3);
-        return response()->json(['status' => 'success', 'data'=>$data ]);
+        } while ($dem < 3);
+        return response()->json(['status' => 'success', 'data' => $data]);
     }
-    public function locSVTheoLop(Request $request){
+    public function locSVTheoLop(Request $request)
+    {
         $lst_sv = SinhVien::where('trangthai', '<>', 0)->with('lophoc');
-        if($request->lop_hoc != 0){
-            $lst_sv = $lst_sv->where('malh','=',$request->lop_hoc);
+        if ($request->lop_hoc != 0) {
+            $lst_sv = $lst_sv->where('malh', '=', $request->lop_hoc);
         }
         return response()->json(['status' => 'success', 'data' => $lst_sv->orderBy('id', 'DESC')->paginate(10)]);
     }
-
 }

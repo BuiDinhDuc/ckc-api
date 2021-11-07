@@ -47,9 +47,9 @@ class GiangVienController extends Controller
         $lst_monhoc = MonHoc::where('trangthai', 1);
 
         if (intval($request->mabm) != 0) {
-            $lst_lophoc = $lst_lophoc->where('mabm',intval($request->mabm));
+            $lst_lophoc = $lst_lophoc->where('mabm', intval($request->mabm));
             $lst_giangvien =   $lst_giangvien->where('mabm', intval($request->mabm));
-            $lst_monhoc = $lst_monhoc->where('mabm',intval($request->mabm));
+            $lst_monhoc = $lst_monhoc->where('mabm', intval($request->mabm));
         }
         if (intval($request->khoa) != 0) {
             $lst_lophoc->where('khoa', intval($request->khoa));
@@ -156,6 +156,12 @@ class GiangVienController extends Controller
         $gv = GiangVien::find($request->id);
         $gv->trangthai = 2;
         $gv->save();
+
+        $user = User::whereHas('giangvien', function ($query) use ($request) {
+            $query->where('id', $request->id);
+        })->first();
+        $user->trangthai = 2;
+        $user->save();
         // $lst_gv = GiangVien::where('trangthai', 1)->get();
         $lst_giangvien = GiangVien::where('trangthai', '<>', 0)->with('bomon')->orderBy('id', 'DESC')->paginate(10);
         return response()->json(['status' => 'success', 'message' => "Đã khóa", 'data' => $lst_giangvien], 200);
@@ -165,6 +171,11 @@ class GiangVienController extends Controller
         $gv = GiangVien::find($request->id);
         $gv->trangthai = 1;
         $gv->save();
+        $user = User::whereHas('giangvien', function ($query) use ($request) {
+            $query->where('id', $request->id);
+        })->first();
+        $user->trangthai = 1;
+        $user->save();
         // $lst_gv = GiangVien::where('trangthai', 2)->get();
         $lst_giangvien = GiangVien::where('trangthai', '<>', 0)->with('bomon')->orderBy('id', 'DESC')->paginate(10);
         return response()->json(['status' => 'success', 'message' => "Đã mở khóa", 'data' => $lst_giangvien], 200);

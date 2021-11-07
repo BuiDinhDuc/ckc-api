@@ -145,7 +145,7 @@ class LopHocPhanController extends Controller
 
         $data['lhp'] = $lhp[0];
 
-        $sv_id = SinhVienLopHocPhan::where('malhp', $id)->get()->pluck('masv');
+        $sv_id = SinhVienLopHocPhan::where('malhp', $id)->where('trangthai', 1)->get()->pluck('masv');
 
         $lst_sv = SinhVien::whereIn('id', $sv_id)->with('sinhvienlophocphans', "lophoc")
             // )->with('sinhvienlophocphans')
@@ -392,7 +392,7 @@ class LopHocPhanController extends Controller
     {
 
         $sinhviens = SinhVien::whereHas('sinhvienlophocphans', function ($query) use ($id) {
-            $query->where('malhp', '=', $id);
+            $query->where('malhp', '=', $id)->where('trangthai', 1);
         })->where('trangthai', 1)->select('id')->get()->toArray();
 
         return (new StudentExport($sinhviens))->download('Danh sách sinh viên.xlsx');

@@ -111,6 +111,13 @@ class AuthController extends Controller
                 'errors' => $v->errors()->first(),
             ], 422);
         }
+
+        $user = User::where('email', $request->email)->where('trangthai', '<>', 1)->first();
+        if ($user)  return response()->json([
+            'status' => 'error',
+            'message' => "Tài khoản của bạn đã bị khóa",
+        ], 422);
+
         $credentials = $request->only('email', 'password');
         if ($token = $this->guard()->attempt($credentials)) {
             // var_dump($token);exit;
@@ -122,7 +129,8 @@ class AuthController extends Controller
             ], 200);
         }
         return response()->json([
-            'status' => 'Invalid account or password',
+            'status' => "error",
+            'message' => 'Sai địa chỉ email hoặc mật khẩu',
         ], 422);
     }
     public function logout()
@@ -153,40 +161,38 @@ class AuthController extends Controller
     public function guimailxacnhan(Request $request)
     {
         $user = User::where('email', $request->email)->first();
-        if (!empty($user)){
+        if (!empty($user)) {
             $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $str =   substr(str_shuffle($permitted_chars), 0, 6);
-            
-            $qmk = QuenMatKhau::where('matk',$user->id)->first();
-            if(empty($qmk)){
-                QuenMatKhau::create(['matk'=>$user->id,'maxacnhan'=> $str]);
-            }
-            else{
+
+            $qmk = QuenMatKhau::where('matk', $user->id)->first();
+            if (empty($qmk)) {
+                QuenMatKhau::create(['matk' => $user->id, 'maxacnhan' => $str]);
+            } else {
                 $qmk->maxacnhan = $str;
                 $qmk->save();
             }
             Mail::to($user->email)->send(new ResetPassword($str));
             return response()->json(['status' => 'success', 'message' => 'OK']);
         } else
-            return response()->json(['status' => 'error', 'message' => 'Email không tồn tại'],404);
+            return response()->json(['status' => 'error', 'message' => 'Email không tồn tại'], 404);
     }
     public function resetPassword(Request $request)
     {
         $user = User::where('email', $request->email)->first();
-        if (!empty($user)){   
-            $qmk = QuenMatKhau::where('matk',$user->id)->where('maxacnhan',$request->maxacnhan)->first();
-           if(!empty($qmk)){
-            $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            $str =   substr(str_shuffle($permitted_chars), 0, 10);
-            $user->password = Hash::make($str);
-            $user->save();
-            return response()->json(['status' => 'success', 'message' => 'Thành công','data'=>$str],200);
-           }    
-           else{
-            return response()->json(['status' => 'error', 'message' => 'Mã xác nhận không đúng'],422);
-           } 
+        if (!empty($user)) {
+            $qmk = QuenMatKhau::where('matk', $user->id)->where('maxacnhan', $request->maxacnhan)->first();
+            if (!empty($qmk)) {
+                $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                $str =   substr(str_shuffle($permitted_chars), 0, 10);
+                $user->password = Hash::make($str);
+                $user->save();
+                return response()->json(['status' => 'success', 'message' => 'Thành công', 'data' => $str], 200);
+            } else {
+                return response()->json(['status' => 'error', 'message' => 'Mã xác nhận không đúng'], 422);
+            }
         } else
-            return response()->json(['status' => 'error', 'message' => 'Email không tồn tại'],404);
+            return response()->json(['status' => 'error', 'message' => 'Email không tồn tại'], 404);
     }
 
 
@@ -196,7 +202,7 @@ class AuthController extends Controller
         $data['giangvien'] = $giangvien;
         $sinhvien = SinhVien::where('trangthai', 1)->count();
         $data['sinhvien'] = $sinhvien;
-        $khoa =Khoa::where('trangthai', 1)->count();
+        $khoa = Khoa::where('trangthai', 1)->count();
         $data['khoa'] = $khoa;
         $bomon = BoMon::where('trangthai', 1)->count();
         $data['bomon'] = $bomon;
