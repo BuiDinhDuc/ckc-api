@@ -152,7 +152,9 @@ class LopHocPhanController extends Controller
             ->where('trangthai', 1)->get();
         $data['lst_sv'] = $lst_sv;
 
-        $sv_lhp = SinhVienLopHocPhan::where('malhp', $id)->with('sinhviens')->get();
+        $sv_lhp = SinhVienLopHocPhan::where('malhp', $id)->whereHas('sinhviens', function ($query) {
+            $query->where('trangthai', 1);
+        })->with('sinhviens')->get();
         $data['sv_lhp'] = $sv_lhp;
         if (!empty($lhp)) {
             return response()->json(

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class LopHocPhan extends Model
 {
-    protected $fillable = ['tenlhp', 'ngaytao', 'hocky', 'namhoc','trangthai', 'magv', 'mabm', 'malh', 'mamh', 'chinhsach'];
+    protected $fillable = ['tenlhp', 'ngaytao', 'hocky', 'namhoc', 'trangthai', 'magv', 'mabm', 'malh', 'mamh', 'chinhsach'];
     public function lophoc()
     {
         return $this->belongsTo('App\LopHoc', 'malh', 'id');
@@ -29,7 +29,6 @@ class LopHocPhan extends Model
     }
     public function sinhvienlophocphans()
     {
-        return $this->hasMany('App\SinhVienLopHocPhan', 'malhp', 'id');
+        return $this->hasMany('App\SinhVienLopHocPhan', 'malhp', 'id')->where('trangthai', 1);
     }
-
 }

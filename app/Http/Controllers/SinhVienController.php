@@ -128,7 +128,7 @@ class SinhVienController extends Controller
         $sv_lhp = SinhVienLopHocPhan::where("masv", $id)->where('trangthai', 1)->pluck('id');
         foreach ($sv_lhp as $sv) {
             $sinhvien = SinhVienLopHocPhan::where('id', $sv)->first();
-            $sinhvien->trangthai = 2;
+            $sinhvien->trangthai = 3;
             $sinhvien->save();
         }
 
@@ -162,13 +162,13 @@ class SinhVienController extends Controller
         })->first();
         $user->trangthai = 1;
         $user->save();
-        // $sv_lhp = SinhVienLopHocPhan::where("masv", $id)->where('trangthai', 2)->pluck('id');
-        // foreach ($sv_lhp as $sv) {
-        //     $sinhvien = SinhVienLopHocPhan::where('id', $sv)->first();
-        //     $sinhvien->trangthai = 1;
-        //     $sinhvien->save();
-        // }
-        // $lst_gv = GiangVien::where('trangthai', 2)->get();
+        $sv_lhp = SinhVienLopHocPhan::where("masv", $id)->where('trangthai', 3)->pluck('id');
+        foreach ($sv_lhp as $sv) {
+            $sinhvien = SinhVienLopHocPhan::where('id', $sv)->first();
+            $sinhvien->trangthai = 1;
+            $sinhvien->save();
+        }
+
         $lst_sv = SinhVien::where('trangthai', '<>', 0)->with('lophoc')->orderBy('id', 'DESC')->paginate(10);
         return response()->json(['status' => 'success', 'message' => "Đã mở khóa", 'data' => $lst_sv], 200);
     }
