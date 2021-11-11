@@ -19,8 +19,10 @@ use App\LopHocPhan;
 use App\SinhVienBaiTap;
 use App\SinhVienLopHocPhan;
 use App\BangTin;
+use App\BinhChon;
 use App\FileBangTin;
 use App\Exports\StudentScoreExport;
+
 class BaiVietController extends Controller
 {
     // public function __construct()
@@ -583,8 +585,12 @@ class BaiVietController extends Controller
     {
         $baitap = BaiViet::where('id', $id)->where('loaibv', 2)->with('chude', 'filebaiviets')->withCount('giaobai')->first();
 
-        $sv_danop = SinhVienBaiTap::where([['mabv', $id], ['trangthai', 1]])->with('sinhvien')->get();
-        $sv_chuanop = SinhVienBaiTap::where('mabv', $id)->where('trangthai', 0)->with('sinhvien')->get();
+        $sv_danop = SinhVienBaiTap::where([['mabv', $id], ['trangthai', 1]])->whereHas('sinhvien', function ($query) {
+            $query->where('trangthai', 1);
+        })->with('sinhvien')->get();
+        $sv_chuanop = SinhVienBaiTap::where('mabv', $id)->where('trangthai', 0)->whereHas('sinhvien', function ($query) {
+            $query->where('trangthai', 1);
+        })->with('sinhvien')->get();
         $data['baitap'] = $baitap;
         $data['sv_danop'] = $sv_danop;
         $data['sv_chuanop'] = $sv_chuanop;
@@ -884,19 +890,77 @@ class BaiVietController extends Controller
         $sv_bt = SinhVienBaiTap::where('mssv', $mssv->id)->where('mabv', $id)->first();
         return response()->json(['status' => 'success', 'data' => $sv_bt->trangthai]);
     }
-    public function getVanBan($id){
+    public function getVanBan($id)
+    {
         $vb = BaiLamSinhVien::find($id);
-        return response()->json(['status' => 'success', 'data' =>$vb]);
+        return response()->json(['status' => 'success', 'data' => $vb]);
     }
-    public function xoaVanBan($id){
+    public function xoaVanBan($id)
+    {
         $vb = BaiLamSinhVien::find($id);
         $vb->trangthai = 0;
         $vb->save();
-        return response()->json(['status' => 'success', 'message' =>'Xóa thành công']);
+        return response()->json(['status' => 'success', 'message' => 'Xóa thành công']);
     }
     public function exportDiemSV($id)
     {
         $sinhviens = SinhVienBaiTap::where('mabv', $id)->select('id')->get()->toArray();
-        return (new StudentScoreExport($sinhviens,$id))->download('Điểm sinh viên.xlsx');
+        return (new StudentScoreExport($sinhviens, $id))->download('Điểm sinh viên.xlsx');
+    }
+
+    public function taoBinhChon(Request $request, $malhp)
+    {
+        $binhchon = new BaiViet();
+        $binhchon->tieude = $request->tieude;
+        $binhchon->noidung = $request->noidung;
+        $binhchon->ngaytao        = Carbon::now('Asia/Ho_Chi_Minh');
+        $binhchon->loaibv = 5;
+        $binhchon->matk = $request->matk;
+        $binhchon->malhp = $malhp;
+        $binhchon->trangthai = 1;
+        $binhchon->save();
+
+        return response()->json(['status' => 'success', 'message' => 'Tạo thành công']);
+    }
+
+    public function suaBinhChon(Request $request, $malhp)
+    {
+        $binhchon = BaiViet::find($request->id);
+        $binhchon->tieude = $request->tieude;
+        $binhchon->noidung = $request->noidung;
+        $binhchon->save();
+
+        return response()->json(['status' => 'success', 'message' => 'Sửa thành công']);
+    }
+
+    public function xoaBinhChon($id)
+    {
+        $binhchon = BaiViet::find($id);
+        $binhchon->trangthai = 0;
+        $binhchon->save();
+
+        return response()->json(['status' => 'success', 'message' => 'Xóa thành công']);
+    }
+
+    public function binhchon(Request $request, $mabv)
+    {
+        $binhchon = new BinhChon();
+
+        $binhchon->matk = $request->matk;
+        $binhchon->mabv = $mabv;
+        $binhchon->binh_chon = $request->binh_chon;
+
+        $binhchon->trangthai = $request->trangthai;
+        $binhchon->save();
+
+        return response()->json(['status' => 'success', 'message' => 'Bình chọn thành công']);
+    }
+    public function suaphanbinhchon(Request $request, $id)
+    {
+        $binhchon =  BinhChon::find($id);
+        $binhchon->binh_chon = $request->binh_chon;
+        $binhchon->save();
+
+        return response()->json(['status' => 'success', 'message' => 'Sua thành công']);
     }
 }
