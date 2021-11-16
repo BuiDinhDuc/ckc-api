@@ -23,10 +23,16 @@ use Carbon\Carbon;
 use App\Jobs\SendMailForgotPassword;
 use App\Mail\ResetPassword;
 use App\QuenMatKhau;
+use App\SinhVienBaiTap;
+
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use JWTAuth;
 use Illuminate\Support\Facades\Session;
+use File;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
+use ZipArchive;
 
 class AuthController extends Controller
 {
@@ -213,5 +219,32 @@ class AuthController extends Controller
         $lophocphan = LopHoc::where('trangthai', 1)->count();
         $data['lophocphan'] = $lophocphan;
         return response()->json(['status' => 'success', 'data' => $data], 200);
+    }
+    public function downloadFolder($mabv)
+    {
+
+        $lst_sv_id = SinhVienBaiTap::where('mabv', $mabv)->where('trangthai', 1)->orderBy('id', 'ASC')->pluck('mssv');
+
+        $matk = [];
+        foreach ($lst_sv_id as $sv) {
+            $sv_id = SinhVien::find($sv)->matk;
+            array_push($matk, $sv_id);
+        }
+        $zipArchive = new ZipArchive();
+        $filename = $mabv.'.zip';
+
+        // open and create zip file
+        if ($zipArchive->open($filename, ZipArchive::CREATE || ZipArchive::OVERWRITE)) {
+            // get all file
+                $files  = File::files(public_path('bailam\\' . $mabv));
+                foreach($files as $key => $value) {
+                    $name = basename($value);
+                    $zipArchive->addFile($value,$name);
+                }
+            
+        }
+        $zipArchive->close();
+      
+        return response()->json(['status' => 'success', "data"=> $filename]);
     }
 }

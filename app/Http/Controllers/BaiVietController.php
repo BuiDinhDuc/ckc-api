@@ -745,7 +745,7 @@ class BaiVietController extends Controller
 
     public function getListDienDan($malhp)
     {
-        $lst_diendan = BaiViet::where('malhp', $malhp)->where('trangthai', 1)->where('loaibv', 4)->with('taikhoan', 'lophocphan', 'filebaiviets', 'binhluans')->withCount('binhluans')->orderBy('id', 'DESC')->get();
+        $lst_diendan = BaiViet::where('malhp', $malhp)->where('trangthai', 1)->whereIn('loaibv', [4, 5])->with('taikhoan', 'lophocphan', 'filebaiviets', 'binhluans', 'binhchonco', 'binhchonkhong')->withCount('binhluans', 'binhchonco', 'binhchonkhong')->orderBy('id', 'DESC')->get();
         return response()->json(['status' => 'success', 'data' => $lst_diendan]);
     }
 
@@ -911,7 +911,6 @@ class BaiVietController extends Controller
     public function taoBinhChon(Request $request, $malhp)
     {
         $binhchon = new BaiViet();
-        $binhchon->tieude = $request->tieude;
         $binhchon->noidung = $request->noidung;
         $binhchon->ngaytao        = Carbon::now('Asia/Ho_Chi_Minh');
         $binhchon->loaibv = 5;
@@ -941,26 +940,40 @@ class BaiVietController extends Controller
 
         return response()->json(['status' => 'success', 'message' => 'Xóa thành công']);
     }
-
-    public function binhchon(Request $request, $mabv)
+    public function getBinhChon($id)
     {
-        $binhchon = new BinhChon();
+        $binhchon = BaiViet::find($id);
+        return response()->json(['status' => 'success', 'data' => $binhchon]);
+    }
 
-        $binhchon->matk = $request->matk;
-        $binhchon->mabv = $mabv;
-        $binhchon->binh_chon = $request->binh_chon;
+    public function binhchon(Request $request)
+    {
+        $binhchon = BinhChon::where('matk', $request->matk)->where('mabv', $request->mabv)->first();
 
-        $binhchon->trangthai = $request->trangthai;
-        $binhchon->save();
-
+        if ($binhchon) {
+            $binhchon->binh_chon = $request->binh_chon;
+            $binhchon->save();
+        }
+        else 
+        {
+        $bc = new BinhChon();
+        $bc->matk = $request->matk;
+        $bc->mabv = $request->mabv;
+        $bc->binh_chon = $request->binh_chon;
+        $bc->save();
+        }
         return response()->json(['status' => 'success', 'message' => 'Bình chọn thành công']);
     }
-    public function suaphanbinhchon(Request $request, $id)
+    public function suaphanbinhchon(Request $request)
     {
-        $binhchon =  BinhChon::find($id);
+        $binhchon =  BinhChon::where('matk', $request->matk)->where('mabv', $request->mabv)->get();
         $binhchon->binh_chon = $request->binh_chon;
         $binhchon->save();
 
         return response()->json(['status' => 'success', 'message' => 'Sua thành công']);
+    }
+    public function getBinhChonTheoMaTK($matk){
+        $bc = BinhChon::where('matk', $matk)->select('mabv','binh_chon')->get();
+        return response()->json(['status' => 'success', 'data' =>$bc]);
     }
 }

@@ -42,4 +42,10 @@ class BaiViet extends Model
     {
         return $this->hasMany('App\SinhVienBaiTap', 'mabv', 'id');
     }
+    public function binhchonco(){
+        return $this->hasMany('App\BinhChon','mabv', 'id')->where('binh_chon',1);
+    }
+    public function binhchonkhong(){
+        return $this->hasMany('App\BinhChon','mabv', 'id')->where('binh_chon', 0);
+    }
 }

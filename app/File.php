@@ -16,4 +16,8 @@ class File extends Model
     {
         return $this->belongsTo('App\User', 'matk', 'matk');
     }
+    public function filebailamsinhviens()
+    {
+        return $this->hasMany('App\BaiLamSinhVien', 'mafile', 'id');
+    }
 }

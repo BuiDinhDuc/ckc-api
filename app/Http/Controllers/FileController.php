@@ -4,8 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\File;
+use App\SinhVien;
+use App\SinhVienBaiTap;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Response;
+use RecursiveDirectoryIterator;
+use RecursiveIterator;
+use RecursiveIteratorIterator;
+use ZipArchive;
+use Zip;
+
 
 class FileController extends Controller
 {
@@ -62,6 +71,35 @@ class FileController extends Controller
     {
 
         $id_account = $request->matk;
+        $mssv = SinhVien::where('matk', $id_account)->first()->mssv;
+        if ($request->hasFile('file')) {
+
+            $file        = $request->file;
+            $name_file   = $file->getClientOriginalName();
+            $file_name   = $request->tenfile;
+            $size        = $file->getSize();
+            $path        = public_path('bailam/' . $request->mabv);
+            $file->move($path, $name_file);
+
+            $child = File::create([
+                'tenfile'       => $name_file,
+                'path'          => 'bailam/' . $request->mabv . '/' . $name_file,
+                'dungluong'     => $size,
+                'duoifile'      => '.' . $file->getClientOriginalExtension(),
+                'trangthai'     => 1,
+                'matk'          => $id_account,
+                'ngaytao'       => Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString(),
+                'file_name'     => $file_name
+            ]);
+
+
+            return response()->json(['status' => 'success', 'message' => 'Upload thành công', 'data' => $child->id]);
+        }
+    }
+    public function uploadFileDienDan(Request $request)
+    {
+
+        $id_account = $request->matk;
         if ($request->hasFile('file')) {
 
             $file        = $request->file;
@@ -86,7 +124,11 @@ class FileController extends Controller
             return response()->json(['status' => 'success', 'message' => 'Upload thành công', 'data' => $child->id]);
         }
     }
+ 
 
+   
+
+ 
     /**
      * Display the specified resource.
      *
