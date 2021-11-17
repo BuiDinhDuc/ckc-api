@@ -159,6 +159,7 @@ Route::prefix('baiviet')->group(function () {
     Route::get('getVanBan/{id}', 'BaiVietController@getVanBan');
     Route::get('xoaVanBan/{id}', 'BaiVietController@xoaVanBan');
     Route::get('exportDiemSV/{id}', 'BaiVietController@exportDiemSV');
+    Route::get('DemSLSVNopBai/{id}', 'BaiVietController@DemSLSVNopBai');
 
     Route::get('getBinhChon/{id}', 'BaiVietController@getBinhChon');
     Route::post('taoBinhChon/{malhp}', 'BaiVietController@taoBinhChon');
@@ -173,12 +174,12 @@ Route::prefix('baiviet')->group(function () {
     Route::get('deleteFileDinhKem/{id}', 'BaiVietController@deleteFileDinhKem');
 
     Route::post('getStatus/{id}', 'BaiVietController@getStatus');
-    Route::get('getBC/{matk}','BaiVietController@getBinhChonTheoMaTK');
+    Route::get('getBC/{matk}', 'BaiVietController@getBinhChonTheoMaTK');
 });
 
 Route::prefix('file')->group(function () {
     Route::get('/{id}', 'FileController@index');
-    Route::post('download/{id}','AuthController@downloadFolder');
+    Route::post('download/{id}', 'AuthController@downloadFolder');
     Route::post('uploadFile', 'FileController@store');
     Route::post('uploadFileBaiLam', 'FileController@uploadFileBaiLam');
     Route::post('uploadFileDienDan', 'FileController@uploadFileDienDan');
@@ -223,4 +224,3 @@ Route::get('/province', 'ProvinceController@getProvince');
 Route::get('/district', 'ProvinceController@getDistrict');
 Route::get('/ward', 'ProvinceController@getWard');
 Route::get('/demSL', 'AuthController@demSL');
-

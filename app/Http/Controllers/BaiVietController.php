@@ -953,14 +953,12 @@ class BaiVietController extends Controller
         if ($binhchon) {
             $binhchon->binh_chon = $request->binh_chon;
             $binhchon->save();
-        }
-        else 
-        {
-        $bc = new BinhChon();
-        $bc->matk = $request->matk;
-        $bc->mabv = $request->mabv;
-        $bc->binh_chon = $request->binh_chon;
-        $bc->save();
+        } else {
+            $bc = new BinhChon();
+            $bc->matk = $request->matk;
+            $bc->mabv = $request->mabv;
+            $bc->binh_chon = $request->binh_chon;
+            $bc->save();
         }
         return response()->json(['status' => 'success', 'message' => 'Bình chọn thành công']);
     }
@@ -972,8 +970,14 @@ class BaiVietController extends Controller
 
         return response()->json(['status' => 'success', 'message' => 'Sua thành công']);
     }
-    public function getBinhChonTheoMaTK($matk){
-        $bc = BinhChon::where('matk', $matk)->select('mabv','binh_chon')->get();
-        return response()->json(['status' => 'success', 'data' =>$bc]);
+    public function getBinhChonTheoMaTK($matk)
+    {
+        $bc = BinhChon::where('matk', $matk)->select('mabv', 'binh_chon')->get();
+        return response()->json(['status' => 'success', 'data' => $bc]);
+    }
+    public function DemSLSVNopBai($mabv)
+    {
+        $svbt = SinhVienBaiTap::where('trangthai', 1)->where('mabv', $mabv)->count();
+        return response()->json(['status' => 'success', 'data' => $svbt]);
     }
 }
