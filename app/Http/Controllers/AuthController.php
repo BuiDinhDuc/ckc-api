@@ -231,20 +231,21 @@ class AuthController extends Controller
             array_push($matk, $sv_id);
         }
         $zipArchive = new ZipArchive();
-        $filename = $mabv.'.zip';
+        $filename = $mabv . '.zip';
 
         // open and create zip file
         if ($zipArchive->open($filename, ZipArchive::CREATE || ZipArchive::OVERWRITE)) {
             // get all file
-                $files  = File::files(public_path('bailam\\' . $mabv));
-                foreach($files as $key => $value) {
+            $files  = File::files(public_path('bailam\\' . $mabv));
+            if ($files) {
+                foreach ($files as $key => $value) {
                     $name = basename($value);
-                    $zipArchive->addFile($value,$name);
+                    $zipArchive->addFile($value, $name);
                 }
-            
+            } else return response()->json(['status' => 'success', "message" => "Không có file"]);
         }
         $zipArchive->close();
-      
-        return response()->json(['status' => 'success', "data"=> $filename]);
+
+        return response()->json(['status' => 'success', "data" => $filename]);
     }
 }
